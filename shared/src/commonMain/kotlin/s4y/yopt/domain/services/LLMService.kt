@@ -94,7 +94,14 @@ class LLMService(
             throw Exception("GET $url returned non-JSON: ${raw.take(300)}", e)
         }
         r["error"]?.jsonObject?.let {
-            throw Exception(it["message"]?.jsonPrimitive?.content ?: "API error")
+            val msg = it["message"]?.jsonPrimitive?.content ?: "API error"
+            val code = it["code"]?.jsonPrimitive?.content
+            val meta = it["metadata"]?.jsonObject?.get("raw")?.jsonPrimitive?.content
+            throw Exception(buildString {
+                append(msg)
+                if (code != null) append(" (code: $code)")
+                if (meta != null) append(" — $meta")
+            })
         }
         return r["data"]?.jsonArray?.map {
             it.jsonObject["id"]?.jsonPrimitive?.content ?: throw Exception("Unexpected model entry in response")
@@ -114,9 +121,16 @@ class LLMService(
         } catch (e: Exception) {
             throw Exception("GET $url returned non-JSON: ${raw.take(300)}", e)
         }
-        r["error"]?.jsonObject?.let {
-            val msg = it["message"]?.jsonPrimitive?.content ?: "Gemini API error"
-            throw Exception("$msg (check that your key has the Generative Language API enabled)")
+        r["error"]?.jsonObject?.let { err ->
+            val msg = err["message"]?.jsonPrimitive?.content ?: "Gemini API error"
+            val code = err["code"]?.jsonPrimitive?.content
+            val status = err["status"]?.jsonPrimitive?.content
+            throw Exception(buildString {
+                append(msg)
+                if (code != null) append(" (code: $code)")
+                if (status != null) append(" — $status")
+                append(" (check that your key has the Generative Language API enabled)")
+            })
         }
         return r["models"]?.jsonArray?.map {
             val fullName = it.jsonObject["name"]?.jsonPrimitive?.content
@@ -139,7 +153,14 @@ class LLMService(
             http.post("${base(prov)}/v1/chat/completions", mapOf("Authorization" to "Bearer $key"), body.toString())
         ).jsonObject
         r["error"]?.jsonObject?.let {
-            throw Exception(it["message"]?.jsonPrimitive?.content ?: "OpenAI API error")
+            val msg = it["message"]?.jsonPrimitive?.content ?: "OpenAI API error"
+            val code = it["code"]?.jsonPrimitive?.content
+            val meta = it["metadata"]?.jsonObject?.get("raw")?.jsonPrimitive?.content
+            throw Exception(buildString {
+                append(msg)
+                if (code != null) append(" (code: $code)")
+                if (meta != null) append(" — $meta")
+            })
         }
         val content = r["choices"]?.jsonArray?.get(0)?.jsonObject
             ?.get("message")?.jsonObject?.get("content")
@@ -168,8 +189,13 @@ class LLMService(
         val r = json.parseToJsonElement(
             http.post("${base(prov)}/v1/messages", headers, body.toString())
         ).jsonObject
-        r["error"]?.jsonObject?.let {
-            throw Exception(it["message"]?.jsonPrimitive?.content ?: "Anthropic API error")
+        r["error"]?.jsonObject?.let { err ->
+            val msg = err["message"]?.jsonPrimitive?.content ?: "Anthropic API error"
+            val type = err["type"]?.jsonPrimitive?.content
+            throw Exception(buildString {
+                if (type != null) append("[$type] ")
+                append(msg)
+            })
         }
         val blocks = r["content"]?.jsonArray
             ?: throw Exception("Unexpected Anthropic response: ${r.toString().take(500)}")
@@ -193,8 +219,15 @@ class LLMService(
         val r = json.parseToJsonElement(
             http.post("${base(prov)}/v1beta/models/${m}:generateContent?key=${key}", emptyMap(), body.toString())
         ).jsonObject
-        r["error"]?.jsonObject?.let {
-            throw Exception(it["message"]?.jsonPrimitive?.content ?: "Gemini API error")
+        r["error"]?.jsonObject?.let { err ->
+            val msg = err["message"]?.jsonPrimitive?.content ?: "Gemini API error"
+            val code = err["code"]?.jsonPrimitive?.content
+            val status = err["status"]?.jsonPrimitive?.content
+            throw Exception(buildString {
+                append(msg)
+                if (code != null) append(" (code: $code)")
+                if (status != null) append(" — $status")
+            })
         }
         val parts = r["candidates"]?.jsonArray?.get(0)?.jsonObject
             ?.get("content")?.jsonObject?.get("parts")?.jsonArray
