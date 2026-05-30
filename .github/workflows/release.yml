@@ -1,0 +1,36 @@
+name: Release macOS App
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install rsvg-convert
+        run: brew install librsvg
+
+      - name: Package macOS App
+        run: ./gradlew :composeApp:packageMacosApp
+
+      - name: Archive .app bundle
+        run: |
+          cd composeApp/build/macos
+          zip -r ../../../YoPt.app.zip YoPt.app
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: composeApp/build/macos/YoPt.app.zip
