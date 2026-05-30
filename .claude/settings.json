@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill"
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  }
+}

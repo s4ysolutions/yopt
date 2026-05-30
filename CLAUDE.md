@@ -1,0 +1,107 @@
+# YoPt — KMP AI Chat App
+
+## Project Overview
+
+**Stack:** Kotlin 2.3.21 · Compose Multiplatform 1.11.0 · AGP 9.2.1 · Ktor · SKIE ·
+`kotlinx.serialization`
+
+**Modules:**
+
+- `:shared` — domain models, ports (interfaces), use cases, infra adapters (`s4y.yopt.infra`)
+- `:composeApp` — Compose UI for all platforms (`s4y.yopt.ui`)
+- `:androidApp` — thin Android app shell (`MainActivity` delegates to `composeApp`)
+
+**KMP targets** (both `:shared` and `:composeApp`):
+`android` · `desktop` (JVM) · `iosArm64` · `iosSimulatorArm64` · `macosArm64` · `wasmJs`
+
+## Running
+
+| Platform          | Command                                                                     |
+|-------------------|-----------------------------------------------------------------------------|
+| Desktop (JVM)     | `./gradlew :composeApp:run` ✅                                               |
+| macOS native      | `./gradlew :composeApp:runMacosNative` ✅                                    |
+| macOS .app bundle | `./gradlew :composeApp:packageMacosApp` → `composeApp/build/macos/YoPt.app` |
+| Web (wasmJs)      | `./gradlew :composeApp:wasmJsBrowserRun`                                    |
+| Android           | Android Studio → run `:androidApp`                                          |
+| iOS               | Xcode → `xcodeApp/`                                                         |
+
+> **macOS native note:** `runDebugExecutableMacosArm64` (the KMP-generated task used by the IDE Run
+> button) runs the raw kexe and crashes — Compose Multiplatform 1.11.0 does not bundle resources for
+> macOS executable binaries. Use `runMacosNative` instead (runs the `.app` bundle where `NSBundle`
+> resolves resources correctly).
+
+## Architecture
+
+Hexagonal / clean. Dependencies point inward: **UI → usecases → domain.services → domain.ports ← adapters**.
+
+Full rules (port rule, service rule, use-case rule, persistence decision tree, reactive
+pattern) are in `.claude/skills/architecture.md` — read it before changing structure.
+
+```
+shared/src/commonMain/kotlin/s4y/yopt/
+  domain/models/    — data classes + enums
+  domain/ports/     — boundary interfaces (one per boundary, even single-impl)
+  domain/services/  — domain logic as plain classes
+  usecases/         — UI-facing orchestration
+  adapters/         — port implementations
+  AppModule.kt      — manual DI wiring
+
+composeApp/src/commonMain/kotlin/s4y/yopt/
+  App.kt          — root composable, creates AppModule
+  ui/             — screens (MainScreen, SettingsDialog)
+  ui/AppIcons.kt  — all icon constants
+```
+
+**DI:** manual `AppModule` (no framework). Instantiated in each platform entry point.
+
+**Entry points:**
+
+- Desktop: `composeApp/src/desktopMain/…/Main.kt` (`fun main()`)
+- Android: `androidApp/src/main/…/MainActivity.kt`
+- macOS native: `composeApp/src/macosArm64Main/…` (entry `s4y.yopt.main`)
+
+## LLM Providers
+
+`PredefinedProviders.kt` — Anthropic, OpenAI, Google Gemini, OpenRouter, DeepSeek, Qwen
+
+API styles: `ApiStyle.ANTHROPIC` / `ApiStyle.OPENAI` / `ApiStyle.GEMINI`
+
+Auth: `ApiKey` only (OAuth removed). Credentials stored in `SecureStore`.
+
+## Rules
+
+### UI
+
+- **i18n required** — all user-visible strings must use `stringResource(Res.string.xxx)`. Never
+  hardcode English strings in composables. Add new strings to `values/strings.xml`.
+- **No ViewModel** — state via `remember { mutableStateOf(...) }` directly in composables.
+- **Reactive persisted state** — use cases expose `Flow`; UI subscribes via `collectAsState()`.
+  Never use `LaunchedEffect` to load initial values.
+- **Material 3** — use `androidx.compose.material3.*` components only.
+- **Icons** — always define as semantic named `ImageVector` constants in `AppIcons.kt` using
+  `Icons.Rounded.*`. Never inline `Icons.Rounded.Xxx` or `Icons.Default.Xxx` in composables.
+- **Tooltips** — every icon-only button must be wrapped in `TooltipBox`. Enclosing composable
+  requires `@OptIn(ExperimentalMaterial3Api::class)`.
+
+### Domain
+
+- **Model enabled state** — stored on `ModelDef.enabled` and toggled via the model service's `setModelEnabled()`. No separate disabled-models store.
+- **UI never touches services/ports directly** — all mutations go through use case methods.
+  No `chat.copy(history = ...)` in composables; add a use case method that encapsulates the
+  operation and delegates to the service.
+- For layering, the port/service/use-case rules and the persistence decision tree, see
+  `.claude/skills/architecture.md`.
+
+### Infrastructure
+
+- **Package** — all adapter implementations in `s4y.yopt.adapters` (not `internal`).
+- **Never mix observable and getter** — if data has `observe*(): Flow<T>`, do not add a `get*(): T`
+  for the same data. The flow is the single source of truth (one-shot data with no flow excepted).
+
+## Available Skills
+
+- `.claude/skills/architecture.md` — layering rules, ports vs services, use-case rule, persistence decision tree, reactive pattern, DI
+- `.claude/skills/ui.md` — modify UI layouts, add controls, restructure screens
+- `.claude/skills/llm.md` — LLM integration layer (API styles, adding providers, model fetching)
+- `.claude/skills/icons.md` — add Material Symbols icons from gstatic URLs to AppIcons.kt
+- `.claude/skills/kmp-xcode.md` — iOS / Xcode KMP integration

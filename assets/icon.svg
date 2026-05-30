@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512" height="512" viewBox="0 0 512 512" version="1.1" id="svg32"
+    sodipodi:docname="icon.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+    <sodipodi:namedview id="namedview32" pagecolor="#ffffff" bordercolor="#000000"
+        borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0"
+        inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="0.4609375"
+        inkscape:cx="253.83051" inkscape:cy="259.25424" inkscape:window-width="1304"
+        inkscape:window-height="766" inkscape:window-x="60" inkscape:window-y="34"
+        inkscape:window-maximized="0" inkscape:current-layer="svg32" />
+    <defs id="defs14">
+        <!-- Enhanced glow filter -->
+        <filter id="glow" x="-0.18571429" y="-0.18352941" width="1.3714286" height="1.3670588">
+            <feGaussianBlur stdDeviation="12" result="coloredBlur" id="feGaussianBlur1" />
+            <feMerge id="feMerge3">
+                <feMergeNode in="coloredBlur" id="feMergeNode1" />
+                <feMergeNode in="coloredBlur" id="feMergeNode2" />
+                <feMergeNode in="SourceGraphic" id="feMergeNode3" />
+            </feMerge>
+        </filter>
+        <!-- Gradients for nodes -->
+        <radialGradient id="blueGradient" cx="170" cy="95" r="40.5" fx="170" fy="95"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" id="stop3" />
+            <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" id="stop4" />
+        </radialGradient>
+        <radialGradient id="purpleGradient" cx="342" cy="95" r="40.5" fx="342" fy="95"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#E879F9;stop-opacity:1" id="stop5" />
+            <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" id="stop6" />
+        </radialGradient>
+        <radialGradient id="greenGradient" cx="130" cy="350" r="40.5" fx="130" fy="350"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#4ADE80;stop-opacity:1" id="stop7" />
+            <stop offset="100%" style="stop-color:#22C55E;stop-opacity:1" id="stop8" />
+        </radialGradient>
+        <radialGradient id="redGradient" cx="382" cy="350" r="40.5" fx="382" fy="350"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#F87171;stop-opacity:1" id="stop9" />
+            <stop offset="100%" style="stop-color:#EF4444;stop-opacity:1" id="stop10" />
+        </radialGradient>
+        <radialGradient id="yellowGradient" cx="256" cy="350" r="40.5" fx="256" fy="350"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#FDE047;stop-opacity:1" id="stop11" />
+            <stop offset="100%" style="stop-color:#EAB308;stop-opacity:1" id="stop12" />
+        </radialGradient>
+        <radialGradient id="whiteGradient" cx="256" cy="190" r="30.5" fx="256" fy="190"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0128039,0,0,0.99504394,-3.2771912,34.295119)">
+            <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" id="stop13" />
+            <stop offset="100%" style="stop-color:#E0F2FE;stop-opacity:1" id="stop14" />
+        </radialGradient>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1E293B;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    <!-- Background with rounded corners -->
+    <rect width="512" height="512" fill="url(#bgGradient)" id="rect14" />
+    <!-- Glow effects for lines (thicker) -->
+    <g filter="url(#glow)" opacity="0.7" id="g17"
+        transform="matrix(1.0706054,0,0,1.0614515,-18.074368,19.838036)">
+        <!-- Y shape upper branches -->
+        <line x1="256" y1="190" x2="170" y2="95" stroke="#ffffff" stroke-width="36"
+            stroke-linecap="round" id="line14" />
+        <line x1="256" y1="190" x2="342" y2="95" stroke="#ffffff" stroke-width="36"
+            stroke-linecap="round" id="line15" />
+        <!-- Vertical connector -->
+        <line x1="256" y1="190" x2="256" y2="350" stroke="#ffffff" stroke-width="36"
+            stroke-linecap="round" id="line16" />
+        <!-- T horizontal line -->
+        <line x1="130" y1="350" x2="382" y2="350" stroke="#ffffff" stroke-width="36"
+            stroke-linecap="round" id="line17" />
+    </g>
+    <!-- Main lines (Y and T structure) - thicker -->
+    <g stroke="#ffffff" stroke-width="24" fill="none" stroke-linecap="round" id="g21"
+        transform="matrix(1.0128039,0,0,0.99504391,-3.2771922,34.295118)">
+        <!-- Y shape upper branches -->
+        <line x1="256" y1="190" x2="170" y2="95" id="line18" />
+        <line x1="256" y1="190" x2="342" y2="95" id="line19" />
+        <!-- Vertical connector -->
+        <line x1="256" y1="190" x2="256" y2="350" id="line20" />
+        <!-- T horizontal line -->
+        <line x1="130" y1="350" x2="382" y2="350" id="line21" />
+    </g>
+    <!-- Outer circles (endpoints) - larger -->
+    <!-- Top left - Blue -->
+    <ellipse cx="168.89944" cy="128.82426" fill="url(#blueGradient)" stroke="#93c5fd"
+        stroke-width="10.01943" id="circle21" style="fill:url(#blueGradient)" rx="48.486549"
+        ry="47.811665" />
+    <ellipse cx="168.89944" cy="128.82426" fill="#1e3a8a" id="circle22" style="stroke-width:1.00389"
+        rx="20.204861" ry="20.920703" />
+    <!-- Top right - Purple -->
+    <ellipse cx="343.10172" cy="128.82426" fill="url(#purpleGradient)" stroke="#d8b4fe"
+        stroke-width="10.01943" id="circle23" style="fill:url(#purpleGradient)" rx="48.486549"
+        ry="47.811665" />
+    <ellipse cx="343.10172" cy="128.82426" fill="#581c87" id="circle24" style="stroke-width:1.00389"
+        rx="20.204861" ry="20.920703" />
+    <!-- Bottom left - Green -->
+    <ellipse cx="128.38733" cy="382.56052" fill="url(#greenGradient)" stroke="#86efac"
+        stroke-width="10.01943" id="circle25" style="fill:url(#greenGradient)" rx="48.486549"
+        ry="47.811665" />
+    <ellipse cx="128.38733" cy="382.56052" fill="#14532d" id="circle26" style="stroke-width:1.00389"
+        rx="20.204861" ry="20.920703" />
+    <!-- Bottom right - Red -->
+    <ellipse cx="383.61389" cy="382.56052" fill="url(#redGradient)" stroke="#fca5a5"
+        stroke-width="10.01943" id="circle27" style="fill:url(#redGradient)" rx="48.486549"
+        ry="47.811665" />
+    <ellipse cx="383.61389" cy="382.56052" fill="#7f1d1d" id="circle28" style="stroke-width:1.00389"
+        rx="20.204861" ry="20.920703" />
+    <!-- Center junction points - larger -->
+    <!-- Y junction -->
+    <ellipse cx="256.00058" cy="223.35344" fill="url(#whiteGradient)" stroke="#bae6fd"
+        stroke-width="5.01943" id="circle29" style="fill:url(#whiteGradient)" rx="28.358509"
+        ry="27.861227" />
+    <ellipse cx="256.00058" cy="223.35344" fill="#0c4a6e" id="circle30" style="stroke-width:1.00389"
+        rx="12.153646" ry="11.940527" />
+    <!-- T junction (center bottom) - Yellow -->
+    <ellipse cx="256.00058" cy="382.56052" fill="url(#yellowGradient)" stroke="#fde047"
+        stroke-width="5.01943" id="circle31" style="fill:url(#yellowGradient)" rx="38.486549"
+        ry="37.811665" />
+    <ellipse cx="256.00058" cy="382.56052" fill="#713f12" id="circle32" style="stroke-width:1.00389"
+        rx="16.204861" ry="15.920703" />
+</svg>

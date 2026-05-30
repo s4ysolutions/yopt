@@ -1,0 +1,49 @@
+# Gradle
+.gradle
+build/
+**/build/
+!gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.run/
+
+# Android
+*.ap_
+*.apk
+*.dex
+bin/
+gen/
+proguard/
+
+# Kotlin Multiplatform
+.kotlin/
+.apple/
+
+# iOS / macOS / Apple
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+*.swp
+*.lock
+*.DS_Store
+
+# Web / JS
+node_modules/
+dist/
+.wasm/
+
+# System files
+Thumbs.db
+.DS_Store
+
+# Local properties / Secrets
+local.properties
+gradle.properties
+
+# Claude Code local settings
+.claude/settings.local.json
