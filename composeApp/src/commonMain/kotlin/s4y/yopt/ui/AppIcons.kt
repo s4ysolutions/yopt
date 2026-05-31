@@ -6,6 +6,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
@@ -347,72 +348,73 @@ private val rawOn: ImageVector by lazy {
         defaultHeight = 24.dp,
         viewportWidth = 24f,
         viewportHeight = 24f,
-    ).apply {
-        path(
-            fill = SolidColor(androidx.compose.ui.graphics.Color.Black),
-            fillAlpha = 1f,
-            stroke = null,
-            strokeAlpha = 1f,
-            strokeLineWidth = 1f,
-            strokeLineCap = StrokeCap.Butt,
-            strokeLineJoin = StrokeJoin.Bevel,
-            strokeLineMiter = 1f,
-            pathFillType = PathFillType.NonZero,
-        ) {
-            moveTo(3f, 15f)
-            verticalLineTo(9f)
-            horizontalLineTo(6.5f)
-            quadTo(7.1f, 9f, 7.55f, 9.45f)
-            reflectiveQuadTo(8f, 10.5f)
-            verticalLineToRelative(1f)
-            quadTo(0f, 0.45f, -0.24f, 0.81f)
-            reflectiveQuadTo(7.1f, 12.9f)
-            lineTo(8f, 15f)
-            horizontalLineTo(6.5f)
-            lineTo(5.6f, 13f)
-            horizontalLineTo(4.5f)
-            verticalLineToRelative(2f)
-            horizontalLineTo(3f)
-            close()
-            moveToRelative(5.75f, 0f)
-            lineToRelative(1.5f, -6f)
-            horizontalLineToRelative(2.5f)
-            lineToRelative(1.5f, 6f)
-            horizontalLineToRelative(-1.5f)
-            lineTo(12.4f, 13.5f)
-            horizontalLineTo(10.65f)
-            lineTo(10.25f, 15f)
-            horizontalLineTo(8.75f)
-            close()
-            moveToRelative(6.75f, 0f)
-            lineTo(14f, 9f)
-            horizontalLineToRelative(1.5f)
-            lineToRelative(0.75f, 3f)
-            lineTo(17f, 9f)
-            horizontalLineToRelative(1.5f)
-            lineToRelative(0.75f, 3f)
-            lineTo(20f, 9f)
-            horizontalLineToRelative(1.5f)
-            lineTo(20f, 15f)
-            horizontalLineTo(18.5f)
-            lineTo(17.75f, 11.95f)
-            lineTo(17f, 15f)
-            horizontalLineTo(15.5f)
-            close()
-            moveTo(11f, 12f)
-            horizontalLineToRelative(1f)
-            lineTo(11.75f, 11f)
-            horizontalLineToRelative(-0.5f)
-            lineTo(11f, 12f)
-            close()
-            moveTo(4.5f, 11.5f)
-            horizontalLineToRelative(2f)
-            verticalLineToRelative(-1f)
-            horizontalLineToRelative(-2f)
-            verticalLineToRelative(1f)
-            close()
-        }
-    }.build()
+    )
+        .apply {
+            path(
+                fill = SolidColor(Color.Black),
+                fillAlpha = 1f,
+                stroke = null,
+                strokeAlpha = 1f,
+                strokeLineWidth = 1f,
+                strokeLineCap = StrokeCap.Butt,
+                strokeLineJoin = StrokeJoin.Bevel,
+                strokeLineMiter = 1f,
+                pathFillType = PathFillType.Companion.NonZero,
+            ) {
+                moveTo(3f, 15f)
+                verticalLineTo(9f)
+                horizontalLineTo(6.5f)
+                quadTo(7.1f, 9f, 7.55f, 9.45f)
+                reflectiveQuadTo(8f, 10.5f)
+                verticalLineToRelative(1f)
+                quadToRelative(0f, 0.45f, -0.24f, 0.81f)
+                reflectiveQuadTo(7.1f, 12.9f)
+                lineTo(8f, 15f)
+                horizontalLineTo(6.5f)
+                lineTo(5.6f, 13f)
+                horizontalLineTo(4.5f)
+                verticalLineToRelative(2f)
+                horizontalLineTo(3f)
+                close()
+                moveToRelative(5.75f, 0f)
+                lineToRelative(1.5f, -6f)
+                horizontalLineToRelative(2.5f)
+                lineToRelative(1.5f, 6f)
+                horizontalLineToRelative(-1.5f)
+                lineTo(12.4f, 13.5f)
+                horizontalLineTo(10.65f)
+                lineTo(10.25f, 15f)
+                horizontalLineTo(8.75f)
+                close()
+                moveToRelative(6.75f, 0f)
+                lineTo(14f, 9f)
+                horizontalLineToRelative(1.5f)
+                lineToRelative(0.75f, 3f)
+                lineTo(17f, 9f)
+                horizontalLineToRelative(1.5f)
+                lineToRelative(0.75f, 3f)
+                lineTo(20f, 9f)
+                horizontalLineToRelative(1.5f)
+                lineTo(20f, 15f)
+                horizontalLineTo(18.5f)
+                lineTo(17.75f, 11.95f)
+                lineTo(17f, 15f)
+                horizontalLineTo(15.5f)
+                close()
+                moveTo(11f, 12f)
+                horizontalLineToRelative(1f)
+                lineTo(11.75f, 11f)
+                horizontalLineToRelative(-0.5f)
+                lineTo(11f, 12f)
+                close()
+                moveTo(4.5f, 11.5f)
+                horizontalLineToRelative(2f)
+                verticalLineToRelative(-1f)
+                horizontalLineToRelative(-2f)
+                verticalLineToRelative(1f)
+                close()
+            }
+        }.build()
 }
 
 private val tune: ImageVector by lazy {
