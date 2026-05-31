@@ -57,6 +57,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -583,10 +585,42 @@ fun MainScreen(
 
                 Spacer(Modifier.height(8.dp))
 
+                val doSend: () -> Unit = {
+                    run {
+                        if (loading) return@run
+                        val p = prompt.trim()
+                        if (p.isEmpty()) return@run
+                        val chat = currentChat ?: return@run
+                        sendJob = scope.launch {
+                            loading = true
+                            error = null
+                            try {
+                                if (chatName.isNotBlank() && chatName != chat.title) {
+                                    chatsUseCase.update(chat.copy(title = chatName))
+                                }
+                                sendUseCase(chat.copy(title = chatName), p, selectedModel)
+                                    .onSuccess { scope.launch { lastPromptUseCase.set(p) } }
+                                    .onFailure { e -> if (e !is kotlinx.coroutines.CancellationException) error = e.message }
+                            } finally {
+                                loading = false
+                                sendJob = null
+                            }
+                        }
+                    }
+                }
+
                 OutlinedTextField(
                     value = prompt,
                     onValueChange = { prompt = it },
-                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    modifier = Modifier.fillMaxWidth().weight(1f).onPreviewKeyEvent { event ->
+                        if (event.type == KeyEventType.KeyDown
+                            && event.key == Key.Enter
+                            && (event.isCtrlPressed || event.isMetaPressed)
+                        ) {
+                            doSend()
+                            true
+                        } else false
+                    },
                     placeholder = { Text(stringResource(Res.string.enter_prompt)) },
                     maxLines = Int.MAX_VALUE
                 )
@@ -631,26 +665,9 @@ fun MainScreen(
                             Modifier.size(24.dp).clickable { sendJob?.cancel() }
                         )
                     } else {
-                        Button(onClick = {
-                            val p = prompt.trim()
-                            if (p.isEmpty()) return@Button
-                            val chat = currentChat ?: return@Button
-                            sendJob = scope.launch {
-                                loading = true
-                                error = null
-                                try {
-                                    if (chatName.isNotBlank() && chatName != chat.title) {
-                                        chatsUseCase.update(chat.copy(title = chatName))
-                                    }
-                                    sendUseCase(chat.copy(title = chatName), p, selectedModel)
-                                        .onSuccess { scope.launch { lastPromptUseCase.set(p) } }
-                                        .onFailure { e -> if (e !is kotlinx.coroutines.CancellationException) error = e.message }
-                                } finally {
-                                    loading = false
-                                    sendJob = null
-                                }
-                            }
-                        }) { Text(stringResource(Res.string.send)) }
+                        Button(onClick = doSend) {
+                            Text(stringResource(Res.string.send))
+                        }
                     }
                 }
 
