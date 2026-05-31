@@ -72,6 +72,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -114,7 +115,8 @@ fun MainScreen(
     globalInstructionsUseCase: ManageGlobalInstructionsUseCase
 ) {
     val scope = rememberCoroutineScope()
-    val persistedFraction by splitFractionUseCase.observe().collectAsState(AppPreferencesService.DEFAULT_SPLIT_FRACTION)
+    val persistedFraction by splitFractionUseCase.observe()
+        .collectAsState(AppPreferencesService.DEFAULT_SPLIT_FRACTION)
     var splitFraction by remember(persistedFraction) { mutableStateOf(persistedFraction) }
     var columnHeightPx by remember { mutableStateOf(1f) }
     val lastChatId by lastChatIdUseCase.observe().collectAsState(null)
@@ -134,7 +136,8 @@ fun MainScreen(
     val selectedModel by modelSelectionUseCase.observe().collectAsState(null)
     val models by modelsUseCase.observeEnabledModels().collectAsState(emptyList())
     val providers by manageProvidersUseCase.observeProviders().collectAsState(emptyList())
-    val defaultShowMarkdown by responseDisplayUseCase.observeDefaultShowMarkdown().collectAsState(false)
+    val defaultShowMarkdown by responseDisplayUseCase.observeDefaultShowMarkdown()
+        .collectAsState(false)
 
     val currentChat = allChats.find { it.id == currentChatId }
 
@@ -223,7 +226,12 @@ fun MainScreen(
                             OutlinedButton(
                                 onClick = { showAddTagDialog = true },
                                 modifier = Modifier.height(28.dp)
-                            ) { Text(stringResource(Res.string.add_tag), style = MaterialTheme.typography.labelSmall) }
+                            ) {
+                                Text(
+                                    stringResource(Res.string.add_tag),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
                         }
                     }
                 },
@@ -241,7 +249,9 @@ fun MainScreen(
                     }) { Text(stringResource(Res.string.save)) }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showChatSettings = false }) { Text(stringResource(Res.string.cancel)) }
+                    TextButton(onClick = {
+                        showChatSettings = false
+                    }) { Text(stringResource(Res.string.cancel)) }
                 }
             )
             if (showAddTagDialog) {
@@ -314,7 +324,9 @@ fun MainScreen(
                                         placeholder = { Text(stringResource(Res.string.search)) },
                                         trailingIcon = {
                                             TooltipBox(
-                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                    TooltipAnchorPosition.Above
+                                                ),
                                                 tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
                                                 state = rememberTooltipState()
                                             ) {
@@ -332,7 +344,8 @@ fun MainScreen(
                                     )
                                     DropdownMenu(
                                         expanded = chatDropdownExpanded,
-                                        onDismissRequest = { chatDropdownExpanded = false }
+                                        onDismissRequest = { chatDropdownExpanded = false },
+                                        properties = PopupProperties(focusable = false)
                                     ) {
                                         filteredChats.forEach { chat ->
                                             DropdownMenuItem(
@@ -354,7 +367,9 @@ fun MainScreen(
                                 }
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.new_chat_tooltip)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -374,13 +389,16 @@ fun MainScreen(
                                     }
                                     if (allChats.size > 1) {
                                         TooltipBox(
-                                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                TooltipAnchorPosition.Above
+                                            ),
                                             tooltip = { PlainTooltip { Text(stringResource(Res.string.delete_chat_tooltip)) } },
                                             state = rememberTooltipState()
                                         ) {
                                             TextButton(onClick = {
                                                 currentChat?.let { chat ->
-                                                    val remaining = allChats.filter { it.id != chat.id }
+                                                    val remaining =
+                                                        allChats.filter { it.id != chat.id }
                                                     currentChatId = remaining.firstOrNull()?.id
                                                     scope.launch {
                                                         chatsUseCase.delete(chat.id)
@@ -396,7 +414,9 @@ fun MainScreen(
                                         }
                                     }
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_settings_tooltip)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -409,7 +429,9 @@ fun MainScreen(
                                         }
                                     }
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.settings_tooltip)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -456,7 +478,9 @@ fun MainScreen(
                                     placeholder = { Text(stringResource(Res.string.search)) },
                                     trailingIcon = {
                                         TooltipBox(
-                                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                TooltipAnchorPosition.Above
+                                            ),
                                             tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
                                             state = rememberTooltipState()
                                         ) {
@@ -474,7 +498,8 @@ fun MainScreen(
                                 )
                                 DropdownMenu(
                                     expanded = chatDropdownExpanded,
-                                    onDismissRequest = { chatDropdownExpanded = false }
+                                    onDismissRequest = { chatDropdownExpanded = false },
+                                    properties = PopupProperties(focusable = false)
                                 ) {
                                     filteredChats.forEach { chat ->
                                         DropdownMenuItem(
@@ -511,7 +536,9 @@ fun MainScreen(
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.new_chat_tooltip)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -531,7 +558,9 @@ fun MainScreen(
                                 }
                                 if (allChats.size > 1) {
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.delete_chat_tooltip)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -551,7 +580,9 @@ fun MainScreen(
                                     }
                                 }
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_settings_tooltip)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -564,7 +595,9 @@ fun MainScreen(
                                     }
                                 }
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.settings_tooltip)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -600,7 +633,10 @@ fun MainScreen(
                                 }
                                 sendUseCase(chat.copy(title = chatName), p, selectedModel)
                                     .onSuccess { scope.launch { lastPromptUseCase.set(p) } }
-                                    .onFailure { e -> if (e !is kotlinx.coroutines.CancellationException) error = e.message }
+                                    .onFailure { e ->
+                                        if (e !is kotlinx.coroutines.CancellationException) error =
+                                            e.message
+                                    }
                             } finally {
                                 loading = false
                                 sendJob = null
@@ -644,11 +680,13 @@ fun MainScreen(
                         }
                         if (models.isNotEmpty()) DropdownMenu(
                             expanded = modelExpanded,
-                            onDismissRequest = { modelExpanded = false }
+                            onDismissRequest = { modelExpanded = false },
+                            properties = PopupProperties(focusable = false)
                         ) {
                             models.forEach { m ->
                                 val pName = providers.find { it.id == m.providerId }?.name
-                                val label = if (pName != null) "$pName: ${m.officialName}" else m.officialName
+                                val label =
+                                    if (pName != null) "$pName: ${m.officialName}" else m.officialName
                                 DropdownMenuItem(
                                     text = { Text(label) },
                                     onClick = {
@@ -753,9 +791,10 @@ fun MainScreen(
                 itemsIndexed(history) { i, entry ->
                     val isFirst = i == 0
                     val wordCount = entry.response.split(Regex("\\s+")).count { it.isNotBlank() }
-                    val respExpanded = entry.timestamp in (currentChat?.expandedTimestamps ?: emptySet())
-                        || isFirst
-                        || wordCount < RESPONSE_AUTO_EXPAND_WORD_LIMIT
+                    val respExpanded =
+                        entry.timestamp in (currentChat?.expandedTimestamps ?: emptySet())
+                                || isFirst
+                                || wordCount < RESPONSE_AUTO_EXPAND_WORD_LIMIT
                     var promptExpanded by remember { mutableStateOf(false) }
                     var promptOverflows by remember { mutableStateOf(false) }
                     var respContentHeightPx by remember { mutableStateOf(0) }
@@ -784,8 +823,16 @@ fun MainScreen(
                                             ) {
                                                 if (promptExpanded || promptOverflows) {
                                                     TooltipBox(
-                                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                                                        tooltip = { PlainTooltip { Text(stringResource(if (promptExpanded) Res.string.collapse_prompt else Res.string.expand_prompt)) } },
+                                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                            TooltipAnchorPosition.Above
+                                                        ),
+                                                        tooltip = {
+                                                            PlainTooltip {
+                                                                Text(
+                                                                    stringResource(if (promptExpanded) Res.string.collapse_prompt else Res.string.expand_prompt)
+                                                                )
+                                                            }
+                                                        },
                                                         state = rememberTooltipState()
                                                     ) {
                                                         TextButton(onClick = {
@@ -793,15 +840,27 @@ fun MainScreen(
                                                         }) {
                                                             Icon(
                                                                 if (promptExpanded) AppIcons.Collapse else AppIcons.Expand,
-                                                                contentDescription = stringResource(if (promptExpanded) Res.string.collapse else Res.string.expand),
+                                                                contentDescription = stringResource(
+                                                                    if (promptExpanded) Res.string.collapse else Res.string.expand
+                                                                ),
                                                                 modifier = Modifier.size(18.dp)
                                                             )
                                                         }
                                                     }
                                                 }
                                                 TooltipBox(
-                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                                                    tooltip = { PlainTooltip { Text(stringResource(Res.string.use_as_prompt)) } },
+                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                        TooltipAnchorPosition.Above
+                                                    ),
+                                                    tooltip = {
+                                                        PlainTooltip {
+                                                            Text(
+                                                                stringResource(
+                                                                    Res.string.use_as_prompt
+                                                                )
+                                                            )
+                                                        }
+                                                    },
                                                     state = rememberTooltipState()
                                                 ) {
                                                     TextButton(onClick = {
@@ -815,8 +874,18 @@ fun MainScreen(
                                                     }
                                                 }
                                                 TooltipBox(
-                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                                                    tooltip = { PlainTooltip { Text(stringResource(Res.string.append_to_prompt)) } },
+                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                        TooltipAnchorPosition.Above
+                                                    ),
+                                                    tooltip = {
+                                                        PlainTooltip {
+                                                            Text(
+                                                                stringResource(
+                                                                    Res.string.append_to_prompt
+                                                                )
+                                                            )
+                                                        }
+                                                    },
                                                     state = rememberTooltipState()
                                                 ) {
                                                     TextButton(onClick = {
@@ -830,8 +899,18 @@ fun MainScreen(
                                                     }
                                                 }
                                                 TooltipBox(
-                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                                                    tooltip = { PlainTooltip { Text(stringResource(Res.string.copy_prompt)) } },
+                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                        TooltipAnchorPosition.Above
+                                                    ),
+                                                    tooltip = {
+                                                        PlainTooltip {
+                                                            Text(
+                                                                stringResource(
+                                                                    Res.string.copy_prompt
+                                                                )
+                                                            )
+                                                        }
+                                                    },
                                                     state = rememberTooltipState()
                                                 ) {
                                                     TextButton(onClick = {
@@ -876,8 +955,18 @@ fun MainScreen(
                                             )
                                             if (promptOverflows) {
                                                 TooltipBox(
-                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                                                    tooltip = { PlainTooltip { Text(stringResource(Res.string.expand_prompt)) } },
+                                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                        TooltipAnchorPosition.Above
+                                                    ),
+                                                    tooltip = {
+                                                        PlainTooltip {
+                                                            Text(
+                                                                stringResource(
+                                                                    Res.string.expand_prompt
+                                                                )
+                                                            )
+                                                        }
+                                                    },
                                                     state = rememberTooltipState()
                                                 ) {
                                                     TextButton(onClick = {
@@ -892,7 +981,9 @@ fun MainScreen(
                                                 }
                                             }
                                             TooltipBox(
-                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                    TooltipAnchorPosition.Above
+                                                ),
                                                 tooltip = { PlainTooltip { Text(stringResource(Res.string.use_as_prompt)) } },
                                                 state = rememberTooltipState()
                                             ) {
@@ -905,7 +996,9 @@ fun MainScreen(
                                                 }
                                             }
                                             TooltipBox(
-                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                    TooltipAnchorPosition.Above
+                                                ),
                                                 tooltip = { PlainTooltip { Text(stringResource(Res.string.append_to_prompt)) } },
                                                 state = rememberTooltipState()
                                             ) {
@@ -920,7 +1013,9 @@ fun MainScreen(
                                                 }
                                             }
                                             TooltipBox(
-                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                                    TooltipAnchorPosition.Above
+                                                ),
                                                 tooltip = { PlainTooltip { Text(stringResource(Res.string.copy_prompt)) } },
                                                 state = rememberTooltipState()
                                             ) {
@@ -946,14 +1041,20 @@ fun MainScreen(
                             ) {
                                 // Collapse/Expand — left-aligned
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(if (respExpanded) Res.string.collapse_response else Res.string.expand_response)) } },
                                     state = rememberTooltipState()
                                 ) {
                                     TextButton(onClick = {
                                         scope.launch {
                                             currentChat?.let { chat ->
-                                                chatsUseCase.setEntryExpanded(chat.id, entry.timestamp, !respExpanded)
+                                                chatsUseCase.setEntryExpanded(
+                                                    chat.id,
+                                                    entry.timestamp,
+                                                    !respExpanded
+                                                )
                                             }
                                         }
                                     }) {
@@ -967,18 +1068,23 @@ fun MainScreen(
                                 Spacer(Modifier.weight(1f))
                                 if (respExpanded) {
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(if (!entry.showMarkdown) Res.string.switch_to_markdown else Res.string.switch_to_raw)) } },
                                         state = rememberTooltipState()
                                     ) {
                                         TextButton(onClick = {
-                                        scope.launch {
-                                            currentChat?.let { chat ->
-                                                chatsUseCase.toggleEntryMarkdown(chat.id, entry.timestamp)
-                                                responseDisplayUseCase.setDefaultShowMarkdown(!entry.showMarkdown)
+                                            scope.launch {
+                                                currentChat?.let { chat ->
+                                                    chatsUseCase.toggleEntryMarkdown(
+                                                        chat.id,
+                                                        entry.timestamp
+                                                    )
+                                                    responseDisplayUseCase.setDefaultShowMarkdown(!entry.showMarkdown)
+                                                }
                                             }
-                                        }
-                                    }) {
+                                        }) {
                                             Icon(
                                                 if (!entry.showMarkdown) AppIcons.MarkdownView else AppIcons.RawView,
                                                 contentDescription = "Toggle raw/markdown",
@@ -988,7 +1094,9 @@ fun MainScreen(
                                     }
                                 }
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.use_as_prompt)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -1001,7 +1109,9 @@ fun MainScreen(
                                     }
                                 }
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.append_to_prompt)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -1016,7 +1126,9 @@ fun MainScreen(
                                     }
                                 }
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.copy_response)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -1044,9 +1156,10 @@ fun MainScreen(
                                             SelectionContainer {
                                                 MarkdownResponse(
                                                     content = entry.response,
-                                                    modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                                                        respContentHeightPx = it.size.height
-                                                    }
+                                                    modifier = Modifier.fillMaxWidth()
+                                                        .onGloballyPositioned {
+                                                            respContentHeightPx = it.size.height
+                                                        }
                                                 )
                                             }
                                         } else {
@@ -1054,29 +1167,38 @@ fun MainScreen(
                                                 value = rawFieldValue,
                                                 // readOnly blocks edits; selection changes still
                                                 // arrive here, keeping rawFieldValue.selection live.
-                                                onValueChange = { rawFieldValue = it.copy(text = entry.response) },
+                                                onValueChange = {
+                                                    rawFieldValue = it.copy(text = entry.response)
+                                                },
                                                 readOnly = true,
-                                                textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                                                modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                                                    respContentHeightPx = it.size.height
-                                                }
+                                                textStyle = MaterialTheme.typography.bodySmall.copy(
+                                                    fontFamily = FontFamily.Monospace
+                                                ),
+                                                modifier = Modifier.fillMaxWidth()
+                                                    .onGloballyPositioned {
+                                                        respContentHeightPx = it.size.height
+                                                    }
                                             )
                                         }
                                     } else {
                                         if (entry.showMarkdown) {
                                             MarkdownResponse(
                                                 content = entry.response,
-                                                modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                                                    respContentHeightPx = it.size.height
-                                                }
+                                                modifier = Modifier.fillMaxWidth()
+                                                    .onGloballyPositioned {
+                                                        respContentHeightPx = it.size.height
+                                                    }
                                             )
                                         } else {
                                             Text(
                                                 entry.response,
-                                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                                                modifier = Modifier.fillMaxWidth().onGloballyPositioned {
-                                                    respContentHeightPx = it.size.height
-                                                }
+                                                style = MaterialTheme.typography.bodySmall.copy(
+                                                    fontFamily = FontFamily.Monospace
+                                                ),
+                                                modifier = Modifier.fillMaxWidth()
+                                                    .onGloballyPositioned {
+                                                        respContentHeightPx = it.size.height
+                                                    }
                                             )
                                         }
                                     }
@@ -1097,7 +1219,7 @@ fun MainScreen(
                                                 } else {
                                                     val sel = rawFieldValue.selection
                                                     val copied = if (sel.collapsed) entry.response
-                                                        else entry.response.substring(sel.min, sel.max)
+                                                    else entry.response.substring(sel.min, sel.max)
                                                     clipboard.setText(AnnotatedString(copied))
                                                 }
                                                 true
@@ -1112,7 +1234,9 @@ fun MainScreen(
                                         AlertDialog(
                                             onDismissRequest = { showMarkdownCopyWarning = false },
                                             confirmButton = {
-                                                TextButton(onClick = { showMarkdownCopyWarning = false }) {
+                                                TextButton(onClick = {
+                                                    showMarkdownCopyWarning = false
+                                                }) {
                                                     Text(stringResource(Res.string.ok))
                                                 }
                                             },
@@ -1134,7 +1258,9 @@ fun MainScreen(
                             // Bottom bar: info only
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 TooltipBox(
-                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above
+                                    ),
                                     tooltip = { PlainTooltip { Text(stringResource(Res.string.remove_from_history)) } },
                                     state = rememberTooltipState()
                                 ) {
@@ -1159,7 +1285,8 @@ fun MainScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 val entryModel = models.find { it.id == entry.modelId }
-                                val entryProviderName = providers.find { it.id == entryModel?.providerId }?.name
+                                val entryProviderName =
+                                    providers.find { it.id == entryModel?.providerId }?.name
                                 val entryModelLabel = if (entryProviderName != null)
                                     "$entryProviderName: ${entry.modelName}"
                                 else
@@ -1186,17 +1313,23 @@ fun MainScreen(
                                 ) {
                                     // Collapse/Expand — left-aligned
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(if (respExpanded) Res.string.collapse_response else Res.string.expand_response)) } },
                                         state = rememberTooltipState()
                                     ) {
                                         TextButton(onClick = {
-                                        scope.launch {
-                                            currentChat?.let { chat ->
-                                                chatsUseCase.setEntryExpanded(chat.id, entry.timestamp, !respExpanded)
+                                            scope.launch {
+                                                currentChat?.let { chat ->
+                                                    chatsUseCase.setEntryExpanded(
+                                                        chat.id,
+                                                        entry.timestamp,
+                                                        !respExpanded
+                                                    )
+                                                }
                                             }
-                                        }
-                                    }) {
+                                        }) {
                                             Icon(
                                                 if (respExpanded) AppIcons.Collapse else AppIcons.Expand,
                                                 contentDescription = stringResource(if (respExpanded) Res.string.collapse else Res.string.expand),
@@ -1206,18 +1339,23 @@ fun MainScreen(
                                     }
                                     Spacer(Modifier.weight(1f))
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(if (!entry.showMarkdown) Res.string.switch_to_markdown else Res.string.switch_to_raw)) } },
                                         state = rememberTooltipState()
                                     ) {
                                         TextButton(onClick = {
-                                        scope.launch {
-                                            currentChat?.let { chat ->
-                                                chatsUseCase.toggleEntryMarkdown(chat.id, entry.timestamp)
-                                                responseDisplayUseCase.setDefaultShowMarkdown(!entry.showMarkdown)
+                                            scope.launch {
+                                                currentChat?.let { chat ->
+                                                    chatsUseCase.toggleEntryMarkdown(
+                                                        chat.id,
+                                                        entry.timestamp
+                                                    )
+                                                    responseDisplayUseCase.setDefaultShowMarkdown(!entry.showMarkdown)
+                                                }
                                             }
-                                        }
-                                    }) {
+                                        }) {
                                             Icon(
                                                 if (!entry.showMarkdown) AppIcons.MarkdownView else AppIcons.RawView,
                                                 contentDescription = "Toggle raw/markdown",
@@ -1226,7 +1364,9 @@ fun MainScreen(
                                         }
                                     }
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.use_as_prompt)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -1239,7 +1379,9 @@ fun MainScreen(
                                         }
                                     }
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.append_to_prompt)) } },
                                         state = rememberTooltipState()
                                     ) {
@@ -1254,7 +1396,9 @@ fun MainScreen(
                                         }
                                     }
                                     TooltipBox(
-                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
                                         tooltip = { PlainTooltip { Text(stringResource(Res.string.copy_response)) } },
                                         state = rememberTooltipState()
                                     ) {
