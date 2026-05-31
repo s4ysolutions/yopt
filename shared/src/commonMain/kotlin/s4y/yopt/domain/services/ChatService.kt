@@ -52,6 +52,18 @@ class ChatService(private val kv: KeyValueStore) {
         save()
     }
 
+    suspend fun setEntryExpanded(chatId: String, entryTimestamp: Long, expanded: Boolean) {
+        _chats.value = _chats.value.map { chat ->
+            if (chat.id == chatId) chat.copy(
+                expandedTimestamps = if (expanded)
+                    chat.expandedTimestamps + entryTimestamp
+                else
+                    chat.expandedTimestamps - entryTimestamp
+            ) else chat
+        }
+        save()
+    }
+
     suspend fun importAll(chats: List<Chat>) {
         _chats.value = chats
         save()

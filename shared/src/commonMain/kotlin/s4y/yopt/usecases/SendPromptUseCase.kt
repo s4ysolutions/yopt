@@ -8,6 +8,8 @@ import s4y.yopt.domain.services.AuthService
 import s4y.yopt.domain.services.LLMService
 import s4y.yopt.domain.services.ModelService
 
+private const val RESPONSE_AUTO_EXPAND_WORD_LIMIT = 50
+
 class SendPromptUseCase(
     private val llm: LLMService,
     private val models: ModelService,
@@ -41,6 +43,11 @@ class SendPromptUseCase(
                 showMarkdown = prefs.getDefaultShowMarkdown()
             )
             chats.appendHistory(chat.id, entry)
+            // Auto-expand: first item or short responses
+            val wordCount = response.split(Regex("\\s+")).count { it.isNotBlank() }
+            if (chat.history.isEmpty() || wordCount < RESPONSE_AUTO_EXPAND_WORD_LIMIT) {
+                chats.setEntryExpanded(chat.id, entry.timestamp, expanded = true)
+            }
             Result.success(entry)
         } catch (e: Exception) {
             Result.failure(e)

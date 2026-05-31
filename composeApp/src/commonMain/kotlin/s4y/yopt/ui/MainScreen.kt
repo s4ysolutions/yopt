@@ -736,7 +736,9 @@ fun MainScreen(
                 itemsIndexed(history) { i, entry ->
                     val isFirst = i == 0
                     val wordCount = entry.response.split(Regex("\\s+")).count { it.isNotBlank() }
-                    var respExpanded by remember { mutableStateOf(isFirst || wordCount < RESPONSE_AUTO_EXPAND_WORD_LIMIT) }
+                    val respExpanded = entry.timestamp in (currentChat?.expandedTimestamps ?: emptySet())
+                        || isFirst
+                        || wordCount < RESPONSE_AUTO_EXPAND_WORD_LIMIT
                     var promptExpanded by remember { mutableStateOf(false) }
                     var promptOverflows by remember { mutableStateOf(false) }
                     var respContentHeightPx by remember { mutableStateOf(0) }
@@ -931,7 +933,13 @@ fun MainScreen(
                                     tooltip = { PlainTooltip { Text(stringResource(if (respExpanded) Res.string.collapse_response else Res.string.expand_response)) } },
                                     state = rememberTooltipState()
                                 ) {
-                                    TextButton(onClick = { respExpanded = !respExpanded }) {
+                                    TextButton(onClick = {
+                                        scope.launch {
+                                            currentChat?.let { chat ->
+                                                chatsUseCase.setEntryExpanded(chat.id, entry.timestamp, !respExpanded)
+                                            }
+                                        }
+                                    }) {
                                         Icon(
                                             if (respExpanded) AppIcons.Collapse else AppIcons.Expand,
                                             contentDescription = stringResource(if (respExpanded) Res.string.collapse else Res.string.expand),
@@ -1165,7 +1173,13 @@ fun MainScreen(
                                         tooltip = { PlainTooltip { Text(stringResource(if (respExpanded) Res.string.collapse_response else Res.string.expand_response)) } },
                                         state = rememberTooltipState()
                                     ) {
-                                        TextButton(onClick = { respExpanded = !respExpanded }) {
+                                        TextButton(onClick = {
+                                        scope.launch {
+                                            currentChat?.let { chat ->
+                                                chatsUseCase.setEntryExpanded(chat.id, entry.timestamp, !respExpanded)
+                                            }
+                                        }
+                                    }) {
                                             Icon(
                                                 if (respExpanded) AppIcons.Collapse else AppIcons.Expand,
                                                 contentDescription = stringResource(if (respExpanded) Res.string.collapse else Res.string.expand),

@@ -19,6 +19,8 @@ class ManageChatsUseCase(private val chats: ChatService) {
         chats.removeHistoryEntry(chatId, index)
     suspend fun toggleEntryMarkdown(chatId: String, entryTimestamp: Long) =
         chats.toggleEntryMarkdown(chatId, entryTimestamp)
+    suspend fun setEntryExpanded(chatId: String, entryTimestamp: Long, expanded: Boolean) =
+        chats.setEntryExpanded(chatId, entryTimestamp, expanded)
     suspend fun update(chat: Chat) = chats.update(chat)
     suspend fun delete(chatId: String) = chats.delete(chatId)
 }
