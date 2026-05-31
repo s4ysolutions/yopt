@@ -818,7 +818,6 @@ fun MainScreen(
                                         Column(Modifier.fillMaxWidth()) {
                                             Row(
                                                 Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.End,
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 if (promptExpanded || promptOverflows) {
@@ -848,6 +847,7 @@ fun MainScreen(
                                                         }
                                                     }
                                                 }
+                                                Spacer(Modifier.weight(1f))
                                                 TooltipBox(
                                                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                                                         TooltipAnchorPosition.Above
@@ -937,22 +937,11 @@ fun MainScreen(
                                             )
                                         }
                                     } else {
-                                        // Wide + collapsed: buttons to the right of prompt
+                                        // Wide + collapsed: buttons to the right of prompt, expand on left
                                         Row(
                                             Modifier.fillMaxWidth(),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Text(
-                                                entry.prompt,
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis,
-                                                onTextLayout = {
-                                                    promptOverflows = it.hasVisualOverflow
-                                                },
-                                                modifier = Modifier.weight(1f)
-                                            )
                                             if (promptOverflows) {
                                                 TooltipBox(
                                                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
@@ -980,6 +969,17 @@ fun MainScreen(
                                                     }
                                                 }
                                             }
+                                            Text(
+                                                entry.prompt,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                                onTextLayout = {
+                                                    promptOverflows = it.hasVisualOverflow
+                                                },
+                                                modifier = Modifier.weight(1f)
+                                            )
                                             TooltipBox(
                                                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                                                     TooltipAnchorPosition.Above
@@ -1036,7 +1036,7 @@ fun MainScreen(
                             } // end prompt row
                             // Response action buttons — always shown above response
                             Row(
-                                Modifier.fillMaxWidth(),
+                                Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 // Collapse/Expand — left-aligned
@@ -1308,7 +1308,7 @@ fun MainScreen(
                             // Bottom repeat buttons when expanded content taller than screen
                             if (respExpanded && respContentHeightPx > windowHeightPx) {
                                 Row(
-                                    Modifier.fillMaxWidth(),
+                                    Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     // Collapse/Expand — left-aligned
