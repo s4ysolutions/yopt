@@ -70,7 +70,7 @@ Auth: `ApiKey` only (OAuth removed). Credentials stored in `SecureStore`.
 
 ## Rules
 
-### UI
+### UI (Compose — composeApp)
 
 - **i18n required** — all user-visible strings must use `stringResource(Res.string.xxx)`. Never
   hardcode English strings in composables. Add new strings to `values/strings.xml`.
@@ -82,6 +82,21 @@ Auth: `ApiKey` only (OAuth removed). Credentials stored in `SecureStore`.
   `Icons.Rounded.*`. Never inline `Icons.Rounded.Xxx` or `Icons.Default.Xxx` in composables.
 - **Tooltips** — every icon-only button must be wrapped in `TooltipBox`. Enclosing composable
   requires `@OptIn(ExperimentalMaterial3Api::class)`.
+
+### UI (SwiftUI — xcodeApp)
+
+- **Visual parity** — SwiftUI must match Compose visually. When changing Compose layouts, colors,
+  or icons, update the SwiftUI counterparts. Design constants live in `xcodeApp/Shared/DesignTokens.swift`.
+- **DesignTokens** — never hardcode colors, radii, padding, or icon sizes in SwiftUI views.
+  Always use `DesignTokens.*` constants.
+- **Model selection** — call `viewModel.selectModel(_ id:)` to persist selection via Kotlin bridge.
+  Never set `viewModel.selectedModel` directly.
+- **Expand logic** — write `(chat?.expandedTimestamps.contains(ts) ?? false) || isFirst || wordCount < 50`.
+  Parenthesise the `??` operand — Swift's `??` binds differently than Kotlin's `?:`.
+- **New Swift files** — must be registered in `xcodeApp/YoPt.xcodeproj/project.pbxproj` with a
+  `PBXFileReference`, group entry, and two `PBXBuildFile` + `PBXSourcesBuildPhase` entries (iOS
+  target `B2` + macOS target `B4`). See `.claude/skills/ui.md` for the pattern.
+- **SF Symbol → AppIcons mapping** — see `.claude/skills/ui.md` for the full table.
 
 ### Domain
 
@@ -101,7 +116,7 @@ Auth: `ApiKey` only (OAuth removed). Credentials stored in `SecureStore`.
 ## Available Skills
 
 - `.claude/skills/architecture.md` — layering rules, ports vs services, use-case rule, persistence decision tree, reactive pattern, DI
-- `.claude/skills/ui.md` — modify UI layouts, add controls, restructure screens
+- `.claude/skills/ui.md` — modify Compose or SwiftUI layouts, add controls, keep visual parity; includes SwiftUI file map, DesignTokens reference, icon mapping table, xcodeproj registration pattern
 - `.claude/skills/llm.md` — LLM integration layer (API styles, adding providers, model fetching)
 - `.claude/skills/icons.md` — add Material Symbols icons from gstatic URLs to AppIcons.kt
 - `.claude/skills/kmp-xcode.md` — iOS / Xcode KMP integration

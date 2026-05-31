@@ -1,6 +1,6 @@
 ---
 name: ui
-description: Modify the YoPt Compose Multiplatform UI — adjust layouts, add controls, restructure screens, or change composable parameters.
+description: Modify the YoPt UI — Compose Multiplatform (Android/Desktop/iOS/macOS/Web) or SwiftUI (xcodeApp iOS/macOS). Adjust layouts, add controls, restructure screens, or keep visual parity between the two UIs.
 ---
 
 # YoPt UI Skill
@@ -358,6 +358,99 @@ Three states:
 Horizontally-scrollable `Row(horizontalScroll)` of `OutlinedButton` chips (28.dp height). Each chip: tag name + "×" suffix; click removes from list. "+ Add tag" button opens `AlertDialog` with `OutlinedTextField(singleLine)`. Add rejects empty and duplicate tags.
 
 Tags persisted as `Chat.labels` via `chatsUseCase.update()`.
+
+---
+
+# SwiftUI (xcodeApp)
+
+Parallel native app for iOS and macOS sharing the same Kotlin domain via `ComposeApp.xcframework`.
+Compose UI is the source of truth — SwiftUI should visually match it. When changing layouts/colors/icons in Compose, update the SwiftUI counterparts too.
+
+## File map
+
+| File | Purpose |
+|------|---------|
+| `Shared/DesignTokens.swift` | Design constants mirroring Compose values (colors, radii, spacing, dot-grid params) |
+| `Shared/Components/HeaderView.swift` | Chat search + chat name + action buttons |
+| `Shared/Components/ChatListView.swift` | Dropdown list of filtered chats |
+| `Shared/Components/PromptAreaView.swift` | Prompt TextEditor + model selector + Send button |
+| `Shared/Components/ResponseCardView.swift` | Single history entry card |
+| `Shared/Components/ResponseActionsBar.swift` | `ResponseActionsBar` (above response) + `PromptActionsBar` (above prompt) |
+| `Shared/Components/DraggableSplitter.swift` | Resizable divider between prompt area and history |
+| `Shared/Components/ChatSettingsView.swift` | Chat instructions + tags overlay dialog |
+| `Shared/Components/SettingsView.swift` | Full settings sheet (tabs: Providers, Chats, Global, Export) |
+| `Shared/Components/TagChipsView.swift` | Tag chip row + AddTagDialog |
+| `Shared/Components/ModelSelectorView.swift` | Standalone model picker (used in Settings; prompt area uses inline picker in PromptAreaView) |
+| `Shared/Components/MarkdownResponseView.swift` | Markdown renderer via `AttributedString` |
+| `Shared/ViewModels/ChatViewModel.swift` | `@MainActor ObservableObject` — all published state, bridges to Kotlin via `KotlinBridge` |
+| `Shared/ViewModels/SettingsViewModel.swift` | Settings-specific state and actions |
+| `Shared/KotlinBridge.swift` | Singleton wrapper around KMP use cases exposed via SKIE |
+| `macApp/Views/MacMainChatView.swift` | macOS root view |
+| `iosApp/Views/MainChatView.swift` | iOS root view |
+
+## DesignTokens
+
+`Shared/DesignTokens.swift` mirrors Compose visual constants. Always use these — never hardcode values.
+
+| Token | Value | Compose equivalent |
+|---|---|---|
+| `topAreaBackground` | `accentColor.opacity(0.08)` | `primaryContainer.copy(alpha=0.4f)` |
+| `topAreaCornerRadius` | `12` | `RoundedCornerShape(12.dp)` |
+| `cardCornerRadius` | `8` | `RoundedCornerShape(8.dp)` |
+| `sectionPadding` | `8` | `8.dp` inner padding |
+| `cardVerticalPadding` | `4` | `padding(vertical=4.dp)` on cards |
+| `iconSize` | `18` | `Modifier.size(18.dp)` |
+| `actionBarHeight` | `24` | action bar frame height |
+| `dotSpacing` / `dotRadius` / `dotOpacity` | `20` / `2` / `0.12` | dot-grid `drawBehind` params |
+
+`dotGridBackground()` view modifier draws the response-area dot grid (matches Compose's `drawBehind` circle pattern).
+
+## Icon mapping (Compose AppIcons → SF Symbols)
+
+| AppIcons constant | SF Symbol used |
+|---|---|
+| `NewChat` (Add) | `plus.bubble` |
+| `DeleteChat` / `RemoveFromHistory` (deleteForever) | `trash` / `xmark.bin` |
+| `ChatInstructions` (tune) | `slider.horizontal.3` |
+| `Settings` (Settings) | `gearshape` |
+| `ChatListToggle` (KeyboardArrowDown) | `chevron.down` |
+| `Expand` (expandContent) | `arrow.up.left.and.arrow.down.right` |
+| `Collapse` (collapseContent) | `arrow.down.right.and.arrow.up.left` |
+| `UseAsPrompt` (rectangleAdd) | `arrow.up.message` |
+| `AppendToPrompt` (shadowAdd) | `plus.message` |
+| `CopyToClipboard` (contentCopy) | `doc.on.doc` |
+| `MarkdownView` (markdown) | `doc.text.magnifyingglass` |
+| `RawView` (rawOn) | `doc.plaintext` |
+| `RefreshModels` (Refresh) | `arrow.clockwise` |
+| `Back` (ArrowBack) | `chevron.left` |
+
+## SwiftUI architecture rules
+
+- **`ChatViewModel` is the single state owner** — `@StateObject` in root views; never duplicate state locally.
+- **Model selection** — call `viewModel.selectModel(_ id: String)` which bridges to `modelSelectionUseCase.set(modelId:)`. Never set `viewModel.selectedModel` directly (it's driven by the Kotlin flow).
+- **Dropdown positioning** — SwiftUI `.overlay(alignment: .top)` + `.offset(y: measuredFieldHeight)` + `.zIndex(100)` to place dropdowns below their anchor. Measure anchor height via `GeometryReader` into a `@State`.
+- **Splitter drag** — `DraggableSplitter` requires `totalHeight: CGFloat` from the parent (captured via `.background(GeometryReader {...})`). Stores `dragStartFraction` on first `onChanged`; resets on `onEnded`.
+- **Expand logic** — always write: `(chat?.expandedTimestamps.contains(ts) ?? false) || isFirst || wordCount < 50`. Never use `??` before `||` without explicit parentheses — Swift operator precedence differs from Kotlin.
+- **Selected model display** — compute the label `"ProviderName: ModelName"` in the parent view from `viewModel.models` + `viewModel.providers`; pass as `selectedModelName` to `PromptAreaView`. Never pass a raw model ID as a display string.
+- **Adding a new file to xcodeApp** — must add to `xcodeApp/YoPt.xcodeproj/project.pbxproj`: one `PBXFileReference`, one entry in `Shared` group children, and two `PBXBuildFile` + two `PBXSourcesBuildPhase` entries (one per target: iOS `B2`, macOS `B4`). IDs follow the `AA000000000000000001XX` sequence.
+
+## Layout structure (macOS + iOS root views)
+
+```
+VStack(spacing: 0)
+├── VStack(spacing: 0)  ← tinted rounded container (DesignTokens.topAreaBackground + topAreaCornerRadius)
+│   ├── HeaderView
+│   ├── Divider
+│   └── PromptAreaView
+│   [.padding(.horizontal, 12).padding(.top, 8)]
+├── DraggableSplitter(fraction:, totalHeight:, onFractionChanged:)
+└── ScrollView  ← .dotGridBackground()
+    └── LazyVStack(spacing: DesignTokens.cardVerticalPadding * 2)
+        └── ResponseCardView × N  [.padding(.horizontal, 12)]
+[.background(GeometryReader) ← captures totalHeight for splitter]
+```
+
+---
 
 ## Common operations
 
