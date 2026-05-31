@@ -241,9 +241,34 @@ tasks.register("createDebugAppBundle") {
     }
 }
 
-// runDebugExecutableMacosArm64 runs composeApp.kexe directly; Compose 1.11.0's macOS reader
-// only checks source dirs for that case (not bundle path). Resources won't load.
-// Use runMacosNative instead for full resource support.
+// For a bare .kexe (non-bundle), NSBundle.mainBundle.resourcePath resolves to the directory
+// containing the executable. DefaultMacOsResourceReader then looks for:
+//   <executableDir>/compose-resources/composeResources/<module>/values/strings.cvr
+// (same reader path as bundles: resourcePath + "/compose-resources/" + path)
+// The KMP native resource pipeline never produces that tree (macosArm64 prepare tasks are
+// NO-SOURCE because all resources live in commonMain). This task copies them there so
+// runDebugExecutableMacosArm64 works without a bundle.
+tasks.register("copyResourcesToMacosDebugExecutable") {
+    dependsOn("prepareComposeResourcesTaskForCommonMain")
+    val srcDir = preparedResourcesSrcDir
+    // Reader: NSBundle.mainBundle.resourcePath + "/compose-resources/" + path
+    // For a bare kexe, resourcePath == executableDir, so resources must land at:
+    //   <executableDir>/compose-resources/composeResources/<module>/...
+    val dstDir = layout.buildDirectory
+        .dir("bin/macosArm64/debugExecutable/compose-resources/composeResources/$composeResourcesModulePath")
+    inputs.dir(srcDir)
+    outputs.dir(dstDir)
+    val srcDirFile = srcDir.get().asFile
+    val dstDirFile = dstDir.get().asFile
+    doLast {
+        dstDirFile.deleteRecursively()
+        srcDirFile.copyRecursively(dstDirFile, overwrite = true)
+    }
+}
+
+tasks.named("runDebugExecutableMacosArm64") {
+    dependsOn("linkDebugExecutableMacosArm64", "copyResourcesToMacosDebugExecutable")
+}
 
 tasks.register("runMacosNative") {
     dependsOn("createDebugAppBundle")
