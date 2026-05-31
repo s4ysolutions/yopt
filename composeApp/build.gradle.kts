@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -24,6 +25,7 @@ kotlin {
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export(projects.shared)
             xcf.add(this)
         }
     }
@@ -32,6 +34,7 @@ kotlin {
             framework {
                 baseName = "ComposeApp"
                 isStatic = true
+                export(projects.shared)
                 xcf.add(this)
             }
             executable {
@@ -52,7 +55,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(projects.shared)
+            api(projects.shared)
             implementation(libs.markdown.renderer)
             implementation(libs.markdown.renderer.m3)
         }
