@@ -61,11 +61,11 @@ struct ResponseCardView: View {
         }
         .padding(4)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius)
                 .fill(DesignTokens.cardBackground)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius)
                 .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
         )
         .padding(.vertical, 4)

@@ -14,6 +14,7 @@ struct HeaderView: View {
 
     @State private var columnWidth: CGFloat = 0
     @State private var searchFieldHeight: CGFloat = 44
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
         VStack(spacing: 8) {
@@ -35,6 +36,12 @@ struct HeaderView: View {
                     actionButtons
                 }
             }
+        }
+        .overlay {
+            Button("") { searchFocused = true }
+                .keyboardShortcut("f", modifiers: .command)
+                .opacity(0)
+                .frame(width: 0, height: 0)
         }
         .background(GeometryReader { geo in
             Color.clear
@@ -63,6 +70,7 @@ struct HeaderView: View {
         HStack(spacing: 4) {
             TextField("Search...", text: $chatSearchQuery)
                 .textFieldStyle(.plain)
+                .focused($searchFocused)
 #if os(macOS)
                 .onChange(of: chatSearchQuery) { chatDropdownExpanded = true }
 #else
@@ -95,18 +103,17 @@ struct HeaderView: View {
         )
 #if os(iOS)
         .background(Color(uiColor: .systemBackground))
+#endif
+        // Overlay (not popover): macOS popover steals key focus on open,
+        // breaking incremental typing in the search field.
         .overlay(alignment: .topLeading) {
             if chatDropdownExpanded {
                 chatListView
-                    .padding(.top, searchFieldHeight + 4)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .offset(y: searchFieldHeight + 4)
                     .zIndex(10)
             }
         }
-#else
-        .popover(isPresented: $chatDropdownExpanded, arrowEdge: .bottom) {
-            chatListView
-        }
-#endif
     }
 
     private var chatNameField: some View {

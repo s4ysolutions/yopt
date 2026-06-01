@@ -63,6 +63,11 @@ struct AddTagDialog: View {
             }
         }
         .padding()
+#if os(macOS)
         .frame(width: 260)
+        .fixedSize(horizontal: false, vertical: true)
+#else
+        .presentationDetents([.height(180)])
+#endif
     }
 }

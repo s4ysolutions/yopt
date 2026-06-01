@@ -80,9 +80,10 @@ struct ProviderCardView: View {
 
                 Button(action: onToggle) {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .font(.caption)
+                        .actionIcon()
                 }
                 .buttonStyle(.plain)
+                .help(isExpanded ? "Collapse" : "Expand")
             }
 
             if isExpanded {
@@ -331,7 +332,10 @@ struct ModelListView: View {
 
             Text("Models").font(.caption).padding(.top, 4)
 
-            ForEach(filtered) { model in
+            ForEach(Array(filtered.enumerated()), id: \.element.id) { idx, model in
+                if idx > 0 {
+                    Divider()
+                }
                 Toggle(isOn: Binding(
                     get: { model.enabled },
                     set: { _ in onToggle(model.id) }
@@ -339,7 +343,8 @@ struct ModelListView: View {
                     Text(model.officialName)
                         .font(.callout)
                 }
-                .padding(.vertical, 2)
+                .toggleStyle(.switch)
+                .padding(.vertical, 6)
             }
         }
         .padding(.vertical, 4)

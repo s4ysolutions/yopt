@@ -35,8 +35,14 @@ struct ChatListView: View {
         .frame(idealWidth: 260, maxWidth: 360, idealHeight: idealH, maxHeight: idealH)
 #if os(iOS)
         .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .shadow(radius: 6, y: 3)
+#else
+        .background(Color(nsColor: .controlBackgroundColor))
 #endif
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+        )
+        .shadow(radius: 6, y: 3)
     }
 }

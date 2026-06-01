@@ -44,7 +44,12 @@ struct ChatSettingsView: View {
             }
         }
         .padding()
+#if os(macOS)
         .frame(minWidth: 400, idealWidth: 440)
+        .fixedSize(horizontal: false, vertical: true)
+#else
+        .presentationDetents([.medium])
+#endif
         .sheet(isPresented: $showAddTag) {
             AddTagDialog(isPresented: $showAddTag, tags: $labels)
         }

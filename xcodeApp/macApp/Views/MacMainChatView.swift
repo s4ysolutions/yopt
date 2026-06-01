@@ -34,6 +34,9 @@ struct MacMainChatView: View {
             Button("", action: { viewModel.showSettings = true })
                 .keyboardShortcut(",", modifiers: .command)
                 .opacity(0)
+            Button("", action: viewModel.createNewChat)
+                .keyboardShortcut("n", modifiers: .command)
+                .opacity(0)
             if viewModel.showSettings {
                 Button("", action: { viewModel.showSettings = false })
                     .keyboardShortcut(.escape, modifiers: [])
@@ -100,7 +103,6 @@ struct MacMainChatView: View {
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
             .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
-            .clipped()
             .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)

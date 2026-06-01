@@ -57,7 +57,6 @@ struct MainChatView: View {
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
             .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
-            .clipped()
             .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
@@ -71,6 +70,18 @@ struct MainChatView: View {
 
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
+                if history.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "text.bubble")
+                            .font(.system(size: 36))
+                            .foregroundColor(.secondary.opacity(0.35))
+                        Text("Send a prompt to get started")
+                            .font(.body)
+                            .foregroundColor(.secondary.opacity(0.5))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 60)
+                } else {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
                         let isFirst = i == 0
@@ -101,6 +112,7 @@ struct MainChatView: View {
                         .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
                         .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
                     }
+                }
                 }
             }
             .dotGridBackground()
