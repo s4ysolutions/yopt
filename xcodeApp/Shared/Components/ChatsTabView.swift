@@ -23,12 +23,17 @@ struct ChatsTabView: View {
             if !allLabels.isEmpty {
                 labelFilterView
             }
-            LazyVStack(spacing: 0) {
-                ForEach(filteredChats) { chat in
-                    ChatEditRowView(chat: chat, onUpdate: onUpdate, onDelete: onDelete)
+            ScrollView {
+                LazyVStack(spacing: 4) {
+                    ForEach(filteredChats) { chat in
+                        ChatEditRowView(chat: chat, onUpdate: onUpdate, onDelete: onDelete)
+                    }
                 }
             }
+            .frame(maxHeight: .infinity)
         }
+        .padding(.top, 8)
+        .frame(maxHeight: .infinity)
     }
 
     private var labelFilterView: some View {
@@ -106,6 +111,9 @@ struct ChatEditRowView: View {
                 }
             }
         }
-        .padding(4)
+        .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.secondary.opacity(0.05))
+        .cornerRadius(8)
     }
 }

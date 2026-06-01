@@ -10,6 +10,7 @@ struct GlobalTabView: View {
                 set: { settingsVM.globalInstructions = $0; settingsVM.setGlobalInstructions($0) }
             ))
             .font(.body)
+            .frame(maxHeight: .infinity)
             .overlay(
                 Group {
                     if settingsVM.globalInstructions.isEmpty {
@@ -22,6 +23,12 @@ struct GlobalTabView: View {
                 },
                 alignment: .topLeading
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+            )
         }
+        .padding(.vertical, 8)
+        .frame(maxHeight: .infinity)
     }
 }

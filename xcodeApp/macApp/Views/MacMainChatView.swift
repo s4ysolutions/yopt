@@ -17,6 +17,36 @@ struct MacMainChatView: View {
     }
 
     var body: some View {
+        Group {
+            if viewModel.showSettings {
+                SettingsView(viewModel: viewModel)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(nsColor: .windowBackgroundColor))
+            } else {
+                mainContent
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+            if viewModel.showChatSettings, let chat = viewModel.currentChat {
+                ChatSettingsView(
+                    isPresented: $viewModel.showChatSettings,
+                    chat: chat,
+                    onSave: { title, instr, labels in
+                        let updated = Chat(
+                            id: chat.id, title: title, instructions: instr,
+                            defaultModelId: chat.defaultModelId, labels: labels,
+                            expandedTimestamps: Set(chat.expandedTimestamps.map { KotlinLong(longLong: $0) }),
+                            history: chat.history.map { $0.toKotlinEntry() }
+                        )
+                        Task { try? await KotlinBridge.shared.chatsUseCase.update(chat: updated) }
+                    }
+                )
+            }
+        }
+    }
+
+    private var mainContent: some View {
         VStack(spacing: 0) {
             // Header + prompt area with tinted rounded background
             VStack(spacing: 0) {
@@ -114,25 +144,5 @@ struct MacMainChatView: View {
                     .onChange(of: geo.size.height) { totalHeight = $0 }
             }
         )
-        .sheet(isPresented: $viewModel.showSettings) {
-            SettingsView(viewModel: viewModel)
-        }
-        .overlay {
-            if viewModel.showChatSettings, let chat = viewModel.currentChat {
-                ChatSettingsView(
-                    isPresented: $viewModel.showChatSettings,
-                    chat: chat,
-                    onSave: { title, instr, labels in
-                        let updated = Chat(
-                            id: chat.id, title: title, instructions: instr,
-                            defaultModelId: chat.defaultModelId, labels: labels,
-                            expandedTimestamps: Set(chat.expandedTimestamps.map { KotlinLong(longLong: $0) }),
-                            history: chat.history.map { $0.toKotlinEntry() }
-                        )
-                        Task { try? await KotlinBridge.shared.chatsUseCase.update(chat: updated) }
-                    }
-                )
-            }
-        }
     }
 }

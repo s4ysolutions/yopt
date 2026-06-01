@@ -5,7 +5,7 @@ struct ExportTabView: View {
     @ObservedObject var settingsVM: SettingsViewModel
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             SaveFileButton(label: "Export Settings") {
                 settingsVM.export()
             }
@@ -27,7 +27,8 @@ struct ExportTabView: View {
                 Text(err).foregroundColor(.red).font(.caption)
             }
         }
-        .padding()
+        .padding(.top, 8)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .alert(settingsVM.dialogTitle ?? "", isPresented: Binding(
             get: { settingsVM.dialogText != nil },
             set: { if !$0 { settingsVM.dialogText = nil } }
