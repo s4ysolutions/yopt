@@ -26,7 +26,7 @@ struct SettingsView: View {
             Divider()
                 .padding(.vertical, 8)
 
-            Picker("Tab", selection: $selectedTab) {
+            Picker("", selection: $selectedTab) {
                 Text("Providers").tag(0)
                 Text("Chats").tag(1)
                 Text("Global").tag(2)
@@ -35,17 +35,15 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal, 12)
 
-            TabView(selection: $selectedTab) {
-                ProvidersTabView(settingsVM: settingsVM)
-                    .tag(0)
-                ChatsTabView(chats: settingsVM.chats, onUpdate: settingsVM.updateChat, onDelete: settingsVM.deleteChat)
-                    .tag(1)
-                GlobalTabView(settingsVM: settingsVM)
-                    .tag(2)
-                ExportTabView(settingsVM: settingsVM)
-                    .tag(3)
+            Group {
+                switch selectedTab {
+                case 0: ProvidersTabView(settingsVM: settingsVM)
+                case 1: ChatsTabView(chats: settingsVM.chats, onUpdate: settingsVM.updateChat, onDelete: settingsVM.deleteChat)
+                case 2: GlobalTabView(settingsVM: settingsVM)
+                case 3: ExportTabView(settingsVM: settingsVM)
+                default: EmptyView()
+                }
             }
-            .tabViewStyle(.automatic)
             .padding(.horizontal, 12)
         }
         .frame(minWidth: 500, minHeight: 400)
