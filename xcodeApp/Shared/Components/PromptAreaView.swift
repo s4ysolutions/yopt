@@ -63,6 +63,7 @@ struct PromptAreaView: View {
                     Button(action: onCancel) {
                         ProgressView()
                             .scaleEffect(0.8)
+                            .frame(width: 28, height: 28)
                     }
                     .buttonStyle(.plain)
                 } else {

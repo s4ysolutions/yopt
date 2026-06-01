@@ -91,9 +91,9 @@ struct ResponseCardView: View {
     }
 
     private var bottomBar: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 8) {
             Button(action: onRemove) {
-                Image("delete_forever")
+                Image(systemName: "trash")
                     .actionIcon()
             }
             .buttonStyle(.plain)

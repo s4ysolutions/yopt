@@ -10,9 +10,9 @@ struct ResponseActionsBar: View {
     let onCopy: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 0) {
             Button(action: onToggleExpand) {
-                Image(isExpanded ? "collapse_content" : "expand_content")
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -22,7 +22,7 @@ struct ResponseActionsBar: View {
 
             if isExpanded {
                 Button(action: onToggleMarkdown) {
-                    Image(showMarkdown ? "raw_on" : "markdown")
+                    Image(systemName: showMarkdown ? "chevron.left.forwardslash.chevron.right" : "doc.richtext")
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
@@ -30,21 +30,21 @@ struct ResponseActionsBar: View {
             }
 
             Button(action: onUseAsPrompt) {
-                Image("add_box")
+                Image(systemName: "square.and.pencil")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Use as Prompt")
 
             Button(action: onAppendToPrompt) {
-                Image("shadow_add")
+                Image(systemName: "text.badge.plus")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Append to Prompt")
 
             Button(action: onCopy) {
-                Image("content_copy")
+                Image(systemName: "doc.on.doc")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -64,10 +64,10 @@ struct PromptActionsBar: View {
     let onCopy: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 0) {
             if showExpand {
                 Button(action: onToggleExpand) {
-                    Image(isExpanded ? "collapse_content" : "expand_content")
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
@@ -75,19 +75,19 @@ struct PromptActionsBar: View {
             }
             Spacer()
             Button(action: onUseAsPrompt) {
-                Image("add_box")
+                Image(systemName: "square.and.pencil")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Use as Prompt")
             Button(action: onAppendToPrompt) {
-                Image("shadow_add")
+                Image(systemName: "text.badge.plus")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Append to Prompt")
             Button(action: onCopy) {
-                Image("content_copy")
+                Image(systemName: "doc.on.doc")
                     .actionIcon()
             }
             .buttonStyle(.plain)

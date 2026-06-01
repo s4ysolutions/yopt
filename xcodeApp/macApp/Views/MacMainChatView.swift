@@ -22,13 +22,26 @@ struct MacMainChatView: View {
                 SettingsView(viewModel: viewModel)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(nsColor: .windowBackgroundColor))
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
             } else {
                 mainContent
+                    .transition(.move(edge: .leading).combined(with: .opacity))
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: viewModel.showSettings)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay {
-            if viewModel.showChatSettings, let chat = viewModel.currentChat {
+            Button("", action: { viewModel.showSettings = true })
+                .keyboardShortcut(",", modifiers: .command)
+                .opacity(0)
+            if viewModel.showSettings {
+                Button("", action: { viewModel.showSettings = false })
+                    .keyboardShortcut(.escape, modifiers: [])
+                    .opacity(0)
+            }
+        }
+        .sheet(isPresented: $viewModel.showChatSettings) {
+            if let chat = viewModel.currentChat {
                 ChatSettingsView(
                     isPresented: $viewModel.showChatSettings,
                     chat: chat,
@@ -100,35 +113,48 @@ struct MacMainChatView: View {
 
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
-                        let isFirst = i == 0
-                        let wordCount = entry.response.split { $0.isWhitespace }.count
-                        let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
-                            || isFirst
-                            || wordCount < 50
-                        let entryModel = viewModel.models.first { $0.id == entry.modelId }
-                        let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
-                        let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
+                if history.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "text.bubble")
+                            .font(.system(size: 36))
+                            .foregroundColor(.secondary.opacity(0.35))
+                        Text("Send a prompt to get started")
+                            .font(.body)
+                            .foregroundColor(.secondary.opacity(0.5))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 60)
+                } else {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
+                            let isFirst = i == 0
+                            let wordCount = entry.response.split { $0.isWhitespace }.count
+                            let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
+                                || isFirst
+                                || wordCount < 50
+                            let entryModel = viewModel.models.first { $0.id == entry.modelId }
+                            let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
+                            let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
 
-                        ResponseCardView(
-                            entry: entry,
-                            isFirst: isFirst,
-                            currentPrompt: viewModel.prompt,
-                            currentModelId: viewModel.selectedModel,
-                            isExpanded: respExpanded,
-                            chatId: viewModel.currentChatId ?? "",
-                            onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                            onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                            onUseAsPrompt: viewModel.useAsPrompt,
-                            onAppendToPrompt: viewModel.appendToPrompt,
-                            onCopy: { NSPasteboard.general.clearContents(); NSPasteboard.general.setString($0, forType: .string) },
-                            onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
-                            modelName: entryModelLabel
-                        )
-                        .padding(.horizontal, 12)
-                        .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
-                        .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
+                            ResponseCardView(
+                                entry: entry,
+                                isFirst: isFirst,
+                                currentPrompt: viewModel.prompt,
+                                currentModelId: viewModel.selectedModel,
+                                isExpanded: respExpanded,
+                                chatId: viewModel.currentChatId ?? "",
+                                onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onUseAsPrompt: viewModel.useAsPrompt,
+                                onAppendToPrompt: viewModel.appendToPrompt,
+                                onCopy: { NSPasteboard.general.clearContents(); NSPasteboard.general.setString($0, forType: .string) },
+                                onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
+                                modelName: entryModelLabel
+                            )
+                            .padding(.horizontal, 12)
+                            .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
+                            .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
+                        }
                     }
                 }
             }

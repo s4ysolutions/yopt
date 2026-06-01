@@ -51,7 +51,7 @@ struct HeaderView: View {
             Button {
                 chatDropdownExpanded.toggle()
             } label: {
-                Image("keyboard_arrow_down")
+                Image(systemName: "chevron.down")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -97,7 +97,7 @@ struct HeaderView: View {
     private var actionButtons: some View {
         HStack(spacing: 8) {
             Button(action: onCreateNew) {
-                Image("add")
+                Image(systemName: "plus")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -105,7 +105,7 @@ struct HeaderView: View {
 
             if allChatsCount > 1 {
                 Button(action: onDelete) {
-                    Image("delete_forever")
+                    Image(systemName: "trash")
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
@@ -113,14 +113,14 @@ struct HeaderView: View {
             }
 
             Button(action: onChatSettings) {
-                Image("tune")
+                Image(systemName: "slider.horizontal.3")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Chat Settings")
 
             Button(action: onSettings) {
-                Image("settings")
+                Image(systemName: "gear")
                     .actionIcon()
             }
             .buttonStyle(.plain)

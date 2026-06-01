@@ -49,8 +49,8 @@ struct ChatsTabView: View {
                         Text(label)
                             .font(.caption2)
                     }
-                    .tint(checked ? nil : nil)
                     .buttonStyle(.bordered)
+                    .tint(checked ? .accentColor : nil)
                     .controlSize(.small)
                 }
             }

@@ -7,7 +7,7 @@ enum DesignTokens {
     static let sectionPadding: CGFloat = 8
     static let cardVerticalPadding: CGFloat = 4
     static let iconSize: CGFloat = 18
-    static let actionBarHeight: CGFloat = 24
+    static let actionBarHeight: CGFloat = 28
     static let dotSpacing: CGFloat = 20
     static let dotRadius: CGFloat = 2
     static let dotOpacity: Double = 0.12
@@ -28,8 +28,9 @@ extension Image {
     func actionIcon() -> some View {
         self.resizable()
             .scaledToFit()
-            .frame(width: 16, height: 16)
+            .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
             .foregroundColor(.secondary)
+            .padding((28 - DesignTokens.iconSize) / 2)
     }
 }
 

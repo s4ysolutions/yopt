@@ -66,7 +66,7 @@ struct ProviderCardView: View {
 
                 if isExpanded {
                     Button(action: onRefresh) {
-                        Image("refresh")
+                        Image(systemName: "arrow.clockwise")
                             .actionIcon()
                     }
                     .buttonStyle(.plain)
