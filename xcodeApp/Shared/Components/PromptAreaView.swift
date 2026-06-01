@@ -58,6 +58,7 @@ struct PromptAreaView: View {
                 .buttonStyle(.plain)
                 .popover(isPresented: $showModelPicker) {
                     modelPickerContent
+                        .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, 380))])
                 }
 
                 if loading {
@@ -98,14 +99,16 @@ struct PromptAreaView: View {
                                     .foregroundColor(.accentColor)
                             }
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(4)
+            .padding(8)
         }
+        #if os(macOS)
         .frame(width: 280, height: min(CGFloat(models.count) * 36 + 8, 300))
+        #endif
     }
 }
