@@ -93,8 +93,8 @@ struct ResponseCardView: View {
     private var bottomBar: some View {
         HStack {
             Button(action: onRemove) {
-                Image(systemName: "xmark.bin")
-                    .font(.caption2)
+                Image("delete_forever")
+                    .actionIcon()
             }
             .buttonStyle(.plain)
             .help("Remove from History")

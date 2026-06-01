@@ -9,8 +9,8 @@ struct SettingsView: View {
         VStack(spacing: 0) {
             HStack {
                 Button(action: { viewModel.showSettings = false }) {
-                    Image(systemName: "chevron.left")
-                        .font(.body)
+                    Image("arrow_back")
+                        .actionIcon()
                 }
                 .buttonStyle(.plain)
                 .help("Back")

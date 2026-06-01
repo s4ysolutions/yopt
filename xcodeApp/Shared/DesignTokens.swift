@@ -24,6 +24,15 @@ extension View {
     }
 }
 
+extension Image {
+    func actionIcon() -> some View {
+        self.resizable()
+            .scaledToFit()
+            .frame(width: 16, height: 16)
+            .foregroundColor(.secondary)
+    }
+}
+
 struct DotGridBackground: View {
     var body: some View {
         Canvas { context, size in
