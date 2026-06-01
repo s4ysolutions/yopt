@@ -67,7 +67,7 @@
 		AA0000000000000000013f /* GlobalTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000013d /* GlobalTabView.swift */; };
 		AA00000000000000000141 /* ExportTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000140 /* ExportTabView.swift */; };
 		AA00000000000000000142 /* ExportTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000140 /* ExportTabView.swift */; };
-		AA00000000000000000147 /* MainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000150 /* MainChatView.swift */; };
+		AA00000000000000000147 /* MainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000146 /* MainChatView.swift */; };
 		AA00000000000000000148 /* MacMainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000149 /* MacMainChatView.swift */; };
 		AA00000000000000000152 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000151 /* DesignTokens.swift */; };
 		AA00000000000000000153 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000151 /* DesignTokens.swift */; };
@@ -123,7 +123,6 @@
 		AA00000000000000000140 /* ExportTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTabView.swift; sourceTree = "<group>"; };
 		AA00000000000000000146 /* MainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChatView.swift; sourceTree = "<group>"; };
 		AA00000000000000000149 /* MacMainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMainChatView.swift; sourceTree = "<group>"; };
-		AA00000000000000000150 /* MainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChatView.swift; sourceTree = "<group>"; };
 		AA00000000000000000151 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,14 +146,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		41DBBEC82FCCD9EE00C55555 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				AA00000000000000000150 /* MainChatView.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		AA00000000000000000000C0 = {
 			isa = PBXGroup;
 			children = (
@@ -163,7 +154,6 @@
 				AA00000000000000000000C2 /* macApp */,
 				AA00000000000000000000C3 /* Frameworks */,
 				AA00000000000000000000C4 /* Products */,
-				41DBBEC82FCCD9EE00C55555 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};

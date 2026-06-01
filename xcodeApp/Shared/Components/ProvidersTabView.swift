@@ -206,7 +206,11 @@ struct CustomProviderEditView: View {
                                 Text(style.rawValue).tag(style)
                             }
                         }
+                        #if os(macOS)
                         .pickerStyle(.radioGroup)
+                        #else
+                        .pickerStyle(.wheel)
+                        #endif
                         .padding()
                     }
             }
@@ -261,7 +265,11 @@ struct AddCustomProviderView: View {
                                 Text(style.rawValue).tag(style)
                             }
                         }
+                        #if os(macOS)
                         .pickerStyle(.radioGroup)
+                        #else
+                        .pickerStyle(.wheel)
+                        #endif
                         .padding()
                     }
             }
