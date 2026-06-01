@@ -91,7 +91,7 @@ struct ResponseCardView: View {
     }
 
     private var bottomBar: some View {
-        HStack {
+        HStack(spacing: 0) {
             Button(action: onRemove) {
                 Image("delete_forever")
                     .actionIcon()
@@ -104,17 +104,19 @@ struct ResponseCardView: View {
                 .foregroundColor(.secondary)
 
             if let name = modelName {
-                Text("\u{00B7} \(name)")
+                Text(" \u{00B7} \(name)")
                     .font(.caption2)
                     .foregroundColor(.accentColor)
                     .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Spacer()
             }
 
-            Text("\u{00B7} \(formatDuration(entry.durationMs))")
+            Text(" \u{00B7} \(formatDuration(entry.durationMs))")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-
-            Spacer()
         }
     }
 

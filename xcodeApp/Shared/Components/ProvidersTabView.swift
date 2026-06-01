@@ -60,7 +60,7 @@ struct ProviderCardView: View {
                         .font(.headline)
                     Text(hasKey ? "API Key set" : "Not configured")
                         .font(.caption)
-                        .foregroundColor(hasKey ? .green : .red)
+                        .foregroundColor(hasKey ? Color.accentColor : Color.red)
                 }
                 Spacer()
 

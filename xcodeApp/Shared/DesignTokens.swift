@@ -1,9 +1,9 @@
 import SwiftUI
 
 enum DesignTokens {
-    static let topAreaBackground = Color.accentColor.opacity(0.08)
+    static let topAreaBackground = Color.accentColor.opacity(0.4)
     static let topAreaCornerRadius: CGFloat = 12
-    static let cardCornerRadius: CGFloat = 8
+    static let cardCornerRadius: CGFloat = 12
     static let sectionPadding: CGFloat = 8
     static let cardVerticalPadding: CGFloat = 4
     static let iconSize: CGFloat = 18
