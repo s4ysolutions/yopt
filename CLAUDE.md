@@ -11,24 +11,17 @@
 - `:composeApp` — Compose UI for all platforms (`s4y.yopt.ui`)
 - `:androidApp` — thin Android app shell (`MainActivity` delegates to `composeApp`)
 
-**KMP targets** (both `:shared` and `:composeApp`):
-`android` · `desktop` (JVM) · `iosArm64` · `iosSimulatorArm64` · `macosArm64` · `wasmJs`
+**KMP targets** (`:shared`): `android` · `desktop` (JVM) · `iosArm64` · `iosSimulatorArm64` · `macosArm64` · `macosX64` · `wasmJs`
+**KMP targets** (`:composeApp`): `android` · `desktop` (JVM) · `iosArm64` · `iosSimulatorArm64` · `macosArm64` (framework only, for xcodeApp) · `wasmJs`
 
 ## Running
 
-| Platform          | Command                                                                     |
-|-------------------|-----------------------------------------------------------------------------|
-| Desktop (JVM)     | `./gradlew :composeApp:run` ✅                                               |
-| macOS native      | `./gradlew :composeApp:runMacosNative` ✅                                    |
-| macOS .app bundle | `./gradlew :composeApp:packageMacosApp` → `composeApp/build/macos/YoPt.app` |
-| Web (wasmJs)      | `./gradlew :composeApp:wasmJsBrowserRun`                                    |
-| Android           | Android Studio → run `:androidApp`                                          |
-| iOS               | Xcode → `xcodeApp/`                                                         |
-
-> **macOS native note:** `runDebugExecutableMacosArm64` (the KMP-generated task used by the IDE Run
-> button) runs the raw kexe and crashes — Compose Multiplatform 1.11.0 does not bundle resources for
-> macOS executable binaries. Use `runMacosNative` instead (runs the `.app` bundle where `NSBundle`
-> resolves resources correctly).
+| Platform      | Command                                  |
+|---------------|------------------------------------------|
+| Desktop (JVM) | `./gradlew :composeApp:run` ✅            |
+| Web (wasmJs)  | `./gradlew :composeApp:wasmJsBrowserRun` |
+| Android       | Android Studio → run `:androidApp`       |
+| iOS / macOS   | Xcode → `xcodeApp/`                      |
 
 ## Architecture
 

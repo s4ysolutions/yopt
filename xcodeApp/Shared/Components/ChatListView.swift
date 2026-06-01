@@ -5,7 +5,14 @@ struct ChatListView: View {
     let onSelect: (String) -> Void
     let onDismiss: () -> Void
 
+    @State private var hoveredId: String? = nil
+
+    private static let rowHeight: CGFloat = 30
+    private static let maxVisible = 10
+
     var body: some View {
+        let count = chats.count
+        let idealH = min(CGFloat(count) * Self.rowHeight + 8, CGFloat(Self.maxVisible) * Self.rowHeight + 8)
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(chats) { chat in
@@ -13,18 +20,23 @@ struct ChatListView: View {
                         Text(chat.title)
                             .lineLimit(1)
                             .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 6)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(hoveredId == chat.id ? Color.accentColor.opacity(0.12) : Color.clear)
+                            .cornerRadius(4)
                     }
                     .buttonStyle(.plain)
-                    Divider()
+                    .frame(maxWidth: .infinity)
+                    .onHover { hoveredId = $0 ? chat.id : nil }
                 }
             }
+            .padding(4)
         }
-        .frame(maxHeight: 300)
+        .frame(idealWidth: 260, maxWidth: 360, idealHeight: idealH, maxHeight: idealH)
+#if os(iOS)
         .background(.regularMaterial)
-        .cornerRadius(8)
-        .shadow(radius: 4)
-        .onTapGesture {} // prevent dismissal when interacting
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .shadow(radius: 6, y: 3)
+#endif
     }
 }

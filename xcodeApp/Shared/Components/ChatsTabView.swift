@@ -86,7 +86,7 @@ struct ChatEditRowView: View {
                     }
                     Button("Cancel") { editing = false }
                 }
-                .overlay {
+                .sheet(isPresented: $showAddTag) {
                     AddTagDialog(isPresented: $showAddTag, tags: $labels)
                 }
             } else {
@@ -114,6 +114,6 @@ struct ChatEditRowView: View {
         .padding(8)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.secondary.opacity(0.05))
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

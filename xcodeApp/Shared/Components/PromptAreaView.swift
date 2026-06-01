@@ -20,6 +20,7 @@ struct PromptAreaView: View {
             // Prompt text editor
             TextEditor(text: $prompt)
                 .font(.body)
+                .scrollContentBackground(.hidden)
                 .frame(minHeight: 60, maxHeight: .infinity)
                 .overlay(
                     Group {
@@ -104,7 +105,7 @@ struct PromptAreaView: View {
                 }
             }
             .padding(4)
-            .frame(width: 280)
         }
+        .frame(width: 280, height: min(CGFloat(models.count) * 36 + 8, 300))
     }
 }

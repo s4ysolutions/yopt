@@ -27,39 +27,29 @@ final class SettingsViewModel: ObservableObject {
 
     private func observeFlows() {
         observationTasks.append(Task {
-            do {
-                for try await ms in bridge.modelsUseCase.observeModels() {
-                    self.models = (ms as? [ModelDef] ?? []).map(ModelDefModel.fromKotlin)
-                }
-            } catch {}
+            for await ms in bridge.modelsUseCase.observeModels() {
+                self.models = ms.map(ModelDefModel.fromKotlin)
+            }
         })
         observationTasks.append(Task {
-            do {
-                for try await cs in bridge.chatsUseCase.observeAll() {
-                    self.chats = (cs as? [Chat] ?? []).map(ChatModel.fromKotlin)
-                }
-            } catch {}
+            for await cs in bridge.chatsUseCase.observeAll() {
+                self.chats = cs.map(ChatModel.fromKotlin)
+            }
         })
         observationTasks.append(Task {
-            do {
-                for try await cs in bridge.manageAuthUseCase.observeCredentials() {
-                    self.creds = (cs as? [AuthCredentials] ?? []).map(AuthCredentialsModel.fromKotlin)
-                }
-            } catch {}
+            for await cs in bridge.manageAuthUseCase.observeCredentials() {
+                self.creds = cs.map(AuthCredentialsModel.fromKotlin)
+            }
         })
         observationTasks.append(Task {
-            do {
-                for try await ps in bridge.manageProvidersUseCase.observeProviders() {
-                    self.providers = (ps as? [ProviderDef] ?? []).map(ProviderModel.fromKotlin)
-                }
-            } catch {}
+            for await ps in bridge.manageProvidersUseCase.observeProviders() {
+                self.providers = ps.map(ProviderModel.fromKotlin)
+            }
         })
         observationTasks.append(Task {
-            do {
-                for try await instr in bridge.globalInstructionsUseCase.observe() {
-                    self.globalInstructions = instr as? String ?? ""
-                }
-            } catch {}
+            for await instr in bridge.globalInstructionsUseCase.observe() {
+                self.globalInstructions = instr
+            }
         })
     }
 
@@ -114,7 +104,7 @@ final class SettingsViewModel: ObservableObject {
     func export() {
         Task {
             do {
-                let json = try await bridge.exportUseCase.export() as! String
+                let json = try await bridge.exportUseCase.export()
                 self.dialogTitle = "Export"
                 self.dialogText = "Data exported (\(json.count) chars). Use Save panel to write."
             } catch {

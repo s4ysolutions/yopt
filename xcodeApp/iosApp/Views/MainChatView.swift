@@ -57,6 +57,7 @@ struct MainChatView: View {
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
             .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
+            .clipped()
             .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
@@ -117,8 +118,8 @@ struct MainChatView: View {
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView(viewModel: viewModel)
         }
-        .overlay {
-            if viewModel.showChatSettings, let chat = viewModel.currentChat {
+        .sheet(isPresented: $viewModel.showChatSettings) {
+            if let chat = viewModel.currentChat {
                 ChatSettingsView(
                     isPresented: $viewModel.showChatSettings,
                     chat: chat,

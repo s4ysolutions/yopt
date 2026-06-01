@@ -16,10 +16,10 @@ struct ChatModel: Identifiable, Equatable {
             id: chat.id,
             title: chat.title,
             instructions: chat.instructions,
-            defaultModelId: chat.defaultModelId as? String,
-            labels: chat.labels as? [String] ?? [],
+            defaultModelId: chat.defaultModelId,
+            labels: chat.labels,
             expandedTimestamps: Set(chat.expandedTimestamps.map { $0.int64Value }),
-            history: (chat.history as? [ResponseEntry] ?? []).map(ResponseEntryModel.fromKotlin)
+            history: chat.history.map(ResponseEntryModel.fromKotlin)
         )
     }
 

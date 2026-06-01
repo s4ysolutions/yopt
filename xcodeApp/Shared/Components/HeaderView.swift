@@ -39,15 +39,35 @@ struct HeaderView: View {
         .background(GeometryReader { geo in
             Color.clear
                 .onAppear { columnWidth = geo.size.width }
-                .onChange(of: geo.size.width) { columnWidth = $0 }
+#if os(macOS)
+                .onChange(of: geo.size.width) { _, newWidth in columnWidth = newWidth }
+#else
+                .onChange(of: geo.size.width) { newWidth in columnWidth = newWidth }
+#endif
         })
+    }
+
+    private var chatListView: some View {
+        ChatListView(
+            chats: filteredChats,
+            onSelect: { id in
+                onSelectChat(id)
+                chatSearchQuery = ""
+                chatDropdownExpanded = false
+            },
+            onDismiss: { chatDropdownExpanded = false }
+        )
     }
 
     private var chatSearchField: some View {
         HStack(spacing: 4) {
             TextField("Search...", text: $chatSearchQuery)
                 .textFieldStyle(.plain)
+#if os(macOS)
+                .onChange(of: chatSearchQuery) { chatDropdownExpanded = true }
+#else
                 .onChange(of: chatSearchQuery) { _ in chatDropdownExpanded = true }
+#endif
             Button {
                 chatDropdownExpanded.toggle()
             } label: {
@@ -62,26 +82,31 @@ struct HeaderView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
         )
-        .background(GeometryReader { geo in
-            Color.clear
-                .onAppear { searchFieldHeight = geo.size.height }
-                .onChange(of: geo.size.height) { searchFieldHeight = $0 }
-        })
-        .overlay(alignment: .top) {
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear { searchFieldHeight = geo.size.height }
+#if os(macOS)
+                    .onChange(of: geo.size.height) { _, h in searchFieldHeight = h }
+#else
+                    .onChange(of: geo.size.height) { h in searchFieldHeight = h }
+#endif
+            }
+        )
+#if os(iOS)
+        .background(Color(uiColor: .systemBackground))
+        .overlay(alignment: .topLeading) {
             if chatDropdownExpanded {
-                ChatListView(
-                    chats: filteredChats,
-                    onSelect: { id in
-                        onSelectChat(id)
-                        chatSearchQuery = ""
-                        chatDropdownExpanded = false
-                    },
-                    onDismiss: { chatDropdownExpanded = false }
-                )
-                .offset(y: searchFieldHeight)
-                .zIndex(100)
+                chatListView
+                    .padding(.top, searchFieldHeight + 4)
+                    .zIndex(10)
             }
         }
+#else
+        .popover(isPresented: $chatDropdownExpanded, arrowEdge: .bottom) {
+            chatListView
+        }
+#endif
     }
 
     private var chatNameField: some View {

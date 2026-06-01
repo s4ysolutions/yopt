@@ -52,95 +52,79 @@ final class ChatViewModel: ObservableObject {
     private func observeFlows() {
         // Observe chats
         observationTasks.append(Task {
-            do {
-                for try await chats in bridge.chatsUseCase.observeAll() {
-                    let chatList = (chats as? [Chat] ?? []).map(ChatModel.fromKotlin)
-                    self.allChats = chatList
-                    if self.currentChatId == nil && !chatList.isEmpty {
-                        var savedId: String? = nil
-                        for try await id in self.bridge.lastChatIdUseCase.observe() {
-                            savedId = id as? String
-                            break
-                        }
-                        let saved = chatList.first { $0.id == savedId }
-                        self.currentChatId = saved?.id ?? chatList.first?.id
-                        self.chatName = saved?.title ?? chatList.first?.title ?? ""
-                    } else if let cid = self.currentChatId, !chatList.contains(where: { $0.id == cid }) {
-                        self.currentChatId = chatList.first?.id
-                        self.chatName = chatList.first?.title ?? ""
+            for await chats in bridge.chatsUseCase.observeAll() {
+                let chatList = chats.map(ChatModel.fromKotlin)
+                self.allChats = chatList
+                if self.currentChatId == nil && !chatList.isEmpty {
+                    var savedId: String? = nil
+                    for await id in self.bridge.lastChatIdUseCase.observe() {
+                        savedId = id
+                        break
                     }
-                    if let cid = self.currentChatId, let chat = chatList.first(where: { $0.id == cid }) {
-                        self.chatName = chat.title
-                    }
+                    let saved = chatList.first { $0.id == savedId }
+                    self.currentChatId = saved?.id ?? chatList.first?.id
+                    self.chatName = saved?.title ?? chatList.first?.title ?? ""
+                } else if let cid = self.currentChatId, !chatList.contains(where: { $0.id == cid }) {
+                    self.currentChatId = chatList.first?.id
+                    self.chatName = chatList.first?.title ?? ""
                 }
-            } catch {}
+                if let cid = self.currentChatId, let chat = chatList.first(where: { $0.id == cid }) {
+                    self.chatName = chat.title
+                }
+            }
         })
 
         // Observe enabled models
         observationTasks.append(Task {
-            do {
-                for try await ms in bridge.modelsUseCase.observeEnabledModels() {
-                    self.models = (ms as? [ModelDef] ?? []).map(ModelDefModel.fromKotlin)
-                }
-            } catch {}
+            for await ms in bridge.modelsUseCase.observeEnabledModels() {
+                self.models = ms.map(ModelDefModel.fromKotlin)
+            }
         })
 
         // Observe providers
         observationTasks.append(Task {
-            do {
-                for try await ps in bridge.manageProvidersUseCase.observeProviders() {
-                    self.providers = (ps as? [ProviderDef] ?? []).map(ProviderModel.fromKotlin)
-                }
-            } catch {}
+            for await ps in bridge.manageProvidersUseCase.observeProviders() {
+                self.providers = ps.map(ProviderModel.fromKotlin)
+            }
         })
 
         // Observe selected model
         observationTasks.append(Task {
-            do {
-                for try await modelId in bridge.modelSelectionUseCase.observe() {
-                    self.selectedModel = modelId as? String
-                    if modelId == nil && !self.models.isEmpty {
-                        try? await bridge.modelSelectionUseCase.set(modelId: self.models.first!.id)
-                    }
+            for await modelId in bridge.modelSelectionUseCase.observe() {
+                self.selectedModel = modelId
+                if modelId == nil && !self.models.isEmpty {
+                    try? await bridge.modelSelectionUseCase.set(modelId: self.models.first!.id)
                 }
-            } catch {}
+            }
         })
 
         // Observe global instructions
         observationTasks.append(Task {
-            do {
-                for try await instr in bridge.globalInstructionsUseCase.observe() {
-                    self.globalInstructions = instr as? String ?? ""
-                }
-            } catch {}
+            for await instr in bridge.globalInstructionsUseCase.observe() {
+                self.globalInstructions = instr
+            }
         })
 
         // Observe split fraction
         observationTasks.append(Task {
-            do {
-                for try await f in bridge.splitFractionUseCase.observe() {
-                    self.splitFraction = f as? Float ?? 0.4
-                }
-            } catch {}
+            for await f in bridge.splitFractionUseCase.observe() {
+                self.splitFraction = f as? Float ?? 0.4
+            }
         })
 
         // Observe show markdown
         observationTasks.append(Task {
-            do {
-                for try await md in bridge.responseDisplayUseCase.observeDefaultShowMarkdown() {
-                    self.defaultShowMarkdown = md as? Bool ?? false
-                }
-            } catch {}
+            for await md in bridge.responseDisplayUseCase.observeDefaultShowMarkdown() {
+                self.defaultShowMarkdown = md as? Bool ?? false
+            }
         })
 
         // Observe last prompt
         observationTasks.append(Task {
-            do {
-                for try await p in bridge.lastPromptUseCase.observe() {
-                    self.lastPrompt = p as? String ?? ""
-                    if self.prompt.isEmpty { self.prompt = p as? String ?? "" }
-                }
-            } catch {}
+            for await p in bridge.lastPromptUseCase.observe() {
+                self.lastPrompt = p
+                if self.prompt.isEmpty { self.prompt = p }
+            }
         })
     }
 

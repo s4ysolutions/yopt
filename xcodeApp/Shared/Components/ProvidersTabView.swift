@@ -25,15 +25,19 @@ struct ProvidersTabView: View {
                     },
                     onDeleteCustom: { settingsVM.deleteCustomProvider(provider.id) }
                 )
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
 
             Button(action: { showAddCustom = true }) {
                 Label("Add Custom Provider", systemImage: "plus.circle")
             }
+            .listRowSeparator(.hidden)
             .popover(isPresented: $showAddCustom) {
                 AddCustomProviderView(settingsVM: settingsVM, isPresented: $showAddCustom)
             }
         }
+        .listStyle(.plain)
     }
 }
 
@@ -110,7 +114,7 @@ struct ProviderCardView: View {
         }
         .padding(8)
         .background(Color.secondary.opacity(0.05))
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 
@@ -315,12 +319,12 @@ struct ModelListView: View {
                     .textFieldStyle(.roundedBorder)
 
                 Button("All Off") {
-                    filtered.forEach { onToggle($0.id) }
+                    filtered.filter { $0.enabled }.forEach { onToggle($0.id) }
                 }
                 .font(.caption2)
 
                 Button("All On") {
-                    filtered.forEach { onToggle($0.id) }
+                    filtered.filter { !$0.enabled }.forEach { onToggle($0.id) }
                 }
                 .font(.caption2)
             }
@@ -333,8 +337,9 @@ struct ModelListView: View {
                     set: { _ in onToggle(model.id) }
                 )) {
                     Text(model.officialName)
-                        .font(.body)
+                        .font(.callout)
                 }
+                .padding(.vertical, 2)
             }
         }
         .padding(.vertical, 4)

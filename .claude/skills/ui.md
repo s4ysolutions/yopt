@@ -426,13 +426,43 @@ Compose UI is the source of truth — SwiftUI should visually match it. When cha
 
 ## SwiftUI architecture rules
 
-- **`ChatViewModel` is the single state owner** — `@StateObject` in root views; never duplicate state locally.
+- **`ChatViewModel` is the single state owner** — `@StateObject` in root views; never duplicate state locally. Child views get it as `@ObservedObject`.
 - **Model selection** — call `viewModel.selectModel(_ id: String)` which bridges to `modelSelectionUseCase.set(modelId:)`. Never set `viewModel.selectedModel` directly (it's driven by the Kotlin flow).
-- **Dropdown positioning** — SwiftUI `.overlay(alignment: .top)` + `.offset(y: measuredFieldHeight)` + `.zIndex(100)` to place dropdowns below their anchor. Measure anchor height via `GeometryReader` into a `@State`.
+- **Dropdown positioning** — SwiftUI `.overlay(alignment: .top)` + `.offset(y: measuredFieldHeight)` to place dropdowns below their anchor. Measure anchor height via `GeometryReader` into a `@State`. `.zIndex()` inside an overlay only affects stacking within that overlay's local context — to float above sibling views further down the hierarchy, apply `.zIndex()` on the anchor's parent container instead.
 - **Splitter drag** — `DraggableSplitter` requires `totalHeight: CGFloat` from the parent (captured via `.background(GeometryReader {...})`). Stores `dragStartFraction` on first `onChanged`; resets on `onEnded`.
 - **Expand logic** — always write: `(chat?.expandedTimestamps.contains(ts) ?? false) || isFirst || wordCount < 50`. Never use `??` before `||` without explicit parentheses — Swift operator precedence differs from Kotlin.
 - **Selected model display** — compute the label `"ProviderName: ModelName"` in the parent view from `viewModel.models` + `viewModel.providers`; pass as `selectedModelName` to `PromptAreaView`. Never pass a raw model ID as a display string.
 - **Adding a new file to xcodeApp** — must add to `xcodeApp/YoPt.xcodeproj/project.pbxproj`: one `PBXFileReference`, one entry in `Shared` group children, and two `PBXBuildFile` + two `PBXSourcesBuildPhase` entries (one per target: iOS `B2`, macOS `B4`). IDs follow the `AA000000000000000001XX` sequence.
+
+## SwiftUI cross-platform safety (`Shared/` = iOS + macOS)
+
+Files in `Shared/` compile for both platforms. Platform APIs need `#if` guards:
+
+```swift
+#if os(macOS)
+    Color(nsColor: .controlBackgroundColor)
+#else
+    Color(uiColor: .systemBackground)
+#endif
+```
+
+Never use `Color(uiColor:)` / `UIColor` / `UIImage` in `Shared/` without `#if os(iOS)`. Never use `Color(nsColor:)` / `NSColor` in `Shared/` without `#if os(macOS)`. Prefer `DesignTokens.*` — handles platform branching internally.
+
+## SwiftUI background rules
+
+- **Opaque surfaces** (dropdowns, popovers, cards): use `DesignTokens.cardBackground` or `.regularMaterial` on iOS / `Color(nsColor: .controlBackgroundColor)` on macOS. `.regularMaterial` is guaranteed opaque on iOS.
+- **GeometryReader for measurement** uses `Color.clear` — fine for sizing, but a SEPARATE `.background(...)` must provide the actual fill. The two concerns must not be merged.
+- Never use `Color(uiColor: .systemBackground)` as a dropdown/popover background on iOS — use `.regularMaterial` instead.
+
+## SwiftUI API compatibility
+
+`onChange(of:perform:)` deprecated macOS 14+. Use:
+```swift
+.onChange(of: value) { newValue in ... }  // ✓
+.onChange(of: value) { ... }              // ✓ zero-param
+```
+
+`Image.actionIcon()` is an extension on `Image` (not `View`) defined in `DesignTokens.swift`. Only call it on `Image`, not on arbitrary views.
 
 ## Layout structure (macOS + iOS root views)
 

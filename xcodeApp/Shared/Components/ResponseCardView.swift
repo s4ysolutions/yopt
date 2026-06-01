@@ -17,6 +17,7 @@ struct ResponseCardView: View {
 
     @State private var promptExpanded = false
     @State private var promptOverflows = false
+    @State private var showRemoveConfirm = false
 
     private let wordLimit = 50
     private let responsePreviewLength = 200
@@ -68,6 +69,10 @@ struct ResponseCardView: View {
                 .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
         )
         .padding(.vertical, 4)
+        .confirmationDialog("Remove this entry from history?", isPresented: $showRemoveConfirm, titleVisibility: .visible) {
+            Button("Remove", role: .destructive, action: onRemove)
+            Button("Cancel", role: .cancel) {}
+        }
     }
 
     private var promptSection: some View {
@@ -87,12 +92,12 @@ struct ResponseCardView: View {
         }
         .padding(4)
         .background(Color.secondary.opacity(0.1))
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 
     private var bottomBar: some View {
         HStack(spacing: 8) {
-            Button(action: onRemove) {
+            Button(action: { showRemoveConfirm = true }) {
                 Image(systemName: "trash")
                     .actionIcon()
             }

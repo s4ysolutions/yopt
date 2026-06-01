@@ -36,5 +36,10 @@ struct DraggableSplitter: View {
                         onFractionChanged(fraction)
                     }
             )
+#if os(macOS)
+            .onHover { hovering in
+                if hovering { NSCursor.resizeUpDown.push() } else { NSCursor.pop() }
+            }
+#endif
     }
 }

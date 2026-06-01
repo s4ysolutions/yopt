@@ -100,6 +100,7 @@ struct MacMainChatView: View {
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
             .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
+            .clipped()
             .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
@@ -167,7 +168,7 @@ struct MacMainChatView: View {
             GeometryReader { geo in
                 Color.clear
                     .onAppear { totalHeight = geo.size.height }
-                    .onChange(of: geo.size.height) { totalHeight = $0 }
+                    .onChange(of: geo.size.height) { _, newHeight in totalHeight = newHeight }
             }
         )
     }

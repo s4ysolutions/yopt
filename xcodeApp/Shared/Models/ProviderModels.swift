@@ -42,7 +42,6 @@ enum ApiStyleModel: String, CaseIterable {
         case .openai: return .openai
         case .anthropic: return .anthropic
         case .gemini: return .gemini
-        default: return .openai
         }
     }
 
@@ -80,6 +79,6 @@ struct AuthCredentialsModel: Equatable {
     let apiKey: String?
 
     static func fromKotlin(_ cred: AuthCredentials) -> AuthCredentialsModel {
-        AuthCredentialsModel(providerId: cred.providerId, apiKey: cred.apiKey as? String)
+        AuthCredentialsModel(providerId: cred.providerId, apiKey: cred.apiKey)
     }
 }

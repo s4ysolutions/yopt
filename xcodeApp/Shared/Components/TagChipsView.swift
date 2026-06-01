@@ -36,36 +36,33 @@ struct AddTagDialog: View {
 
     @State private var newTagText = ""
 
+    private func commit() {
+        let trimmed = newTagText.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty && !tags.contains(trimmed) {
+            tags.append(trimmed)
+        }
+        newTagText = ""
+        isPresented = false
+    }
+
     var body: some View {
-        Group {
-            if isPresented {
-                VStack(spacing: 12) {
-                    Text("Add Tag")
-                        .font(.headline)
-                    TextField("Tag", text: $newTagText)
-                        .textFieldStyle(.roundedBorder)
-                    HStack {
-                        Button("Cancel") {
-                            newTagText = ""
-                            isPresented = false
-                        }
-                        Button("Add") {
-                            let trimmed = newTagText.trimmingCharacters(in: .whitespaces)
-                            if !trimmed.isEmpty && !tags.contains(trimmed) {
-                                tags.append(trimmed)
-                            }
-                            newTagText = ""
-                            isPresented = false
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
+        VStack(spacing: 12) {
+            Text("Add Tag")
+                .font(.headline)
+            TextField("Tag", text: $newTagText)
+                .textFieldStyle(.roundedBorder)
+                .onSubmit { commit() }
+            HStack {
+                Button("Cancel") {
+                    newTagText = ""
+                    isPresented = false
                 }
-                .padding()
-                .frame(width: 300)
-                .background(.regularMaterial)
-                .cornerRadius(12)
-                .shadow(radius: 8)
+                Button("Add", action: commit)
+                    .buttonStyle(.borderedProminent)
+                    .disabled(newTagText.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
+        .padding()
+        .frame(width: 260)
     }
 }

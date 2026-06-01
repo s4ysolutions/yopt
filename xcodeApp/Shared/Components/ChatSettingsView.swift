@@ -19,6 +19,7 @@ struct ChatSettingsView: View {
                     .font(.caption)
                 TextEditor(text: $instructions)
                     .font(.body)
+                    .scrollContentBackground(.hidden)
                     .frame(height: 100)
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
@@ -44,7 +45,7 @@ struct ChatSettingsView: View {
         }
         .padding()
         .frame(minWidth: 400, idealWidth: 440)
-        .overlay {
+        .sheet(isPresented: $showAddTag) {
             AddTagDialog(isPresented: $showAddTag, tags: $labels)
         }
         .onAppear {

@@ -37,14 +37,21 @@ struct SettingsView: View {
 
             Group {
                 switch selectedTab {
-                case 0: ProvidersTabView(settingsVM: settingsVM)
-                case 1: ChatsTabView(chats: settingsVM.chats, onUpdate: settingsVM.updateChat, onDelete: settingsVM.deleteChat)
-                case 2: GlobalTabView(settingsVM: settingsVM)
-                case 3: ExportTabView(settingsVM: settingsVM)
-                default: EmptyView()
+                case 0:
+                    ProvidersTabView(settingsVM: settingsVM)
+                case 1:
+                    ChatsTabView(chats: settingsVM.chats, onUpdate: settingsVM.updateChat, onDelete: settingsVM.deleteChat)
+                        .padding(.horizontal, 12)
+                case 2:
+                    GlobalTabView(settingsVM: settingsVM)
+                        .padding(.horizontal, 12)
+                case 3:
+                    ExportTabView(settingsVM: settingsVM)
+                        .padding(.horizontal, 12)
+                default:
+                    EmptyView()
                 }
             }
-            .padding(.horizontal, 12)
         }
     }
 }
