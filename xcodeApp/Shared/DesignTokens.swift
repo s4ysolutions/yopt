@@ -11,6 +11,11 @@ enum DesignTokens {
     static let dotSpacing: CGFloat = 20
     static let dotRadius: CGFloat = 2
     static let dotOpacity: Double = 0.12
+#if os(macOS)
+    static let cardBackground = Color(nsColor: .windowBackgroundColor)
+#else
+    static let cardBackground = Color(uiColor: .systemBackground)
+#endif
 }
 
 extension View {
@@ -19,7 +24,7 @@ extension View {
     }
 }
 
-private struct DotGridBackground: View {
+struct DotGridBackground: View {
     var body: some View {
         Canvas { context, size in
             let spacing = DesignTokens.dotSpacing

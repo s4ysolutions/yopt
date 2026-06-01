@@ -34,6 +34,7 @@ struct MacMainChatView: View {
                 )
                 .padding(.horizontal, DesignTokens.sectionPadding)
                 .padding(.top, DesignTokens.sectionPadding)
+                .zIndex(1)
 
                 Divider()
                     .padding(.vertical, DesignTokens.sectionPadding)
@@ -54,10 +55,12 @@ struct MacMainChatView: View {
                 .padding(.horizontal, DesignTokens.sectionPadding)
                 .padding(.bottom, DesignTokens.sectionPadding)
             }
-            .background(DesignTokens.topAreaBackground)
-            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius))
+            .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
+            .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
+            .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
+            .padding(.bottom, 4)
 
             DraggableSplitter(
                 fraction: $viewModel.splitFraction,
@@ -67,7 +70,7 @@ struct MacMainChatView: View {
 
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
-                LazyVStack(spacing: DesignTokens.cardVerticalPadding * 2) {
+                LazyVStack(spacing: 0) {
                     ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
                         let isFirst = i == 0
                         let wordCount = entry.response.split { $0.isWhitespace }.count
@@ -94,16 +97,23 @@ struct MacMainChatView: View {
                             modelName: entryModelLabel
                         )
                         .padding(.horizontal, 12)
+                        .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
+                        .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
                     }
                 }
             }
+            .padding(.bottom, 8)
             .dotGridBackground()
         }
-        .background(GeometryReader { geo in
-            Color.clear
-                .onAppear { totalHeight = geo.size.height }
-                .onChange(of: geo.size.height) { totalHeight = $0 }
-        })
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(nsColor: .windowBackgroundColor))
+        .overlay(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear { totalHeight = geo.size.height }
+                    .onChange(of: geo.size.height) { totalHeight = $0 }
+            }
+        )
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView(viewModel: viewModel)
         }

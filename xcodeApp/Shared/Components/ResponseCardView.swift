@@ -59,6 +59,10 @@ struct ResponseCardView: View {
             bottomBar
         }
         .padding(4)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(DesignTokens.cardBackground)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
