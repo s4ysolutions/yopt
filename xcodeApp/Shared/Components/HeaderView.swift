@@ -23,8 +23,10 @@ struct HeaderView: View {
                 VStack(spacing: 8) {
                     HStack {
                         chatSearchField
+                            .zIndex(1)
                         actionButtons
                     }
+                    .zIndex(1)
                     chatNameField
                 }
             } else {
@@ -32,6 +34,7 @@ struct HeaderView: View {
                 HStack(spacing: 8) {
                     chatSearchField
                         .frame(width: columnWidth * 0.3)
+                        .zIndex(1)
                     chatNameField
                     actionButtons
                 }
