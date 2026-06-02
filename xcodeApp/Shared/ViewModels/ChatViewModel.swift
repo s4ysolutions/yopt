@@ -19,7 +19,6 @@ final class ChatViewModel: ObservableObject {
     @Published var providers: [ProviderModel] = []
     @Published var selectedModel: String? = nil
     @Published var globalInstructions: String = ""
-    @Published var splitFraction: Float = 0.4
     @Published var defaultShowMarkdown: Bool = false
     @Published var lastPrompt: String = ""
 
@@ -107,13 +106,6 @@ final class ChatViewModel: ObservableObject {
         observationTasks.append(Task {
             for await instr in bridge.globalInstructionsUseCase.observe() {
                 self.globalInstructions = instr
-            }
-        })
-
-        // Observe split fraction
-        observationTasks.append(Task {
-            for await f in bridge.splitFractionUseCase.observe() {
-                self.splitFraction = f as? Float ?? 0.4
             }
         })
 
@@ -216,16 +208,4 @@ final class ChatViewModel: ObservableObject {
     func useAsPrompt(_ text: String) { prompt = text }
     func appendToPrompt(_ text: String) { prompt = prompt + "\n" + text }
 
-    // MARK: - Split
-
-    private var splitSaveTask: Task<Void, Never>?
-
-    func saveSplitFraction(_ fraction: Float) {
-        splitSaveTask?.cancel()
-        splitSaveTask = Task {
-            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms debounce
-            if Task.isCancelled { return }
-            try? await bridge.splitFractionUseCase.set(value: fraction)
-        }
-    }
 }

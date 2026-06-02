@@ -5,11 +5,6 @@ import ComposeApp
 struct MacMainChatView: View {
     @StateObject private var viewModel = ChatViewModel()
     @State private var chatDropdownExpanded = false
-    @State private var dragStartFraction: Float? = nil
-
-    private let dividerHeight: CGFloat = 12
-    private let minTopHeight: CGFloat = 120
-    private let minBottomHeight: CGFloat = 80
 
     private var selectedModelLabel: String {
         guard let sel = viewModel.models.first(where: { $0.id == viewModel.selectedModel }) else {
@@ -67,140 +62,100 @@ struct MacMainChatView: View {
     }
 
     private var mainContent: some View {
-        GeometryReader { geo in
-            let available = geo.size.height
-            let topHeight = max(minTopHeight,
-                                min(available * CGFloat(viewModel.splitFraction),
-                                    available - minBottomHeight - dividerHeight))
-
+        SplitView {
+            // Top: header + prompt
             VStack(spacing: 0) {
-                // Top: header + prompt
-                VStack(spacing: 0) {
-                    HeaderView(
-                        chatSearchQuery: $viewModel.chatSearchQuery,
-                        chatDropdownExpanded: $chatDropdownExpanded,
-                        chatName: $viewModel.chatName,
-                        filteredChats: viewModel.filteredChats,
-                        allChatsCount: viewModel.allChats.count,
-                        onCreateNew: viewModel.createNewChat,
-                        onDelete: viewModel.deleteCurrentChat,
-                        onChatSettings: { viewModel.showChatSettings = true },
-                        onSettings: { viewModel.showSettings = true },
-                        onSelectChat: viewModel.selectChat
-                    )
-                    .padding(.horizontal, DesignTokens.sectionPadding)
-                    .padding(.top, DesignTokens.sectionPadding)
-                    .zIndex(1)
+                HeaderView(
+                    chatSearchQuery: $viewModel.chatSearchQuery,
+                    chatDropdownExpanded: $chatDropdownExpanded,
+                    chatName: $viewModel.chatName,
+                    filteredChats: viewModel.filteredChats,
+                    allChatsCount: viewModel.allChats.count,
+                    onCreateNew: viewModel.createNewChat,
+                    onDelete: viewModel.deleteCurrentChat,
+                    onChatSettings: { viewModel.showChatSettings = true },
+                    onSettings: { viewModel.showSettings = true },
+                    onSelectChat: viewModel.selectChat
+                )
+                .padding(.horizontal, DesignTokens.sectionPadding)
+                .padding(.top, DesignTokens.sectionPadding)
+                .zIndex(1)
 
-                    Divider()
-                        .padding(.vertical, DesignTokens.sectionPadding)
+                Divider()
+                    .padding(.vertical, DesignTokens.sectionPadding)
 
-                    PromptAreaView(
-                        prompt: $viewModel.prompt,
-                        loading: $viewModel.loading,
-                        selectedModelName: selectedModelLabel,
-                        selectedModelId: viewModel.selectedModel,
-                        models: viewModel.models,
-                        modelsEmpty: viewModel.models.isEmpty,
-                        error: viewModel.error,
-                        onSend: viewModel.send,
-                        onCancel: viewModel.cancelSend,
-                        onSelectModel: viewModel.selectModel,
-                        onOpenSettings: { viewModel.showSettings = true }
-                    )
-                    .padding(.horizontal, DesignTokens.sectionPadding)
-                    .padding(.bottom, DesignTokens.sectionPadding)
-                }
-                .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-                .padding(.horizontal, 12)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
-                .frame(height: topHeight)
-
-                // Divider handle
-                Rectangle()
-                    .fill(Color.secondary.opacity(0.15))
-                    .frame(height: dividerHeight)
-                    .overlay(
-                        HStack(spacing: 4) {
-                            ForEach(0..<3, id: \.self) { _ in
-                                Circle()
-                                    .fill(Color.secondary.opacity(0.3))
-                                    .frame(width: 4, height: 4)
-                            }
-                        }
-                    )
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                if dragStartFraction == nil { dragStartFraction = viewModel.splitFraction }
-                                guard available > 0 else { return }
-                                let delta = Float(value.translation.height / available)
-                                viewModel.splitFraction = max(0.2, min(0.8, (dragStartFraction ?? viewModel.splitFraction) + delta))
-                            }
-                            .onEnded { _ in
-                                viewModel.saveSplitFraction(viewModel.splitFraction)
-                                dragStartFraction = nil
-                            }
-                    )
-                    .onHover { hovering in
-                        if hovering { NSCursor.resizeUpDown.push() } else { NSCursor.pop() }
-                    }
-
-                // Bottom: history
-                let history = viewModel.currentChat?.history.reversed() ?? []
-                ScrollView {
-                    if history.isEmpty {
-                        VStack(spacing: 12) {
-                            Image(systemName: "text.bubble")
-                                .font(.system(size: 36))
-                                .foregroundColor(.secondary.opacity(0.35))
-                            Text("Send a prompt to get started")
-                                .font(.body)
-                                .foregroundColor(.secondary.opacity(0.5))
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                    } else {
-                        LazyVStack(spacing: 0) {
-                            ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
-                                let isFirst = i == 0
-                                let wordCount = entry.response.split { $0.isWhitespace }.count
-                                let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
-                                    || isFirst
-                                    || wordCount < 50
-                                let entryModel = viewModel.models.first { $0.id == entry.modelId }
-                                let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
-                                let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
-
-                                ResponseCardView(
-                                    entry: entry,
-                                    isFirst: isFirst,
-                                    currentPrompt: viewModel.prompt,
-                                    currentModelId: viewModel.selectedModel,
-                                    isExpanded: respExpanded,
-                                    chatId: viewModel.currentChatId ?? "",
-                                    onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                                    onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                                    onUseAsPrompt: viewModel.useAsPrompt,
-                                    onAppendToPrompt: viewModel.appendToPrompt,
-                                    onCopy: { NSPasteboard.general.clearContents(); NSPasteboard.general.setString($0, forType: .string) },
-                                    onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
-                                    modelName: entryModelLabel
-                                )
-                                .padding(.horizontal, 12)
-                                .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
-                                .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
-                            }
-                        }
-                    }
-                }
-                .padding(.bottom, 8)
-                .dotGridBackground()
-                .frame(maxHeight: .infinity)
+                PromptAreaView(
+                    prompt: $viewModel.prompt,
+                    loading: $viewModel.loading,
+                    selectedModelName: selectedModelLabel,
+                    selectedModelId: viewModel.selectedModel,
+                    models: viewModel.models,
+                    modelsEmpty: viewModel.models.isEmpty,
+                    error: viewModel.error,
+                    onSend: viewModel.send,
+                    onCancel: viewModel.cancelSend,
+                    onSelectModel: viewModel.selectModel,
+                    onOpenSettings: { viewModel.showSettings = true }
+                )
+                .padding(.horizontal, DesignTokens.sectionPadding)
+                .padding(.bottom, DesignTokens.sectionPadding)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(nsColor: .windowBackgroundColor))
+            .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
+            .padding(.horizontal, 12)
+            .padding(.top, 8)
+            .padding(.bottom, 4)
+        } bottom: {
+            // Bottom: history
+            let history = viewModel.currentChat?.history.reversed() ?? []
+            ScrollView {
+                if history.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "text.bubble")
+                            .font(.system(size: 36))
+                            .foregroundColor(.secondary.opacity(0.35))
+                        Text("Send a prompt to get started")
+                            .font(.body)
+                            .foregroundColor(.secondary.opacity(0.5))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 60)
+                } else {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
+                            let isFirst = i == 0
+                            let wordCount = entry.response.split { $0.isWhitespace }.count
+                            let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
+                                || isFirst
+                                || wordCount < 50
+                            let entryModel = viewModel.models.first { $0.id == entry.modelId }
+                            let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
+                            let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
+
+                            ResponseCardView(
+                                entry: entry,
+                                isFirst: isFirst,
+                                currentPrompt: viewModel.prompt,
+                                currentModelId: viewModel.selectedModel,
+                                isExpanded: respExpanded,
+                                chatId: viewModel.currentChatId ?? "",
+                                onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onUseAsPrompt: viewModel.useAsPrompt,
+                                onAppendToPrompt: viewModel.appendToPrompt,
+                                onCopy: { NSPasteboard.general.clearContents(); NSPasteboard.general.setString($0, forType: .string) },
+                                onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
+                                modelName: entryModelLabel
+                            )
+                            .padding(.horizontal, 12)
+                            .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
+                            .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
+                        }
+                    }
+                }
+            }
+            .padding(.bottom, 8)
+            .dotGridBackground()
         }
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 }

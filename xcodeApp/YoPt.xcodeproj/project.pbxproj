@@ -49,6 +49,8 @@
 		AA00000000000000000124 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000122 /* ChatListView.swift */; };
 		AA00000000000000000126 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
 		AA00000000000000000127 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
+		AA00000000000000000155 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
+		AA00000000000000000156 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA0000000000000000012c /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012d /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012f /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
@@ -108,6 +110,7 @@
 		AA0000000000000000011f /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		AA00000000000000000122 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		AA00000000000000000125 /* PromptAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAreaView.swift; sourceTree = "<group>"; };
+		AA00000000000000000154 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012b /* TagChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChipsView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012e /* ChatSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000134 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -230,6 +233,7 @@
 				AA0000000000000000011f /* HeaderView.swift */,
 				AA00000000000000000122 /* ChatListView.swift */,
 				AA00000000000000000125 /* PromptAreaView.swift */,
+				AA00000000000000000154 /* SplitView.swift */,
 				AA0000000000000000012b /* TagChipsView.swift */,
 				AA0000000000000000012e /* ChatSettingsView.swift */,
 				AA00000000000000000134 /* SettingsView.swift */,
@@ -416,6 +420,7 @@
 				AA00000000000000000120 /* HeaderView.swift in Sources */,
 				AA00000000000000000123 /* ChatListView.swift in Sources */,
 				AA00000000000000000126 /* PromptAreaView.swift in Sources */,
+				AA00000000000000000155 /* SplitView.swift in Sources */,
 				AA0000000000000000012c /* TagChipsView.swift in Sources */,
 				AA0000000000000000012f /* ChatSettingsView.swift in Sources */,
 				AA00000000000000000135 /* SettingsView.swift in Sources */,
@@ -444,6 +449,7 @@
 				AA00000000000000000121 /* HeaderView.swift in Sources */,
 				AA00000000000000000124 /* ChatListView.swift in Sources */,
 				AA00000000000000000127 /* PromptAreaView.swift in Sources */,
+				AA00000000000000000156 /* SplitView.swift in Sources */,
 				AA0000000000000000012d /* TagChipsView.swift in Sources */,
 				AA00000000000000000130 /* ChatSettingsView.swift in Sources */,
 				AA00000000000000000136 /* SettingsView.swift in Sources */,

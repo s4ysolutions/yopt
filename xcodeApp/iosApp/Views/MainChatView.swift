@@ -16,11 +16,8 @@ struct MainChatView: View {
     }
 
     var body: some View {
-        GeometryReader { geo in
-            let topHeight = geo.size.height / 3
-
-            VStack(spacing: 0) {
-            // Header + prompt area with tinted rounded background
+        SplitView {
+            // Top: header + prompt
             VStack(spacing: 0) {
                 HeaderView(
                     chatSearchQuery: $viewModel.chatSearchQuery,
@@ -58,12 +55,10 @@ struct MainChatView: View {
                 .padding(.bottom, DesignTokens.sectionPadding)
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-            .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
             .padding(.bottom, 4)
-            .frame(height: topHeight)
-
+        } bottom: {
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
                 if history.isEmpty {
@@ -78,45 +73,43 @@ struct MainChatView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 60)
                 } else {
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
-                        let isFirst = i == 0
-                        let wordCount = entry.response.split { $0.isWhitespace }.count
-                        let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
-                            || isFirst
-                            || wordCount < 50
-                        let entryModel = viewModel.models.first { $0.id == entry.modelId }
-                        let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
-                        let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(history.enumerated()), id: \.element.id) { i, entry in
+                            let isFirst = i == 0
+                            let wordCount = entry.response.split { $0.isWhitespace }.count
+                            let respExpanded = (viewModel.currentChat?.expandedTimestamps.contains(entry.timestamp) ?? false)
+                                || isFirst
+                                || wordCount < 50
+                            let entryModel = viewModel.models.first { $0.id == entry.modelId }
+                            let entryProviderName = viewModel.providers.first { $0.id == entryModel?.providerId }?.name
+                            let entryModelLabel = entryProviderName != nil ? "\(entryProviderName!): \(entry.modelName)" : entry.modelName
 
-                        ResponseCardView(
-                            entry: entry,
-                            isFirst: isFirst,
-                            currentPrompt: viewModel.prompt,
-                            currentModelId: viewModel.selectedModel,
-                            isExpanded: respExpanded,
-                            chatId: viewModel.currentChatId ?? "",
-                            onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                            onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
-                            onUseAsPrompt: viewModel.useAsPrompt,
-                            onAppendToPrompt: viewModel.appendToPrompt,
-                            onCopy: { UIPasteboard.general.string = $0 },
-                            onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
-                            modelName: entryModelLabel
-                        )
-                        .padding(.horizontal, 12)
-                        .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
-                        .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
+                            ResponseCardView(
+                                entry: entry,
+                                isFirst: isFirst,
+                                currentPrompt: viewModel.prompt,
+                                currentModelId: viewModel.selectedModel,
+                                isExpanded: respExpanded,
+                                chatId: viewModel.currentChatId ?? "",
+                                onToggleExpand: { viewModel.toggleEntryExpanded(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onToggleMarkdown: { viewModel.toggleEntryMarkdown(timestamp: entry.timestamp, chatId: viewModel.currentChatId ?? "") },
+                                onUseAsPrompt: viewModel.useAsPrompt,
+                                onAppendToPrompt: viewModel.appendToPrompt,
+                                onCopy: { UIPasteboard.general.string = $0 },
+                                onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
+                                modelName: entryModelLabel
+                            )
+                            .padding(.horizontal, 12)
+                            .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
+                            .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
+                        }
                     }
-                }
                 }
             }
             .dotGridBackground()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .ignoresSafeArea(.keyboard)
-            .background(Color(uiColor: .systemBackground))
         }
+        .ignoresSafeArea(.keyboard)
+        .background(Color(uiColor: .systemBackground))
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView(viewModel: viewModel)
         }
