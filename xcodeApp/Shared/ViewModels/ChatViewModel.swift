@@ -55,7 +55,9 @@ final class ChatViewModel: ObservableObject {
             for await chats in bridge.chatsUseCase.observeAll() {
                 let chatList = chats.map(ChatModel.fromKotlin)
                 self.allChats = chatList
-                if self.currentChatId == nil && !chatList.isEmpty {
+                if chatList.isEmpty {
+                    _ = try? await bridge.chatsUseCase.create(title: "New Chat", instructions: "", labels: [])
+                } else if self.currentChatId == nil {
                     var savedId: String? = nil
                     for await id in self.bridge.lastChatIdUseCase.observe() {
                         savedId = id
@@ -78,6 +80,9 @@ final class ChatViewModel: ObservableObject {
         observationTasks.append(Task {
             for await ms in bridge.modelsUseCase.observeEnabledModels() {
                 self.models = ms.map(ModelDefModel.fromKotlin)
+                if self.selectedModel == nil, let first = ms.first {
+                    try? await bridge.modelSelectionUseCase.set(modelId: first.id)
+                }
             }
         })
 
@@ -157,9 +162,11 @@ final class ChatViewModel: ObservableObject {
     }
 
     func send() {
-        guard !loading, let chat = currentChat else { return }
+        guard !loading else { return }
+        guard let chat = currentChat else { self.error = "No chat available"; return }
         let trimmed = prompt.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty, let modelId = selectedModel else { return }
+        guard !trimmed.isEmpty else { return }
+        guard let modelId = selectedModel else { self.error = "No model selected — add an API key in Settings"; return }
         loading = true
         error = nil
         Task {
@@ -211,7 +218,14 @@ final class ChatViewModel: ObservableObject {
 
     // MARK: - Split
 
+    private var splitSaveTask: Task<Void, Never>?
+
     func saveSplitFraction(_ fraction: Float) {
-        Task { try? await bridge.splitFractionUseCase.set(value: fraction) }
+        splitSaveTask?.cancel()
+        splitSaveTask = Task {
+            try? await Task.sleep(nanoseconds: 200_000_000) // 200ms debounce
+            if Task.isCancelled { return }
+            try? await bridge.splitFractionUseCase.set(value: fraction)
+        }
     }
 }

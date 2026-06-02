@@ -5,7 +5,6 @@ import ComposeApp
 struct MainChatView: View {
     @StateObject private var viewModel = ChatViewModel()
     @State private var chatDropdownExpanded = false
-    @State private var totalHeight: CGFloat = 600
 
     private var selectedModelLabel: String {
         guard let sel = viewModel.models.first(where: { $0.id == viewModel.selectedModel }) else {
@@ -17,7 +16,10 @@ struct MainChatView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
+        GeometryReader { geo in
+            let topHeight = geo.size.height / 3
+
+            VStack(spacing: 0) {
             // Header + prompt area with tinted rounded background
             VStack(spacing: 0) {
                 HeaderView(
@@ -56,17 +58,11 @@ struct MainChatView: View {
                 .padding(.bottom, DesignTokens.sectionPadding)
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-            .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
             .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
             .padding(.bottom, 4)
-
-            DraggableSplitter(
-                fraction: $viewModel.splitFraction,
-                totalHeight: totalHeight,
-                onFractionChanged: viewModel.saveSplitFraction
-            )
+            .frame(height: topHeight)
 
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
@@ -116,17 +112,11 @@ struct MainChatView: View {
                 }
             }
             .dotGridBackground()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.keyboard)
-        .background(Color(uiColor: .systemBackground))
-        .overlay(
-            GeometryReader { geo in
-                Color.clear
-                    .onAppear { totalHeight = geo.size.height }
-                    .onChange(of: geo.size.height) { totalHeight = $0 }
             }
-        )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea(.keyboard)
+            .background(Color(uiColor: .systemBackground))
+        }
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView(viewModel: viewModel)
         }

@@ -5,7 +5,7 @@ import ComposeApp
 struct MacMainChatView: View {
     @StateObject private var viewModel = ChatViewModel()
     @State private var chatDropdownExpanded = false
-    @State private var totalHeight: CGFloat = 600
+    @State private var idealTopHeight: CGFloat? = nil
 
     private var selectedModelLabel: String {
         guard let sel = viewModel.models.first(where: { $0.id == viewModel.selectedModel }) else {
@@ -63,8 +63,10 @@ struct MacMainChatView: View {
     }
 
     private var mainContent: some View {
-        VStack(spacing: 0) {
-            // Header + prompt area with tinted rounded background
+        GeometryReader { container in
+            let available = container.size.height
+        VSplitView {
+            // Top: header + prompt
             VStack(spacing: 0) {
                 HeaderView(
                     chatSearchQuery: $viewModel.chatSearchQuery,
@@ -102,18 +104,27 @@ struct MacMainChatView: View {
                 .padding(.bottom, DesignTokens.sectionPadding)
             }
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-            .frame(maxHeight: totalHeight * CGFloat(viewModel.splitFraction))
-            .zIndex(2)
             .padding(.horizontal, 12)
             .padding(.top, 8)
             .padding(.bottom, 4)
+            .frame(minHeight: 120, idealHeight: idealTopHeight ?? (available * CGFloat(viewModel.splitFraction)))
+            .onChange(of: available) { _, h in
+                // Seed the ideal height once from the persisted fraction. After this the
+                // drag owns the height, so flow emissions don't re-propose size mid-drag.
+                if idealTopHeight == nil, h > 0 {
+                    idealTopHeight = h * CGFloat(max(0.2, min(0.8, viewModel.splitFraction)))
+                }
+            }
+            .background(GeometryReader { topGeo in
+                Color.clear
+                    .onChange(of: topGeo.size.height) { _, h in
+                        guard available > 0 else { return }
+                        let fraction = Float(max(0.2, min(0.8, h / available)))
+                        viewModel.saveSplitFraction(fraction)
+                    }
+            })
 
-            DraggableSplitter(
-                fraction: $viewModel.splitFraction,
-                totalHeight: totalHeight,
-                onFractionChanged: viewModel.saveSplitFraction
-            )
-
+            // Bottom: history
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {
                 if history.isEmpty {
@@ -163,15 +174,10 @@ struct MacMainChatView: View {
             }
             .padding(.bottom, 8)
             .dotGridBackground()
+            .frame(minHeight: 80)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(nsColor: .windowBackgroundColor))
-        .overlay(
-            GeometryReader { geo in
-                Color.clear
-                    .onAppear { totalHeight = geo.size.height }
-                    .onChange(of: geo.size.height) { _, newHeight in totalHeight = newHeight }
-            }
-        )
+        }
     }
 }

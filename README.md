@@ -18,19 +18,6 @@ interface. Targets Android, Desktop (JVM), iOS, macOS, and Web (JS).
 ```
 Requires Android SDK.
 
-### macOS
-
-Two build paths — Gradle (fast CLI) and Xcode (debugging, distribution).
-
-**Gradle (CLI only, no Xcode needed)**
-
-| Command | Output |
-|---------|--------|
-| `./gradlew :composeApp:runMacosNative` | Debug `.app`, runs immediately |
-| `./gradlew :composeApp:packageMacosApp` | Release `.app` at `composeApp/build/macos/YoPt.app` |
-
-First launch: right-click → Open to bypass Gatekeeper (unsigned).
-
 **Xcode (debugger, Instruments, signing)**
 
 Build the XCFramework first — Xcode validates file references before running the

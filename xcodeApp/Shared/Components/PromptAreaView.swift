@@ -21,7 +21,7 @@ struct PromptAreaView: View {
             TextEditor(text: $prompt)
                 .font(.body)
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: 60, maxHeight: .infinity)
+                .frame(minHeight: 40, maxHeight: .infinity)
                 .overlay(
                     Group {
                         if prompt.isEmpty {
