@@ -20,6 +20,7 @@ final class ChatViewModel: ObservableObject {
     @Published var selectedModel: String? = nil
     @Published var globalInstructions: String = ""
     @Published var splitFraction: Float = 0.4
+    @Published var splitFractionLoaded: Bool = false
     @Published var defaultShowMarkdown: Bool = false
     @Published var lastPrompt: String = ""
 
@@ -114,6 +115,7 @@ final class ChatViewModel: ObservableObject {
         observationTasks.append(Task {
             for await f in bridge.splitFractionUseCase.observe() {
                 self.splitFraction = f as? Float ?? 0.4
+                self.splitFractionLoaded = true
             }
         })
 

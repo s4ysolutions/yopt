@@ -7,6 +7,11 @@ struct MacMainChatView: View {
     @State private var chatDropdownExpanded = false
     @State private var idealTopHeight: CGFloat? = nil
 
+    private func seedIfReady(_ h: CGFloat) {
+        guard idealTopHeight == nil, h > 0, viewModel.splitFractionLoaded else { return }
+        idealTopHeight = h * CGFloat(max(0.2, min(0.8, viewModel.splitFraction)))
+    }
+
     private var selectedModelLabel: String {
         guard let sel = viewModel.models.first(where: { $0.id == viewModel.selectedModel }) else {
             return "Select Model"
@@ -108,17 +113,13 @@ struct MacMainChatView: View {
             .padding(.top, 8)
             .padding(.bottom, 4)
             .frame(minHeight: 120, idealHeight: idealTopHeight ?? (available * CGFloat(viewModel.splitFraction)))
-            .onChange(of: available) { _, h in
-                // Seed the ideal height once from the persisted fraction. After this the
-                // drag owns the height, so flow emissions don't re-propose size mid-drag.
-                if idealTopHeight == nil, h > 0 {
-                    idealTopHeight = h * CGFloat(max(0.2, min(0.8, viewModel.splitFraction)))
-                }
-            }
+            .onChange(of: available) { _, h in seedIfReady(h) }
+            .onChange(of: viewModel.splitFractionLoaded) { _, _ in seedIfReady(available) }
             .background(GeometryReader { topGeo in
                 Color.clear
                     .onChange(of: topGeo.size.height) { _, h in
-                        guard available > 0 else { return }
+                        // Skip until seeded — avoids echo-saving the restored value.
+                        guard available > 0, idealTopHeight != nil else { return }
                         let fraction = Float(max(0.2, min(0.8, h / available)))
                         viewModel.saveSplitFraction(fraction)
                     }
