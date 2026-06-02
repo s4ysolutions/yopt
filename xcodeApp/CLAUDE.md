@@ -80,7 +80,7 @@ DesignTokens.actionBarHeight         // 28
 
 ## State and actions
 
-- **`ChatViewModel`** is `@StateObject` in root views (`MainChatView`, `MacMainChatView`). Never instantiate it in child views — pass as `@ObservedObject` or via environment.
+- **`ChatViewModel`** is `@StateObject` in root views (`MainChatView` on iOS, `macOSApp` on macOS). On macOS it is passed to `MacMainChatView` as `@ObservedObject`. Never instantiate it in child views — pass as `@ObservedObject` or via environment.
 - **Model selection**: call `viewModel.selectModel(_ id: String)`. Never assign `viewModel.selectedModel` directly (it's driven by the Kotlin flow).
 - **All Kotlin mutations**: go through `KotlinBridge` via `ChatViewModel` or `SettingsViewModel`. Views never call `KotlinBridge.shared` directly.
 

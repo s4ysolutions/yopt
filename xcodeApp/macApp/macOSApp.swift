@@ -4,15 +4,27 @@ import AppKit
 @main
 struct macOSApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var viewModel = ChatViewModel()
 
     var body: some Scene {
         WindowGroup {
-            MacMainChatView()
+            MacMainChatView(viewModel: viewModel)
                 .frame(minWidth: 600, minHeight: 400)
         }
         .windowResizability(.contentMinSize)
         .commands {
-            CommandGroup(replacing: .newItem) {}
+            CommandGroup(replacing: .appSettings) {
+                Button("Settings\u{2026}") {
+                    viewModel.showSettings = true
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
+            CommandGroup(replacing: .newItem) {
+                Button("New Chat") {
+                    viewModel.createNewChat()
+                }
+                .keyboardShortcut("n", modifiers: .command)
+            }
             CommandGroup(replacing: .undoRedo) {}
         }
     }
