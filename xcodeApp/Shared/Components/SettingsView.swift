@@ -53,5 +53,14 @@ struct SettingsView: View {
                 }
             }
         }
+        // ── Hidden keyboard shortcut ─────────────────────────
+        // Escape closes the settings view (local key equivalent,
+        // not a menu-bar command — kept as hidden button overlay).
+        // `.opacity(0)` preserves keyboard focus (unlike `.hidden()`).
+        .overlay {
+            Button("", action: { viewModel.showSettings = false })
+                .keyboardShortcut(.escape, modifiers: [])
+                .opacity(0)
+        }
     }
 }

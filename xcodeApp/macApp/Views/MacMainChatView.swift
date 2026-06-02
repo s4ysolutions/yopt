@@ -90,18 +90,6 @@ struct MacMainChatView: View {
         .animation(.easeInOut(duration: 0.25), value: viewModel.showSettings)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-        // ── Hidden keyboard shortcut ─────────────────────────
-        // Escape closes the settings overlay (sheet-dismissal logic,
-        // not a menu-bar command — kept as a local hidden button).
-        // `.opacity(0)` preserves keyboard focus (unlike `.hidden()`).
-        .overlay {
-            if viewModel.showSettings {
-                Button("", action: { viewModel.showSettings = false })
-                    .keyboardShortcut(.escape, modifiers: [])
-                    .opacity(0)
-            }
-        }
-
         // ── Chat Settings Sheet ───────────────────────────────
         // A modal sheet for editing the current chat's title, instructions,
         // and labels. Triggered by the "slider" button in HeaderView.
