@@ -42,30 +42,6 @@ struct MacMainChatView: View {
     /// Owned by macOSApp, passed via ObservedObject.
     @ObservedObject var viewModel: ChatViewModel
 
-    /// Controls the chat-search dropdown overlay.
-    /// Local state only — the dropdown is ephemeral UI, not persisted.
-    @State private var chatDropdownExpanded = false
-
-    // ───────────────────────────────────────────────────────────
-    // MARK: - Derived State
-    // ───────────────────────────────────────────────────────────
-
-    /// Human-readable label for the currently selected model.
-    ///
-    /// Format: `"ProviderName: ModelName"` when a provider is identifiable,
-    /// falling back to just `"ModelName"`, or `"Select Model"` when nothing
-    /// is selected. This is a computed property rather than stored state because
-    /// it derives purely from `viewModel.models` + `viewModel.selectedModel`,
-    /// both of which update reactively from Kotlin flows.
-    private var selectedModelLabel: String {
-        guard let sel = viewModel.models.first(where: { $0.id == viewModel.selectedModel }) else {
-            return "Select Model"
-        }
-        let provName = viewModel.providers.first { $0.id == sel.providerId }?.name
-        if let pn = provName { return "\(pn): \(sel.officialName)" }
-        return sel.officialName
-    }
-
     // ───────────────────────────────────────────────────────────
     // MARK: - Body
     // ───────────────────────────────────────────────────────────
@@ -118,88 +94,9 @@ struct MacMainChatView: View {
     // MARK: - Main Content (SplitView layout)
     // ───────────────────────────────────────────────────────────
 
-    /// The primary two-pane layout for the chat interface.
-    ///
-    /// Uses `SplitView` (a custom draggable divider, not NSSplitView) so we
-    /// own the persistence and animation. The split fraction is stored at
-    /// `@AppStorage("mainSplitFraction")` — synchronous on launch, no first-frame
-    /// flicker. See `SplitView.swift` for the drag-absolute-Y mechanism.
-    ///
-    /// **Top pane (collapsible)** — `VStack` of:
-    /// 1. `HeaderView` (chat search, rename, action buttons)
-    /// 2. `Divider`
-    /// 3. `PromptAreaView` (input, send/cancel, model picker, error)
-    ///
-    ///   The entire top area gets a rounded rectangle background with a subtle
-    ///   accent tint (`DesignTokens.topAreaBackground`), visually grouping the
-    ///   controls as a cohesive input region.
-    ///
-    /// **Bottom pane (scrollable)** — chat history in reverse chronological
-    ///   order (newest first), each rendered as a `ResponseCardView`.
-    ///   Empty state shows a placeholder icon + hint.
-    ///   Background uses `.dotGridBackground()` — a subtle dot pattern from
-    ///   DesignTokens — for visual texture.
-    ///
     private var mainContent: some View {
         SplitView {
-            // ═══════════════════════════════════════════════════
-            // TOP PANE: Header + Prompt Area
-            // ═══════════════════════════════════════════════════
-            VStack(spacing: 0) {
-                // ── Header ────────────────────────────────────
-                // Chat search/dropdown, inline rename, action buttons
-                // (new chat, delete, chat settings, global settings).
-                // `.zIndex(1)` is critical — the dropdown overlay inside
-                // HeaderView must render above the PromptAreaView sibling
-                // that follows in the VStack.
-                HeaderView(
-                    chatSearchQuery: $viewModel.chatSearchQuery,
-                    chatDropdownExpanded: $chatDropdownExpanded,
-                    chatName: $viewModel.chatName,
-                    filteredChats: viewModel.filteredChats,
-                    allChatsCount: viewModel.allChats.count,
-                    onCreateNew: viewModel.createNewChat,
-                    onDelete: viewModel.deleteCurrentChat,
-                    onChatSettings: { viewModel.showChatSettings = true },
-                    onSettings: { viewModel.showSettings = true },
-                    onSelectChat: viewModel.selectChat
-                )
-                .padding(.horizontal, DesignTokens.sectionPadding)
-                .padding(.top, DesignTokens.sectionPadding)
-                .zIndex(1)
-
-                Divider()
-                    .padding(.vertical, DesignTokens.sectionPadding)
-
-                // ── Prompt Input Area ─────────────────────────
-                // Text editor, send/cancel button, model picker,
-                // error state display. Drives the `EditorHeightKey`
-                // preference that SplitView uses to compute the
-                // true content minimum (chrome + editor min height).
-                PromptAreaView(
-                    prompt: $viewModel.prompt,
-                    loading: $viewModel.loading,
-                    selectedModelName: selectedModelLabel,
-                    selectedModelId: viewModel.selectedModel,
-                    models: viewModel.models,
-                    modelsEmpty: viewModel.models.isEmpty,
-                    error: viewModel.error,
-                    onSend: viewModel.send,
-                    onCancel: viewModel.cancelSend,
-                    onSelectModel: viewModel.selectModel,
-                    onOpenSettings: { viewModel.showSettings = true }
-                )
-                .padding(.horizontal, DesignTokens.sectionPadding)
-                .padding(.bottom, DesignTokens.sectionPadding)
-            }
-            // Visual grouping: rounded rect with subtle accent tint.
-            .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-            // Outer padding matches the window's natural chrome inset.
-            // These are outside the background so the visual container
-            // appears "floating" inside the window, not edge-to-edge.
-            .padding(.horizontal, 12)
-            .padding(.top, 8)
-            .padding(.bottom, 4)
+            ChatTopPaneView(viewModel: viewModel)
         } bottom: {
             // ═══════════════════════════════════════════════════
             // BOTTOM PANE: Scrollable Chat History

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -49,8 +49,6 @@
 		AA00000000000000000124 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000122 /* ChatListView.swift */; };
 		AA00000000000000000126 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
 		AA00000000000000000127 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
-		AA00000000000000000155 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
-		AA00000000000000000156 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA0000000000000000012c /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012d /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012f /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
@@ -69,6 +67,9 @@
 		AA00000000000000000148 /* MacMainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000149 /* MacMainChatView.swift */; };
 		AA00000000000000000152 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000151 /* DesignTokens.swift */; };
 		AA00000000000000000153 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000151 /* DesignTokens.swift */; };
+		AA00000000000000000155 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
+		AA00000000000000000156 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
+		AA00000000000000000157 /* ChatTopPaneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000158 /* ChatTopPaneView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,7 +111,6 @@
 		AA0000000000000000011f /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		AA00000000000000000122 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		AA00000000000000000125 /* PromptAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAreaView.swift; sourceTree = "<group>"; };
-		AA00000000000000000154 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012b /* TagChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChipsView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012e /* ChatSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000134 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -121,7 +121,13 @@
 		AA00000000000000000146 /* MainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChatView.swift; sourceTree = "<group>"; };
 		AA00000000000000000149 /* MacMainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMainChatView.swift; sourceTree = "<group>"; };
 		AA00000000000000000151 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		AA00000000000000000154 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
+		AA00000000000000000158 /* ChatTopPaneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTopPaneView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		41C7684D2FD0715B0065536A /* PreferenceKeys */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PreferenceKeys; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		AA00000000000000000000B0 /* Frameworks */ = {
@@ -227,6 +233,7 @@
 		AA00000000000000000104 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				41C7684D2FD0715B0065536A /* PreferenceKeys */,
 				AA00000000000000000116 /* MarkdownResponseView.swift */,
 				AA00000000000000000119 /* ResponseActionsBar.swift */,
 				AA0000000000000000011c /* ResponseCardView.swift */,
@@ -257,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				AA00000000000000000149 /* MacMainChatView.swift */,
+				AA00000000000000000158 /* ChatTopPaneView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -277,6 +285,9 @@
 			dependencies = (
 				AA00000000000000000000T0 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				41C7684D2FD0715B0065536A /* PreferenceKeys */,
+			);
 			name = "YoPt iOS";
 			productName = "YoPt iOS";
 			productReference = AA00000000000000000000A0 /* YoPt iOS.app */;
@@ -295,6 +306,9 @@
 			);
 			dependencies = (
 				AA00000000000000000000T1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				41C7684D2FD0715B0065536A /* PreferenceKeys */,
 			);
 			name = "YoPt macOS";
 			productName = "YoPt macOS";
@@ -458,6 +472,7 @@
 				AA0000000000000000013f /* GlobalTabView.swift in Sources */,
 				AA00000000000000000142 /* ExportTabView.swift in Sources */,
 				AA00000000000000000148 /* MacMainChatView.swift in Sources */,
+				AA00000000000000000157 /* ChatTopPaneView.swift in Sources */,
 				AA00000000000000000153 /* DesignTokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

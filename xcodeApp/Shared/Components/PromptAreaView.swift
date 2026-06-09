@@ -17,11 +17,10 @@ struct PromptAreaView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            // Prompt text editor
             TextEditor(text: $prompt)
                 .font(.body)
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: 40, maxHeight: .infinity)
+                .frame(maxHeight: .infinity)
                 .overlay(
                     Group {
                         if prompt.isEmpty {
@@ -39,47 +38,53 @@ struct PromptAreaView: View {
                         .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
                 )
 
-            // Bottom row: model selector + send
-            HStack {
-                Button(action: {
-                    if modelsEmpty { onOpenSettings() }
-                    else { showModelPicker.toggle() }
-                }) {
-                    Text(selectedModelName)
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                        )
-                }
-                .buttonStyle(.plain)
-                .popover(isPresented: $showModelPicker) {
-                    modelPickerContent
-                        .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, 380))])
-                }
-
-                if loading {
-                    Button(action: onCancel) {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                            .frame(width: 28, height: 28)
+            VStack(spacing: 8) {
+                HStack {
+                    Button(action: {
+                        if modelsEmpty { onOpenSettings() }
+                        else { showModelPicker.toggle() }
+                    }) {
+                        Text(selectedModelName)
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                            )
                     }
                     .buttonStyle(.plain)
-                } else {
-                    Button("Send", action: onSend)
-                        .buttonStyle(.borderedProminent)
-                        .keyboardShortcut(.return, modifiers: [.command])
+                    .popover(isPresented: $showModelPicker) {
+                        modelPickerContent
+                            .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, 380))])
+                    }
+
+                    if loading {
+                        Button(action: onCancel) {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .frame(width: 28, height: 28)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Button("Send", action: onSend)
+                            .buttonStyle(.borderedProminent)
+                            .keyboardShortcut(.return, modifiers: [.command])
+                    }
+                }
+
+                if let err = error {
+                    Text(err)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
-
-            if let err = error {
-                Text(err)
-                    .font(.caption)
-                    .foregroundColor(.red)
-            }
+            .background(GeometryReader { proxy in
+                Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height + 8)
+            })
         }
     }
 
