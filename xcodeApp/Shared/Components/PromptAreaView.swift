@@ -15,6 +15,8 @@ struct PromptAreaView: View {
 
     @State private var showModelPicker = false
 
+    private let minHeight: CGFloat = 60 + 8 + 40
+
     var body: some View {
         VStack(spacing: 8) {
             TextEditor(text: $prompt)
@@ -83,9 +85,7 @@ struct PromptAreaView: View {
                 }
             }
         }
-        .background(GeometryReader { proxy in
-            Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height)
-        })
+        .background(Color.clear.preference(key: ChatTopPanelMinHeight.self, value: minHeight))
     }
 
     private var modelPickerContent: some View {
