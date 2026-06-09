@@ -15,12 +15,14 @@ struct PromptAreaView: View {
 
     @State private var showModelPicker = false
 
+    private static let textEditorMinHeight: CGFloat = 60
+
     var body: some View {
         VStack(spacing: 8) {
             TextEditor(text: $prompt)
                 .font(.body)
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: 60, maxHeight: .infinity)
+                .frame(minHeight: Self.textEditorMinHeight, maxHeight: .infinity)
                 .overlay(
                     Group {
                         if prompt.isEmpty {
@@ -37,7 +39,7 @@ struct PromptAreaView: View {
                     RoundedRectangle(cornerRadius: 4)
                         .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
                 )
-                .background(Color.clear.preference(key: ChatTopPanelMinHeight.self, value: 60))
+                .background(Color.clear.preference(key: ChatTopPanelMinHeight.self, value: Self.textEditorMinHeight))
 
             VStack(spacing: 8) {
                 HStack {
