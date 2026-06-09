@@ -20,7 +20,7 @@ struct PromptAreaView: View {
             TextEditor(text: $prompt)
                 .font(.body)
                 .scrollContentBackground(.hidden)
-                .frame(maxHeight: .infinity)
+                .frame(minHeight: 60, maxHeight: .infinity)
                 .overlay(
                     Group {
                         if prompt.isEmpty {
@@ -82,10 +82,10 @@ struct PromptAreaView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .background(GeometryReader { proxy in
-                Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height + 8)
-            })
         }
+        .background(GeometryReader { proxy in
+            Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height)
+        })
     }
 
     private var modelPickerContent: some View {
