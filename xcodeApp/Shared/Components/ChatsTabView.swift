@@ -84,11 +84,11 @@ struct ChatEditRowView: View {
                 TagChipsView(tags: $labels, onAddTag: { showAddTag = true })
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
-                    Button("Save") {
+                    Button(String(localized: "button.save")) {
                         onUpdate(chat, title, instructions, labels)
                         editing = false
                     }
-                    Button("Cancel") { editing = false }
+                    Button(String(localized: "button.cancel")) { editing = false }
                 }
                 .sheet(isPresented: $showAddTag) {
                     AddTagDialog(isPresented: $showAddTag, tags: $labels)
@@ -110,8 +110,8 @@ struct ChatEditRowView: View {
                         .foregroundColor(.secondary)
                 }
                 HStack {
-                    Button("Edit") { editing = true; title = chat.title; instructions = chat.instructions; labels = chat.labels }
-                    Button("Delete", role: .destructive) { onDelete(chat.id) }
+                    Button(String(localized: "button.edit")) { editing = true; title = chat.title; instructions = chat.instructions; labels = chat.labels }
+                    Button(String(localized: "button.delete"), role: .destructive) { onDelete(chat.id) }
                 }
             }
         }

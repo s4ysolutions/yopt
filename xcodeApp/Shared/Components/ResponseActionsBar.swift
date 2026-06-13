@@ -34,21 +34,21 @@ struct ResponseActionsBar: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Use as Prompt")
+            .help(String(localized: "help.useAsPrompt"))
 
             Button(action: onAppendToPrompt) {
                 Image(systemName: "text.badge.plus")
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Append to Prompt")
+            .help(String(localized: "help.appendToPrompt"))
 
             Button(action: onCopy) {
                 Image(systemName: "doc.on.doc")
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Copy")
+            .help(String(localized: "help.copy"))
         }
         .padding(.horizontal, 8)
         .frame(height: DesignTokens.actionBarHeight)
@@ -79,19 +79,19 @@ struct PromptActionsBar: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Use as Prompt")
+            .help(String(localized: "help.useAsPrompt"))
             Button(action: onAppendToPrompt) {
                 Image(systemName: "text.badge.plus")
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Append to Prompt")
+            .help(String(localized: "help.appendToPrompt"))
             Button(action: onCopy) {
                 Image(systemName: "doc.on.doc")
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Copy")
+            .help(String(localized: "help.copy"))
         }
         .padding(.horizontal, 8)
         .frame(height: DesignTokens.actionBarHeight)

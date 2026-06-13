@@ -86,7 +86,7 @@ struct HeaderView: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Chat List")
+            .help(String(localized: "help.chatList"))
         }
         .padding(8)
         .overlay(
@@ -136,7 +136,7 @@ struct HeaderView: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("New Chat")
+            .help(String(localized: "help.newChat"))
 
             if allChatsCount > 1 {
                 Button(action: onDelete) {
@@ -144,7 +144,7 @@ struct HeaderView: View {
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
-                .help("Delete Chat")
+                .help(String(localized: "help.deleteChat"))
             }
 
             Button(action: onChatSettings) {
@@ -152,14 +152,14 @@ struct HeaderView: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Chat Settings")
+            .help(String(localized: "help.chatSettings"))
 
             Button(action: onSettings) {
                 Image(systemName: "gear")
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Settings")
+            .help(String(localized: "help.settingsButton"))
         }
     }
 }

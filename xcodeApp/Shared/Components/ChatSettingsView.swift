@@ -24,7 +24,7 @@ struct ChatSettingsView: View {
         VStack(spacing: 16) {
 #if os(macOS)
             HStack {
-                Text("Chat Settings")
+                Text(String(localized: "chatSettings.title"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 Spacer()
@@ -33,17 +33,17 @@ struct ChatSettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)
-                .help("Close (Esc)")
+                .help(String(localized: "help.close"))
             }
             .padding(.bottom, 8)
             Divider()
 #else
-            Text("Chat Settings")
+            Text(String(localized: "chatSettings.title"))
                 .font(.title3.weight(.semibold))
 #endif
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Instructions")
+                Text(String(localized: "chatSettings.instructions"))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
@@ -60,7 +60,7 @@ struct ChatSettingsView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tags")
+                Text(String(localized: "chatSettings.tags"))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
@@ -74,10 +74,10 @@ struct ChatSettingsView: View {
                 .frame(height: 8)
 
             HStack(spacing: 12) {
-                Button("Cancel") { isPresented = false }
+                Button(String(localized: "button.cancel")) { isPresented = false }
                     .keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Save") { save() }
+                Button(String(localized: "button.save")) { save() }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut("s", modifiers: [.command])
             }

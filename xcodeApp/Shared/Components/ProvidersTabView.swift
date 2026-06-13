@@ -75,7 +75,7 @@ struct ProviderCardView: View {
                     }
                     .buttonStyle(.plain)
                     .disabled(!hasKey)
-                    .help("Refresh Models")
+                    .help(String(localized: "help.refreshModels"))
                 }
 
                 Button(action: onToggle) {
@@ -132,8 +132,8 @@ struct ApiKeyEditView: View {
     var body: some View {
         if hasKey && !editing {
             HStack {
-                Button("Change") { editing = true }
-                Button("Clear", role: .destructive, action: onClear)
+                Button(String(localized: "button.change")) { editing = true }
+                Button(String(localized: "button.clear"), role: .destructive, action: onClear)
             }
         } else {
             VStack(alignment: .leading, spacing: 8) {
@@ -149,7 +149,7 @@ struct ApiKeyEditView: View {
                 }
 
                 HStack(spacing: 8) {
-                    Button("Save") {
+                    Button(String(localized: "button.save")) {
                         onSave(key)
                         key = ""
                         editing = false
@@ -157,7 +157,7 @@ struct ApiKeyEditView: View {
                     .buttonStyle(.borderedProminent)
 
                     if hasKey {
-                        Button("Cancel") {
+                        Button(String(localized: "button.cancel")) {
                             key = ""
                             editing = false
                         }
@@ -204,7 +204,7 @@ struct CustomProviderEditView: View {
             HStack {
                 Text("API Style: \(editApiStyle.rawValue)")
                 Spacer()
-                Button("Change") { styleExpanded.toggle() }
+                Button(String(localized: "button.change")) { styleExpanded.toggle() }
                     .popover(isPresented: $styleExpanded) {
                         Picker("API Style", selection: $editApiStyle) {
                             ForEach(ApiStyleModel.allCases, id: \.self) { style in
@@ -224,7 +224,7 @@ struct CustomProviderEditView: View {
                 .textFieldStyle(.roundedBorder)
 
             HStack {
-                Button("Save") {
+                Button(String(localized: "button.save")) {
                     onUpdate(editName, editBaseUrl, editApiStyle)
                     if !editApiKey.isEmpty {
                         onSave(editApiKey)
@@ -232,7 +232,7 @@ struct CustomProviderEditView: View {
                 }
                 .buttonStyle(.borderedProminent)
 
-                Button("Delete", role: .destructive, action: onDelete)
+                Button(String(localized: "button.delete"), role: .destructive, action: onDelete)
             }
         }
         .onAppear {
@@ -256,14 +256,14 @@ struct AddCustomProviderView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Text("Add Custom Provider").font(.headline)
+            Text(String(localized: "providers.addCustom")).font(.headline)
             TextField("Provider Name", text: $newName).textFieldStyle(.roundedBorder)
             TextField("Base URL", text: $newBaseUrl).textFieldStyle(.roundedBorder)
 
             HStack {
                 Text("API Style: \(newApiStyle.rawValue)")
                 Spacer()
-                Button("Change") { styleExpanded.toggle() }
+                Button(String(localized: "button.change")) { styleExpanded.toggle() }
                     .popover(isPresented: $styleExpanded) {
                         Picker("API Style", selection: $newApiStyle) {
                             ForEach(ApiStyleModel.allCases, id: \.self) { style in
@@ -282,9 +282,9 @@ struct AddCustomProviderView: View {
             TextField("API Key (optional)", text: $newApiKey).textFieldStyle(.roundedBorder)
 
             HStack {
-                Button("Cancel") { isPresented = false }
+                Button(String(localized: "button.cancel")) { isPresented = false }
                 Spacer()
-                Button("Save") {
+                Button(String(localized: "button.save")) {
                     let name = newName.isEmpty ? "Custom Provider" : newName
                     let url = newBaseUrl.isEmpty ? "https://api.example.com" : newBaseUrl
                     settingsVM.addCustomProvider(name: name, apiStyle: newApiStyle, baseUrl: url)
@@ -319,18 +319,18 @@ struct ModelListView: View {
                 TextField("Filter models...", text: $filter)
                     .textFieldStyle(.roundedBorder)
 
-                Button("All Off") {
+                Button(String(localized: "button.allOff")) {
                     filtered.filter { $0.enabled }.forEach { onToggle($0.id) }
                 }
                 .font(.caption2)
 
-                Button("All On") {
+                Button(String(localized: "button.allOn")) {
                     filtered.filter { !$0.enabled }.forEach { onToggle($0.id) }
                 }
                 .font(.caption2)
             }
 
-            Text("Models").font(.caption).padding(.top, 4)
+            Text(String(localized: "models.label")).font(.caption).padding(.top, 4)
 
             ForEach(Array(filtered.enumerated()), id: \.element.id) { idx, model in
                 if idx > 0 {

@@ -66,7 +66,7 @@ struct MainChatView: View {
                         Image(systemName: "text.bubble")
                             .font(.system(size: 36))
                             .foregroundColor(.secondary.opacity(0.35))
-                        Text("Send a prompt to get started")
+                        Text(String(localized: "prompt.emptyChatMessage"))
                             .font(.body)
                             .foregroundColor(.secondary.opacity(0.5))
                     }

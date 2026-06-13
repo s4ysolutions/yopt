@@ -13,9 +13,9 @@ struct SettingsView: View {
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
-                .help("Back")
+                .help(String(localized: "help.back"))
 
-                Text("Settings")
+                Text(String(localized: "settings.title"))
                     .font(.title2)
                     .padding(.leading, 8)
                 Spacer()
@@ -27,16 +27,16 @@ struct SettingsView: View {
                 .padding(.vertical, 8)
 
             Picker("", selection: $settingsVM.selectedTab) {
-                Text("Providers").tag(0)
-                Text("Chats").tag(1)
-                Text("Global").tag(2)
-                Text("Synchronization").tag(3)
+                Text(String(localized: "tab.providers")).tag(0)
+                Text(String(localized: "tab.chats")).tag(1)
+                Text(String(localized: "tab.global")).tag(2)
+                Text(String(localized: "tab.synchronization")).tag(3)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 12)
 #else
             HStack {
-                Text("Settings")
+                Text(String(localized: "settings.title"))
                     .font(.title2)
                 Spacer()
                 Button(action: { viewModel.showSettings = false }) {
@@ -44,7 +44,7 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)
-                .help("Close (Esc)")
+                .help(String(localized: "help.close"))
             }
             .padding(.horizontal, 12)
             .padding(.top, 8)
@@ -53,10 +53,10 @@ struct SettingsView: View {
                 .padding(.vertical, 8)
 
             Picker("", selection: $settingsVM.selectedTab) {
-                Text("Providers").tag(0)
-                Text("Chats").tag(1)
-                Text("Global").tag(2)
-                Text("Synchronization").tag(3)
+                Text(String(localized: "tab.providers")).tag(0)
+                Text(String(localized: "tab.chats")).tag(1)
+                Text(String(localized: "tab.global")).tag(2)
+                Text(String(localized: "tab.synchronization")).tag(3)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 12)

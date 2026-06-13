@@ -5,7 +5,7 @@ struct GlobalTabView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Global Instructions")
+            Text(String(localized: "global.instructions"))
                 .font(.caption)
                 .fontWeight(.semibold)
                 .textCase(.uppercase)
@@ -21,7 +21,7 @@ struct GlobalTabView: View {
             .overlay(
                 Group {
                     if settingsVM.globalInstructions.isEmpty {
-                        Text("Enter global instructions for all chats...")
+                        Text(String(localized: "global.instructions.placeholder"))
                             .foregroundColor(.secondary)
                             .padding(.leading, 4)
                             .padding(.top, 8)

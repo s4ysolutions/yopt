@@ -1,0 +1,60 @@
+/* Screens & Dialogs */
+"settings.title" = "Settings";
+"chatSettings.title" = "Chat Settings";
+
+/* Tabs */
+"tab.providers" = "Providers";
+"tab.chats" = "Chats";
+"tab.global" = "Global";
+"tab.synchronization" = "Synchronization";
+
+/* Global Settings */
+"global.instructions" = "Global Instructions";
+"global.instructions.placeholder" = "Enter global instructions for all chats...";
+
+/* Chat Settings */
+"chatSettings.instructions" = "Instructions";
+"chatSettings.tags" = "Tags";
+"chatSettings.addTag" = "Add Tag";
+
+/* Prompt Area */
+"prompt.placeholder" = "Enter prompt...";
+"prompt.send" = "Send";
+"prompt.emptyChatMessage" = "Send a prompt to get started";
+
+/* Buttons */
+"button.save" = "Save";
+"button.cancel" = "Cancel";
+"button.change" = "Change";
+"button.clear" = "Clear";
+"button.delete" = "Delete";
+"button.remove" = "Remove";
+"button.allOff" = "All Off";
+"button.allOn" = "All On";
+
+/* Tooltips & Help Text */
+"help.back" = "Back";
+"help.close" = "Close (Esc)";
+"help.chatList" = "Chat List";
+"help.newChat" = "New Chat";
+"help.deleteChat" = "Delete Chat";
+"help.chatSettings" = "Chat Settings";
+"help.settingsButton" = "Settings";
+"help.refreshModels" = "Refresh Models";
+"help.useAsPrompt" = "Use as Prompt";
+"help.appendToPrompt" = "Append to Prompt";
+"help.copy" = "Copy";
+"help.removeFromHistory" = "Remove from History";
+
+/* Providers Tab */
+"providers.apiStyle" = "API Style: %@";
+
+/* Separators & Symbols */
+"separator.dot" = " · ";
+
+/* Additional UI Strings */
+"button.edit" = "Edit";
+"button.add" = "Add";
+"dialog.ok" = "OK";
+"providers.addCustom" = "Add Custom Provider";
+"models.label" = "Models";

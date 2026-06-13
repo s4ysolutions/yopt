@@ -24,7 +24,7 @@ struct TagChipsView: View {
                 HStack(spacing: 2) {
                     Text("+")
                         .font(.caption2)
-                    Text("Add Tag")
+                    Text(String(localized: "chatSettings.addTag"))
                         .font(.caption2)
                 }
                 .padding(.horizontal, 8)
@@ -108,17 +108,17 @@ struct AddTagDialog: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Text("Add Tag")
+            Text(String(localized: "chatSettings.addTag"))
                 .font(.headline)
             TextField("Tag", text: $newTagText)
                 .textFieldStyle(.roundedBorder)
                 .onSubmit { commit() }
             HStack {
-                Button("Cancel") {
+                Button(String(localized: "button.cancel")) {
                     newTagText = ""
                     isPresented = false
                 }
-                Button("Add", action: commit)
+                Button(String(localized: "button.save"), action: commit)
                     .buttonStyle(.borderedProminent)
                     .disabled(newTagText.trimmingCharacters(in: .whitespaces).isEmpty)
             }

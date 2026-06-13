@@ -33,7 +33,7 @@ struct ExportTabView: View {
             get: { settingsVM.dialogText != nil },
             set: { if !$0 { settingsVM.dialogText = nil } }
         )) {
-            Button("OK") { settingsVM.dialogText = nil }
+            Button(String(localized: "dialog.ok")) { settingsVM.dialogText = nil }
         } message: {
             Text(settingsVM.dialogText ?? "")
         }

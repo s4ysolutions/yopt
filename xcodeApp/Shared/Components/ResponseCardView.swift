@@ -70,8 +70,8 @@ struct ResponseCardView: View {
         )
         .padding(.vertical, 4)
         .confirmationDialog("Remove this entry from history?", isPresented: $showRemoveConfirm, titleVisibility: .visible) {
-            Button("Remove", role: .destructive, action: onRemove)
-            Button("Cancel", role: .cancel) {}
+            Button(String(localized: "button.remove"), role: .destructive, action: onRemove)
+            Button(String(localized: "button.cancel"), role: .cancel) {}
         }
     }
 
@@ -102,7 +102,7 @@ struct ResponseCardView: View {
                     .actionIcon()
             }
             .buttonStyle(.plain)
-            .help("Remove from History")
+            .help(String(localized: "help.removeFromHistory"))
 
             Text(formatTimestamp(entry.timestamp))
                 .font(.caption2)

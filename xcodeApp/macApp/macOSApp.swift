@@ -14,13 +14,13 @@ struct macOSApp: App {
         .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(replacing: .appSettings) {
-                Button("Settings\u{2026}") {
+                Button(String(localized: "help.settingsButton") + "\u{2026}") {
                     viewModel.showSettings = true
                 }
                 .keyboardShortcut(",", modifiers: .command)
             }
             CommandGroup(replacing: .newItem) {
-                Button("New Chat") {
+                Button(String(localized: "help.newChat")) {
                     viewModel.createNewChat()
                 }
                 .keyboardShortcut("n", modifiers: .command)

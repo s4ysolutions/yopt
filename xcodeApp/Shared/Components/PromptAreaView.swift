@@ -26,7 +26,7 @@ struct PromptAreaView: View {
                 .overlay(
                     Group {
                         if prompt.isEmpty {
-                            Text("Enter prompt...")
+                            Text(String(localized: "prompt.placeholder"))
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 4)
                                 .padding(.top, 8)
@@ -71,7 +71,7 @@ struct PromptAreaView: View {
                         }
                         .buttonStyle(.plain)
                     } else {
-                        Button("Send", action: onSend)
+                        Button(String(localized: "prompt.send"), action: onSend)
                             .buttonStyle(.borderedProminent)
                             .keyboardShortcut(.return, modifiers: [.command])
                     }
