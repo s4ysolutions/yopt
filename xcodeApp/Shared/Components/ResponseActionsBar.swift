@@ -67,7 +67,7 @@ struct PromptActionsBar: View {
         HStack(spacing: 0) {
             if showExpand {
                 Button(action: onToggleExpand) {
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
                         .actionIcon()
                 }
                 .buttonStyle(.plain)

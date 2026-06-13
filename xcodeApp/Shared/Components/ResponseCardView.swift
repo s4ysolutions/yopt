@@ -16,7 +16,6 @@ struct ResponseCardView: View {
     let modelName: String?
 
     @State private var promptExpanded = false
-    @State private var promptOverflows = false
     @State private var showRemoveConfirm = false
 
     private let wordLimit = 50
@@ -76,19 +75,29 @@ struct ResponseCardView: View {
     }
 
     private var promptSection: some View {
-        VStack(alignment: .leading, spacing: DesignTokens.spacing2) {
+        // Trim so leading/trailing blank lines don't waste space.
+        let trimmedPrompt = entry.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        // <=3 lines: plain text, no expand button. >3 lines: 1-line ellipsis + expand.
+        let collapsible = trimmedPrompt.components(separatedBy: "\n").count > 3
+        let showFull = !collapsible || promptExpanded
+        // Collapsed: glue all lines into one long string so the single line shows max content.
+        let collapsedText = trimmedPrompt.split(separator: "\n").joined(separator: " ")
+        return VStack(alignment: .leading, spacing: DesignTokens.spacing2) {
             PromptActionsBar(
                 isExpanded: promptExpanded,
-                showExpand: promptOverflows,
+                showExpand: collapsible,
                 onToggleExpand: { promptExpanded.toggle() },
                 onUseAsPrompt: { onUseAsPrompt(entry.prompt) },
                 onAppendToPrompt: { onAppendToPrompt(entry.prompt) },
                 onCopy: { onCopy(entry.prompt) }
             )
-            Text(entry.prompt)
-                .font(.caption)
+            // Cancel the section's horizontal padding so the expand chevron lines up
+            // with the response action bar's chevron.
+            .padding(.horizontal, -DesignTokens.padding4)
+            Text(showFull ? trimmedPrompt : collapsedText)
+                .font(.body)
                 .foregroundColor(.secondary)
-                .lineLimit(promptExpanded ? nil : 1)
+                .lineLimit(showFull ? nil : 1)
         }
         .padding(DesignTokens.padding4)
         .background(Color.secondary.opacity(DesignTokens.opacity10))
