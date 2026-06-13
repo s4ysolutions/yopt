@@ -54,6 +54,7 @@ enum DesignTokens {
     static let opacity30: Double = 0.30
     static let opacity35: Double = 0.35
     static let opacity50: Double = 0.50
+    static let opacity70: Double = 0.70
 
     // MARK: - Dot Grid
     static let dotSpacing: CGFloat = 20

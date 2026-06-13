@@ -79,7 +79,7 @@ struct ProviderCardView: View {
                 }
 
                 Button(action: onToggle) {
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
                         .actionIcon()
                 }
                 .buttonStyle(.plain)

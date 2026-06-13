@@ -12,7 +12,7 @@ struct ResponseActionsBar: View {
     var body: some View {
         HStack(spacing: 0) {
             Button(action: onToggleExpand) {
-                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -69,6 +69,7 @@ struct PromptActionsBar: View {
                 Button(action: onToggleExpand) {
                     Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
                         .actionIcon()
+                        .opacity(DesignTokens.opacity70)
                 }
                 .buttonStyle(.plain)
                 .help(isExpanded ? "Collapse Prompt" : "Expand Prompt")
