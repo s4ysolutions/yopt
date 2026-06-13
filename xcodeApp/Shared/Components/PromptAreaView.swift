@@ -6,6 +6,7 @@ struct PromptAreaView: View {
     let selectedModelName: String
     let selectedModelId: String?
     let models: [ModelDefModel]
+    let providers: [ProviderModel]
     let modelsEmpty: Bool
     let error: String?
     let onSend: () -> Void
@@ -90,21 +91,25 @@ struct PromptAreaView: View {
         }
     }
 
+    private func modelLabel(for model: ModelDefModel) -> String {
+        guard let provName = providers.first(where: { $0.id == model.providerId })?.name else {
+            return model.officialName
+        }
+        return "\(provName): \(model.officialName)"
+    }
+
     private var modelPickerContent: some View {
         ScrollView {
-            LazyVStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 ForEach(models) { model in
                     Button(action: {
                         onSelectModel(model.id)
                         showModelPicker = false
                     }) {
-                        HStack {
-                            Text(model.displayName)
-                            Spacer()
-                            if model.id == selectedModelId {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                            }
+                        HStack(spacing: DesignTokens.spacing8) {
+                            Text(modelLabel(for: model))
+                            Image(systemName: "checkmark")
+                                .foregroundColor(model.id == selectedModelId ? .accentColor : .clear)
                         }
                         .padding(.horizontal, DesignTokens.padding16)
                         .padding(.vertical, DesignTokens.padding10)
@@ -114,8 +119,9 @@ struct PromptAreaView: View {
             }
             .padding(DesignTokens.padding8)
         }
+        .fixedSize(horizontal: true, vertical: false)
         #if os(macOS)
-        .frame(width: DesignTokens.chatListMinWidth, height: min(CGFloat(models.count) * 36 + DesignTokens.padding8, DesignTokens.modelPickerMinHeight))
+        .frame(minWidth: DesignTokens.chatListMinWidth, maxHeight: min(CGFloat(models.count) * 36 + DesignTokens.padding8, DesignTokens.modelPickerMinHeight))
         #endif
     }
 }

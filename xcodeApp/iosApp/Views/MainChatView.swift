@@ -47,6 +47,7 @@ struct MainChatView: View {
                     selectedModelName: selectedModelLabel,
                     selectedModelId: viewModel.selectedModel,
                     models: viewModel.models,
+                    providers: viewModel.providers,
                     modelsEmpty: viewModel.models.isEmpty,
                     error: viewModel.error,
                     onSend: viewModel.send,

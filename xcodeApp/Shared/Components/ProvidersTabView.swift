@@ -310,7 +310,7 @@ struct ModelListView: View {
 
     private var filtered: [ModelDefModel] {
         let result = models.filter { filter.isEmpty || $0.officialName.localizedCaseInsensitiveContains(filter) }
-        return result.sorted { $0.enabled && !$1.enabled }
+        return result.sorted { ($0.enabled ? 0 : 1) < ($1.enabled ? 0 : 1) }
     }
 
     var body: some View {
@@ -332,20 +332,23 @@ struct ModelListView: View {
 
             Text(String(localized: "models.label")).font(.caption).padding(.top, 4)
 
-            ForEach(Array(filtered.enumerated()), id: \.element.id) { idx, model in
-                if idx > 0 {
-                    Divider()
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(filtered) { model in
+                        Toggle(isOn: Binding(
+                            get: { model.enabled },
+                            set: { _ in onToggle(model.id) }
+                        )) {
+                            Text(model.officialName)
+                                .font(.callout)
+                        }
+                        .toggleStyle(.switch)
+                        .padding(.vertical, 6)
+                        Divider()
+                    }
                 }
-                Toggle(isOn: Binding(
-                    get: { model.enabled },
-                    set: { _ in onToggle(model.id) }
-                )) {
-                    Text(model.officialName)
-                        .font(.callout)
-                }
-                .toggleStyle(.switch)
-                .padding(.vertical, 6)
             }
+            .frame(maxHeight: 400)
         }
         .padding(.vertical, 4)
     }
