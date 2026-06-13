@@ -192,8 +192,8 @@ final class ChatViewModel: ObservableObject {
     }
 
     func updateChatName(_ title: String) {
-        chatName = title
-        guard let chat = currentChat, !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        guard var chat = currentChat, !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        chat.title = title
         Task { try? await bridge.chatsUseCase.update(chat: chat.toKotlinChat()) }
     }
 

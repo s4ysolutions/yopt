@@ -30,6 +30,7 @@ struct MainChatView: View {
                     onChatSettings: { viewModel.showChatSettings = true },
                     onSettings: { viewModel.showSettings = true },
                     onSelectChat: viewModel.selectChat,
+                    onRename: viewModel.updateChatName,
                     selectedTags: $viewModel.selectedTags,
                     allTags: viewModel.allTags,
                     tagCounts: viewModel.tagCounts

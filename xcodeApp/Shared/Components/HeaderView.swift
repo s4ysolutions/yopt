@@ -11,6 +11,7 @@ struct HeaderView: View {
     let onChatSettings: () -> Void
     let onSettings: () -> Void
     let onSelectChat: (String) -> Void
+    let onRename: (String) -> Void
     @Binding var selectedTags: Set<String>
     let allTags: [String]
     let tagCounts: [String: Int]
@@ -173,6 +174,9 @@ struct HeaderView: View {
                 RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
                     .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
             )
+            .onChange(of: chatName) { newValue in
+                onRename(newValue)
+            }
     }
 
     private var actionButtons: some View {
