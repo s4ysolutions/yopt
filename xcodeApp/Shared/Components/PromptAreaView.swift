@@ -50,15 +50,16 @@ struct PromptAreaView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, DesignTokens.padding12)
                             .padding(.vertical, DesignTokens.padding6)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6)
-                                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
-                            )
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6)
+                            .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
+                    )
                     .popover(isPresented: $showModelPicker) {
                         modelPickerContent
-                            .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, DesignTokens.modelPickerMaxHeight))])
+                            .presentationDetents([.medium, .large])
                     }
 
                     if loading {
