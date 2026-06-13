@@ -5,7 +5,7 @@ struct ExportTabView: View {
     @ObservedObject var settingsVM: SettingsViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: DesignTokens.spacing12) {
             SaveFileButton(label: "Export Settings") {
                 settingsVM.export()
             }

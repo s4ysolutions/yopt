@@ -15,33 +15,31 @@ struct PromptAreaView: View {
 
     @State private var showModelPicker = false
 
-    private static let textEditorMinHeight: CGFloat = 60
-
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignTokens.spacing8) {
             TextEditor(text: $prompt)
                 .font(.body)
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: Self.textEditorMinHeight, maxHeight: .infinity)
+                .frame(minHeight: DesignTokens.textEditorMinHeight, maxHeight: .infinity)
                 .overlay(
                     Group {
                         if prompt.isEmpty {
                             Text(String(localized: "prompt.placeholder"))
                                 .foregroundColor(.secondary)
-                                .padding(.leading, 4)
-                                .padding(.top, 8)
+                                .padding(.leading, DesignTokens.padding4)
+                                .padding(.top, DesignTokens.padding8)
                                 .allowsHitTesting(false)
                         }
                     },
                     alignment: .topLeading
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: DesignTokens.cornerRadius4)
+                        .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
                 )
-                .background(Color.clear.preference(key: ChatTopPanelMinHeight.self, value: Self.textEditorMinHeight))
+                .background(Color.clear.preference(key: ChatTopPanelMinHeight.self, value: DesignTokens.textEditorMinHeight))
 
-            VStack(spacing: 8) {
+            VStack(spacing: DesignTokens.spacing8) {
                 HStack {
                     Button(action: {
                         if modelsEmpty { onOpenSettings() }
@@ -50,17 +48,17 @@ struct PromptAreaView: View {
                         Text(selectedModelName)
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
+                            .padding(.horizontal, DesignTokens.padding12)
+                            .padding(.vertical, DesignTokens.padding6)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6)
+                                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
                             )
                     }
                     .buttonStyle(.plain)
                     .popover(isPresented: $showModelPicker) {
                         modelPickerContent
-                            .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, 380))])
+                            .presentationDetents([.height(min(CGFloat(models.count) * 44 + 32, DesignTokens.modelPickerMaxHeight))])
                     }
 
                     if loading {
@@ -86,7 +84,7 @@ struct PromptAreaView: View {
                 }
             }
             .background(GeometryReader { proxy in
-                Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height + 8)
+                Color.clear.preference(key: ChatTopPanelMinHeight.self, value: proxy.size.height + DesignTokens.padding8)
             })
         }
     }
@@ -107,16 +105,16 @@ struct PromptAreaView: View {
                                     .foregroundColor(.accentColor)
                             }
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
+                        .padding(.horizontal, DesignTokens.padding16)
+                        .padding(.vertical, DesignTokens.padding10)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(8)
+            .padding(DesignTokens.padding8)
         }
         #if os(macOS)
-        .frame(width: 280, height: min(CGFloat(models.count) * 36 + 8, 300))
+        .frame(width: DesignTokens.chatListMinWidth, height: min(CGFloat(models.count) * 36 + DesignTokens.padding8, DesignTokens.modelPickerMinHeight))
         #endif
     }
 }

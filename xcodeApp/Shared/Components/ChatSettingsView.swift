@@ -21,7 +21,7 @@ struct ChatSettingsView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: DesignTokens.spacing16) {
 #if os(macOS)
             HStack {
                 Text(String(localized: "chatSettings.title"))
@@ -35,14 +35,14 @@ struct ChatSettingsView: View {
                 .buttonStyle(.plain)
                 .help(String(localized: "help.close"))
             }
-            .padding(.bottom, 8)
+            .padding(.bottom, DesignTokens.padding8)
             Divider()
 #else
             Text(String(localized: "chatSettings.title"))
                 .font(.title3.weight(.semibold))
 #endif
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing6) {
                 Text(String(localized: "chatSettings.instructions"))
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -51,15 +51,15 @@ struct ChatSettingsView: View {
                 TextEditor(text: $instructions)
                     .font(.body)
                     .scrollContentBackground(.hidden)
-                    .frame(height: 100)
+                    .frame(height: DesignTokens.chatSettingsInstructionsHeight)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6)
+                            .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
                     )
                     .focused($focusedField, equals: .instructions)
             }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: DesignTokens.spacing6) {
                 Text(String(localized: "chatSettings.tags"))
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -71,9 +71,9 @@ struct ChatSettingsView: View {
             }
 
             Spacer()
-                .frame(height: 8)
+                .frame(height: DesignTokens.padding8)
 
-            HStack(spacing: 12) {
+            HStack(spacing: DesignTokens.spacing12) {
                 Button(String(localized: "button.cancel")) { isPresented = false }
                     .keyboardShortcut(.cancelAction)
                 Spacer()
@@ -82,9 +82,9 @@ struct ChatSettingsView: View {
                     .keyboardShortcut("s", modifiers: [.command])
             }
         }
-        .padding(16)
+        .padding(DesignTokens.padding16)
 #if os(macOS)
-        .frame(minWidth: 420, idealWidth: 460)
+        .frame(minWidth: DesignTokens.chatSettingsMinWidth, idealWidth: DesignTokens.chatSettingsIdealWidth)
         .fixedSize(horizontal: false, vertical: true)
         .presentationDragIndicator(.hidden)
 #else

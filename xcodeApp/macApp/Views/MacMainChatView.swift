@@ -158,7 +158,7 @@ struct MacMainChatView: View {
                                 onRemove: { viewModel.removeEntry(at: (viewModel.currentChat?.history.count ?? 0) - 1 - i, chatId: viewModel.currentChatId ?? "") },
                                 modelName: entryModelLabel
                             )
-                            .padding(.horizontal, 12)
+                            .padding(.horizontal, DesignTokens.padding12)
                             .padding(.top, i == 0 ? 0 : DesignTokens.cardVerticalPadding)
                             .padding(.bottom, i == history.count - 1 ? 0 : DesignTokens.cardVerticalPadding)
                         }
@@ -166,7 +166,7 @@ struct MacMainChatView: View {
                 }
             }
             // Bottom padding gives clearance from the SplitView divider handle.
-            .padding(.bottom, 8)
+            .padding(.bottom, DesignTokens.padding8)
             // Decorative dot-grid background for visual depth.
             .dotGridBackground()
         }

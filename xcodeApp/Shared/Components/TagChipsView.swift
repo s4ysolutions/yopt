@@ -5,30 +5,30 @@ struct TagChipsView: View {
     let onAddTag: () -> Void
 
     var body: some View {
-        FlowLayout(spacing: 4) {
+        FlowLayout(spacing: DesignTokens.spacing4) {
             ForEach(tags, id: \.self) { tag in
                 Button(action: { tags.removeAll { $0 == tag } }) {
-                    HStack(spacing: 2) {
+                    HStack(spacing: DesignTokens.spacing2) {
                         Text(tag)
                             .font(.caption2)
                         Text("\u{00D7}")
                             .font(.caption2)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, DesignTokens.padding8)
+                    .padding(.vertical, DesignTokens.padding4)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
             }
             Button(action: onAddTag) {
-                HStack(spacing: 2) {
+                HStack(spacing: DesignTokens.spacing2) {
                     Text("+")
                         .font(.caption2)
                     Text(String(localized: "chatSettings.addTag"))
                         .font(.caption2)
                 }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
+                .padding(.horizontal, DesignTokens.padding8)
+                .padding(.vertical, DesignTokens.padding4)
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -107,7 +107,7 @@ struct AddTagDialog: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DesignTokens.spacing12) {
             Text(String(localized: "chatSettings.addTag"))
                 .font(.headline)
             TextField("Tag", text: $newTagText)
@@ -125,10 +125,10 @@ struct AddTagDialog: View {
         }
         .padding()
 #if os(macOS)
-        .frame(width: 260)
+        .frame(width: DesignTokens.chatListMinWidth)
         .fixedSize(horizontal: false, vertical: true)
 #else
-        .presentationDetents([.height(180)])
+        .presentationDetents([.height(DesignTokens.addTagDialogHeight)])
 #endif
     }
 }

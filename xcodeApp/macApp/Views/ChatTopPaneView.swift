@@ -59,8 +59,8 @@ struct ChatTopPaneView: View {
             .padding(.bottom, DesignTokens.sectionPadding)
         }
         .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
-        .padding(.horizontal, 12)
-        .padding(.top, 8)
-        .padding(.bottom, 4)
+        .padding(.horizontal, DesignTokens.padding12)
+        .padding(.top, DesignTokens.padding8)
+        .padding(.bottom, DesignTokens.padding4)
     }
 }

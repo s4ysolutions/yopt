@@ -16,7 +16,7 @@ struct ChatListView: View {
         ZStack {
             // Opaque base layer — guarantees the dropdown is not see-through,
             // regardless of how the ScrollView paints its own backing.
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
                 .fill(DesignTokens.cardBackground)
 
             ScrollView {
@@ -25,26 +25,26 @@ struct ChatListView: View {
                         Button(action: { onSelect(chat.id) }) {
                             Text(chat.title)
                                 .lineLimit(1)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
+                                .padding(.horizontal, DesignTokens.padding12)
+                                .padding(.vertical, DesignTokens.padding6)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(hoveredId == chat.id ? Color.accentColor.opacity(0.12) : Color.clear)
-                                .cornerRadius(4)
+                                .background(hoveredId == chat.id ? Color.accentColor.opacity(DesignTokens.opacity12) : Color.clear)
+                                .cornerRadius(DesignTokens.cornerRadius4)
                         }
                         .buttonStyle(.plain)
                         .frame(maxWidth: .infinity)
                         .onHover { hoveredId = $0 ? chat.id : nil }
                     }
                 }
-                .padding(4)
+                .padding(DesignTokens.padding4)
             }
             .scrollContentBackground(.hidden)
         }
-        .frame(idealWidth: 260, maxWidth: 360, idealHeight: idealH, maxHeight: idealH)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(idealWidth: DesignTokens.chatListMinWidth, maxWidth: DesignTokens.chatListMaxWidth, idealHeight: idealH, maxHeight: idealH)
+        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8))
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
+                .stroke(Color.secondary.opacity(DesignTokens.opacity20), lineWidth: 1)
         )
         .shadow(radius: 6, y: 3)
     }

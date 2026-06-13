@@ -50,7 +50,7 @@ struct ResponseActionsBar: View {
             .buttonStyle(.plain)
             .help(String(localized: "help.copy"))
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, DesignTokens.padding8)
         .frame(height: DesignTokens.actionBarHeight)
     }
 }
@@ -93,7 +93,7 @@ struct PromptActionsBar: View {
             .buttonStyle(.plain)
             .help(String(localized: "help.copy"))
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, DesignTokens.padding8)
         .frame(height: DesignTokens.actionBarHeight)
     }
 }

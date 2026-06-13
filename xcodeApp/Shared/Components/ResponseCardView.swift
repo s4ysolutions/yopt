@@ -23,7 +23,7 @@ struct ResponseCardView: View {
     private let responsePreviewLength = 200
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: DesignTokens.spacing4) {
             // Prompt row
             if !isFirst || entry.prompt != currentPrompt || entry.modelId != currentModelId {
                 promptSection
@@ -59,16 +59,16 @@ struct ResponseCardView: View {
             // Bottom bar
             bottomBar
         }
-        .padding(4)
+        .padding(DesignTokens.padding4)
         .background(
             RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius)
                 .fill(DesignTokens.cardBackground)
         )
         .overlay(
             RoundedRectangle(cornerRadius: DesignTokens.cardCornerRadius)
-                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
         )
-        .padding(.vertical, 4)
+        .padding(.vertical, DesignTokens.padding4)
         .confirmationDialog("Remove this entry from history?", isPresented: $showRemoveConfirm, titleVisibility: .visible) {
             Button(String(localized: "button.remove"), role: .destructive, action: onRemove)
             Button(String(localized: "button.cancel"), role: .cancel) {}
@@ -76,7 +76,7 @@ struct ResponseCardView: View {
     }
 
     private var promptSection: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: DesignTokens.spacing2) {
             PromptActionsBar(
                 isExpanded: promptExpanded,
                 showExpand: promptOverflows,
@@ -90,9 +90,9 @@ struct ResponseCardView: View {
                 .foregroundColor(.secondary)
                 .lineLimit(promptExpanded ? nil : 1)
         }
-        .padding(4)
-        .background(Color.secondary.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(DesignTokens.padding4)
+        .background(Color.secondary.opacity(DesignTokens.opacity10))
+        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8))
     }
 
     private var bottomBar: some View {

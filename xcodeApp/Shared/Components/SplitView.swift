@@ -3,8 +3,6 @@ import SwiftUI
 struct SplitView<Top: View, Bottom: View>: View {
     @AppStorage("mainSplitFraction") private var fraction: Double = 0.4
 
-    private let dividerH: CGFloat = 12
-
     @State private var cursorPushed = false
     @State private var minTopHeight: CGFloat = 0
 
@@ -20,8 +18,8 @@ struct SplitView<Top: View, Bottom: View>: View {
     var body: some View {
         GeometryReader { geo in
             let available = geo.size.height
-            let minFraction = (minTopHeight + dividerH) / available
-            let desiredTopHeight = available * CGFloat(fraction) - dividerH
+            let minFraction = (minTopHeight + DesignTokens.dividerHeight) / available
+            let desiredTopHeight = available * CGFloat(fraction) - DesignTokens.dividerHeight
 
             let topHeight = if desiredTopHeight >= minTopHeight {
                 desiredTopHeight
@@ -43,8 +41,8 @@ struct SplitView<Top: View, Bottom: View>: View {
                 minTopHeight = newMin
 
                 if minGrew {
-                    let newMinFraction = (newMin + dividerH) / available
-                    let currentTopHeight = available * CGFloat(fraction) - dividerH
+                    let newMinFraction = (newMin + DesignTokens.dividerHeight) / available
+                    let currentTopHeight = available * CGFloat(fraction) - DesignTokens.dividerHeight
 
                     if currentTopHeight < newMin {
                         fraction = Double(newMinFraction)
@@ -56,14 +54,14 @@ struct SplitView<Top: View, Bottom: View>: View {
 
     private func handle(available: CGFloat, minFraction: Double) -> some View {
         Rectangle()
-            .fill(Color.secondary.opacity(0.15))
-            .frame(height: dividerH)
+            .fill(Color.secondary.opacity(DesignTokens.opacity15))
+            .frame(height: DesignTokens.dividerHeight)
             .overlay(
-                HStack(spacing: 4) {
+                HStack(spacing: DesignTokens.spacing4) {
                     ForEach(0 ..< 3, id: \.self) { _ in
                         Circle()
-                            .fill(Color.secondary.opacity(0.3))
-                            .frame(width: 4, height: 4)
+                            .fill(Color.secondary.opacity(DesignTokens.opacity30))
+                            .frame(width: DesignTokens.circleSize4, height: DesignTokens.circleSize4)
                     }
                 }
             )

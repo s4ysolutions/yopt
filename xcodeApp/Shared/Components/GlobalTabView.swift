@@ -4,7 +4,7 @@ struct GlobalTabView: View {
     @ObservedObject var settingsVM: SettingsViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DesignTokens.spacing8) {
             Text(String(localized: "global.instructions"))
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -23,16 +23,16 @@ struct GlobalTabView: View {
                     if settingsVM.globalInstructions.isEmpty {
                         Text(String(localized: "global.instructions.placeholder"))
                             .foregroundColor(.secondary)
-                            .padding(.leading, 4)
-                            .padding(.top, 8)
+                            .padding(.leading, DesignTokens.padding4)
+                            .padding(.top, DesignTokens.padding8)
                             .allowsHitTesting(false)
                     }
                 },
                 alignment: .topLeading
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6)
+                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
             )
         }
         .padding(DesignTokens.sectionPadding)

@@ -70,7 +70,7 @@ struct HeaderView: View {
     }
 
     private var chatSearchField: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DesignTokens.spacing4) {
             TextField("Search...", text: $chatSearchQuery)
                 .textFieldStyle(.plain)
                 .focused($searchFocused)
@@ -88,10 +88,10 @@ struct HeaderView: View {
             .buttonStyle(.plain)
             .help(String(localized: "help.chatList"))
         }
-        .padding(8)
+        .padding(DesignTokens.padding8)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
+                .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
         )
         .background(
             GeometryReader { geo in
@@ -122,10 +122,10 @@ struct HeaderView: View {
     private var chatNameField: some View {
         TextField("Chat Name", text: $chatName)
             .textFieldStyle(.plain)
-            .padding(8)
+            .padding(DesignTokens.padding8)
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
+                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
             )
     }
 

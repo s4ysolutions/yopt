@@ -26,7 +26,7 @@ struct ProvidersTabView: View {
                     onDeleteCustom: { settingsVM.deleteCustomProvider(provider.id) }
                 )
                 .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                .listRowInsets(EdgeInsets(top: DesignTokens.padding4, leading: 0, bottom: DesignTokens.padding4, trailing: 0))
             }
 
             Button(action: { showAddCustom = true }) {

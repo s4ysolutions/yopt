@@ -19,12 +19,12 @@ struct ChatsTabView: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignTokens.spacing8) {
             if !allLabels.isEmpty {
                 labelFilterView
             }
             ScrollView {
-                LazyVStack(spacing: 4) {
+                LazyVStack(spacing: DesignTokens.spacing4) {
                     ForEach(filteredChats) { chat in
                         ChatEditRowView(chat: chat, onUpdate: onUpdate, onDelete: onDelete)
                     }
@@ -32,13 +32,13 @@ struct ChatsTabView: View {
             }
             .frame(maxHeight: .infinity)
         }
-        .padding(.top, 8)
+        .padding(.top, DesignTokens.padding8)
         .frame(maxHeight: .infinity)
     }
 
     private var labelFilterView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
+            HStack(spacing: DesignTokens.spacing6) {
                 ForEach(0..<allLabels.count, id: \.self) { i in
                     let label = allLabels[i]
                     let checked = checkedLabels.contains(label)
@@ -48,15 +48,15 @@ struct ChatsTabView: View {
                     }) {
                         Text(label)
                             .font(.caption2)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, DesignTokens.padding8)
+                            .padding(.vertical, DesignTokens.padding4)
                     }
-                    .background(checked ? Color.accentColor.opacity(0.15) : Color.secondary.opacity(0.1))
+                    .background(checked ? Color.accentColor.opacity(DesignTokens.opacity15) : Color.secondary.opacity(DesignTokens.opacity10))
                     .foregroundColor(checked ? .accentColor : .primary)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius6))
                 }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, DesignTokens.padding4)
         }
     }
 }
@@ -73,14 +73,14 @@ struct ChatEditRowView: View {
     @State private var showAddTag = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: DesignTokens.spacing4) {
             if editing {
                 TextField("Title", text: $title)
                     .textFieldStyle(.roundedBorder)
                 TextEditor(text: $instructions)
                     .font(.caption)
-                    .frame(height: 60)
-                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary.opacity(0.3)))
+                    .frame(height: DesignTokens.textEditorMinHeight)
+                    .overlay(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius4).stroke(Color.secondary.opacity(DesignTokens.opacity30)))
                 TagChipsView(tags: $labels, onAddTag: { showAddTag = true })
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
@@ -96,7 +96,7 @@ struct ChatEditRowView: View {
             } else {
                 Text(chat.title).font(.body)
                 if !chat.labels.isEmpty {
-                    HStack(spacing: 4) {
+                    HStack(spacing: DesignTokens.spacing4) {
                         ForEach(chat.labels, id: \.self) { label in
                             Text(label)
                                 .font(.caption2)
@@ -115,9 +115,9 @@ struct ChatEditRowView: View {
                 }
             }
         }
-        .padding(8)
+        .padding(DesignTokens.padding8)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.secondary.opacity(0.05))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .background(Color.secondary.opacity(DesignTokens.opacity05))
+        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8))
     }
 }
