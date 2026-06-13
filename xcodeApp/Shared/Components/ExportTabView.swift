@@ -6,21 +6,21 @@ struct ExportTabView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.spacing12) {
-            SaveFileButton(label: "Export Settings") {
+            SaveFileButton(label: String(localized: "export.label")) {
                 settingsVM.export()
             }
             if let err = settingsVM.exportError {
                 Text(err).foregroundColor(.red).font(.caption)
             }
 
-            OpenFileButton(label: "Load & Replace") { content in
+            OpenFileButton(label: String(localized: "import.replaceLabel")) { content in
                 settingsVM.importReplace(json: content)
             }
             if let err = settingsVM.importReplaceError {
                 Text(err).foregroundColor(.red).font(.caption)
             }
 
-            OpenFileButton(label: "Load & Append") { content in
+            OpenFileButton(label: String(localized: "import.appendLabel")) { content in
                 settingsVM.importAppend(json: content)
             }
             if let err = settingsVM.importAppendError {

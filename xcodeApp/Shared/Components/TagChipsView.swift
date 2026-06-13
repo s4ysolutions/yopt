@@ -110,7 +110,7 @@ struct AddTagDialog: View {
         VStack(spacing: DesignTokens.spacing12) {
             Text(String(localized: "chatSettings.addTag"))
                 .font(.headline)
-            TextField("Tag", text: $newTagText)
+            TextField(String(localized: "chatSettings.tagPlaceholder"), text: $newTagText)
                 .textFieldStyle(.roundedBorder)
                 .onSubmit { commit() }
             HStack {

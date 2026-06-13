@@ -75,7 +75,7 @@ struct ChatEditRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.spacing4) {
             if editing {
-                TextField("Title", text: $title)
+                TextField(String(localized: "chat.titlePlaceholder"), text: $title)
                     .textFieldStyle(.roundedBorder)
                 TextEditor(text: $instructions)
                     .font(.caption)

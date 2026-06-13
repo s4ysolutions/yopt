@@ -30,7 +30,7 @@ struct ProvidersTabView: View {
             }
 
             Button(action: { showAddCustom = true }) {
-                Label("Add Custom Provider", systemImage: "plus.circle")
+                Label(String(localized: "providers.addCustom"), systemImage: "plus.circle")
             }
             .listRowSeparator(.hidden)
             .popover(isPresented: $showAddCustom) {
@@ -62,7 +62,7 @@ struct ProviderCardView: View {
                 VStack(alignment: .leading) {
                     Text(provider.name)
                         .font(.headline)
-                    Text(hasKey ? "API Key set" : "Not configured")
+                    Text(hasKey ? String(localized: "providers.apiKeySet") : String(localized: "providers.notConfigured"))
                         .font(.caption)
                         .foregroundColor(hasKey ? Color.accentColor : Color.red)
                 }
@@ -83,7 +83,7 @@ struct ProviderCardView: View {
                         .actionIcon()
                 }
                 .buttonStyle(.plain)
-                .help(isExpanded ? "Collapse" : "Expand")
+                .help(isExpanded ? String(localized: "tooltip.collapse") : String(localized: "tooltip.expand"))
             }
 
             if isExpanded {
@@ -137,13 +137,13 @@ struct ApiKeyEditView: View {
             }
         } else {
             VStack(alignment: .leading, spacing: 8) {
-                TextField(hasKey ? "New API Key" : provider.name + " API Key", text: $key)
+                TextField(hasKey ? String(localized: "providers.newApiKeyPlaceholder") : provider.name + " API Key", text: $key)
                     .textFieldStyle(.roundedBorder)
 
                 if !hasKey {
                     let url = providerUrl(for: provider.id)
                     if let url = url {
-                        Link("Get API Key \u{2197}", destination: url)
+                        Link(String(localized: "providers.getApiKey"), destination: url)
                             .font(.caption)
                     }
                 }
@@ -196,9 +196,9 @@ struct CustomProviderEditView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            TextField("Provider Name", text: $editName)
+            TextField(String(localized: "providers.providerNamePlaceholder"), text: $editName)
                 .textFieldStyle(.roundedBorder)
-            TextField("Base URL", text: $editBaseUrl)
+            TextField(String(localized: "providers.baseUrlPlaceholder"), text: $editBaseUrl)
                 .textFieldStyle(.roundedBorder)
 
             HStack {
@@ -220,7 +220,7 @@ struct CustomProviderEditView: View {
                     }
             }
 
-            TextField("API Key", text: $editApiKey)
+            TextField(String(localized: "providers.apiKeyPlaceholder"), text: $editApiKey)
                 .textFieldStyle(.roundedBorder)
 
             HStack {
@@ -257,8 +257,8 @@ struct AddCustomProviderView: View {
     var body: some View {
         VStack(spacing: 12) {
             Text(String(localized: "providers.addCustom")).font(.headline)
-            TextField("Provider Name", text: $newName).textFieldStyle(.roundedBorder)
-            TextField("Base URL", text: $newBaseUrl).textFieldStyle(.roundedBorder)
+            TextField(String(localized: "providers.providerNamePlaceholder"), text: $newName).textFieldStyle(.roundedBorder)
+            TextField(String(localized: "providers.baseUrlPlaceholder"), text: $newBaseUrl).textFieldStyle(.roundedBorder)
 
             HStack {
                 Text("API Style: \(newApiStyle.rawValue)")
@@ -279,14 +279,14 @@ struct AddCustomProviderView: View {
                     }
             }
 
-            TextField("API Key (optional)", text: $newApiKey).textFieldStyle(.roundedBorder)
+            TextField(String(localized: "providers.apiKeyOptionalPlaceholder"), text: $newApiKey).textFieldStyle(.roundedBorder)
 
             HStack {
                 Button(String(localized: "button.cancel")) { isPresented = false }
                 Spacer()
                 Button(String(localized: "button.save")) {
-                    let name = newName.isEmpty ? "Custom Provider" : newName
-                    let url = newBaseUrl.isEmpty ? "https://api.example.com" : newBaseUrl
+                    let name = newName.isEmpty ? String(localized: "providers.customProviderDefault") : newName
+                    let url = newBaseUrl.isEmpty ? String(localized: "providers.exampleUrl") : newBaseUrl
                     settingsVM.addCustomProvider(name: name, apiStyle: newApiStyle, baseUrl: url)
                     if !newApiKey.isEmpty {
                         // Provider ID will be generated - we save after creation
@@ -316,7 +316,7 @@ struct ModelListView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 4) {
-                TextField("Filter models...", text: $filter)
+                TextField(String(localized: "providers.filterModelsPlaceholder"), text: $filter)
                     .textFieldStyle(.roundedBorder)
 
                 Button(String(localized: "button.allOff")) {

@@ -70,6 +70,8 @@
 		AA00000000000000000155 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA00000000000000000156 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA00000000000000000157 /* ChatTopPaneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000158 /* ChatTopPaneView.swift */; };
+		AA0000000000000000015a /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Localizable.strings */; };
+		AA0000000000000000015b /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +125,7 @@
 		AA00000000000000000151 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		AA00000000000000000154 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		AA00000000000000000158 /* ChatTopPaneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTopPaneView.swift; sourceTree = "<group>"; };
+		AA00000000000000000159 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Resources/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -207,7 +210,8 @@
 				AA00000000000000000103 /* ViewModels */,
 				AA00000000000000000104 /* Components */,
 				AA00000000000000000107 /* KotlinBridge.swift */,
-				AA00000000000000000151 /* DesignTokens.swift */,
+AA00000000000000000159 /* Localizable.strings */,
+								AA00000000000000000151 /* DesignTokens.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -362,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA0000000000000000000020 /* Assets.xcassets in Resources */,
+				AA0000000000000000015a /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA000000000000000000003E /* Assets.xcassets in Resources */,
+				AA0000000000000000015b /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

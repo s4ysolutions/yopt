@@ -107,8 +107,8 @@ final class SettingsViewModel: ObservableObject {
         Task {
             do {
                 let json = try await bridge.exportUseCase.export()
-                self.dialogTitle = "Export"
-                self.dialogText = "Data exported (\(json.count) chars). Use Save panel to write."
+                self.dialogTitle = String(localized: "export.title")
+                self.dialogText = String(localized: "export.message").replacingOccurrences(of: "%@", with: String(json.count))
             } catch {
                 self.exportError = error.localizedDescription
             }
@@ -119,8 +119,8 @@ final class SettingsViewModel: ObservableObject {
         Task {
             do {
                 try await bridge.exportUseCase.import(json: json)
-                self.dialogTitle = "Import"
-                self.dialogText = "Settings replaced successfully."
+                self.dialogTitle = String(localized: "import.title")
+                self.dialogText = String(localized: "import.replaceMessage")
             } catch {
                 self.importReplaceError = error.localizedDescription
             }
@@ -131,8 +131,8 @@ final class SettingsViewModel: ObservableObject {
         Task {
             do {
                 try await bridge.exportUseCase.importAppend(json: json)
-                self.dialogTitle = "Import Append"
-                self.dialogText = "Settings appended successfully."
+                self.dialogTitle = String(localized: "import.appendTitle")
+                self.dialogText = String(localized: "import.appendMessage")
             } catch {
                 self.importAppendError = error.localizedDescription
             }

@@ -71,7 +71,7 @@ struct HeaderView: View {
 
     private var chatSearchField: some View {
         HStack(spacing: DesignTokens.spacing4) {
-            TextField("Search...", text: $chatSearchQuery)
+            TextField(String(localized: "search.placeholder"), text: $chatSearchQuery)
                 .textFieldStyle(.plain)
                 .focused($searchFocused)
 #if os(macOS)
@@ -120,7 +120,7 @@ struct HeaderView: View {
     }
 
     private var chatNameField: some View {
-        TextField("Chat Name", text: $chatName)
+        TextField(String(localized: "chat.nameLabel"), text: $chatName)
             .textFieldStyle(.plain)
             .padding(DesignTokens.padding8)
             .overlay(

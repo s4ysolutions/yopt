@@ -58,3 +58,39 @@
 "dialog.ok" = "OK";
 "providers.addCustom" = "Add Custom Provider";
 "models.label" = "Models";
+
+/* Search and Chat */
+"search.placeholder" = "Search...";
+"chat.nameLabel" = "Chat Name";
+"chat.titlePlaceholder" = "Title";
+
+/* Providers Tab */
+"providers.apiKeySet" = "API Key set";
+"providers.notConfigured" = "Not configured";
+"providers.newApiKeyPlaceholder" = "New API Key";
+"providers.getApiKey" = "Get API Key ↗";
+"providers.providerNamePlaceholder" = "Provider Name";
+"providers.baseUrlPlaceholder" = "Base URL";
+"providers.apiKeyPlaceholder" = "API Key";
+"providers.apiKeyOptionalPlaceholder" = "API Key (optional)";
+"providers.customProviderDefault" = "Custom Provider";
+"providers.exampleUrl" = "https://api.example.com";
+"providers.filterModelsPlaceholder" = "Filter models...";
+
+/* Tags */
+"chatSettings.tagPlaceholder" = "Tag";
+
+/* Tooltips */
+"tooltip.collapse" = "Collapse";
+"tooltip.expand" = "Expand";
+
+/* Export/Import */
+"export.label" = "Export Settings";
+"export.title" = "Export";
+"export.message" = "Data exported (%@ chars). Use Save panel to write.";
+"import.replaceLabel" = "Load & Replace";
+"import.title" = "Import";
+"import.replaceMessage" = "Settings replaced successfully.";
+"import.appendLabel" = "Load & Append";
+"import.appendTitle" = "Import Append";
+"import.appendMessage" = "Settings appended successfully.";
