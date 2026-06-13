@@ -57,7 +57,7 @@ struct MainChatView: View {
             .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
             .padding(.horizontal, DesignTokens.padding12)
             .padding(.top, DesignTokens.padding8)
-            .padding(.bottom, DesignTokens.padding4)
+            .padding(.bottom, DesignTokens.padding8)
         } bottom: {
             let history = viewModel.currentChat?.history.reversed() ?? []
             ScrollView {

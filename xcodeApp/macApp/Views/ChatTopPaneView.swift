@@ -61,6 +61,10 @@ struct ChatTopPaneView: View {
         .background(RoundedRectangle(cornerRadius: DesignTokens.topAreaCornerRadius).fill(DesignTokens.topAreaBackground))
         .padding(.horizontal, DesignTokens.padding12)
         .padding(.top, DesignTokens.padding8)
-        .padding(.bottom, DesignTokens.padding4)
+        .padding(.bottom, DesignTokens.padding8)
+        .background(GeometryReader { proxy in
+            // bottom padding
+            Color.clear.preference(key: ChatTopPanelMinHeight.self,value: DesignTokens.padding8 * 2)
+        })
     }
 }
