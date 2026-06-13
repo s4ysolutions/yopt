@@ -41,6 +41,9 @@ object AppIcons {
 
     // Provider actions
     val RefreshModels: ImageVector = Icons.Rounded.Refresh
+
+    // Tag filter
+    val FilterByTags: ImageVector = sell
 }
 
 private val shadowAdd: ImageVector by lazy {
@@ -548,6 +551,67 @@ private val deleteForever: ImageVector by lazy {
             moveTo(7f, 6f)
             verticalLineTo(19f)
             verticalLineTo(6f)
+            close()
+        }
+    }.build()
+}
+
+private val sell: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "Sell",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 960f,
+        viewportHeight = 960f,
+    ).apply {
+        path(
+            fill = SolidColor(androidx.compose.ui.graphics.Color.Black),
+            fillAlpha = 1f,
+            stroke = null,
+            strokeAlpha = 1f,
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Bevel,
+            strokeLineMiter = 1f,
+            pathFillType = PathFillType.NonZero,
+        ) {
+            moveTo(856f, 570f)
+            lineTo(570f, 856f)
+            quadTo(558f, 868f, 543f, 874f)
+            quadTo(528f, 880f, 513f, 880f)
+            quadTo(498f, 880f, 483f, 874f)
+            quadTo(468f, 868f, 456f, 856f)
+            lineTo(103f, 503f)
+            quadTo(92f, 492f, 86f, 477.5f)
+            quadTo(80f, 463f, 80f, 447f)
+            lineTo(80f, 160f)
+            quadTo(80f, 127f, 103.5f, 103.5f)
+            quadTo(127f, 80f, 160f, 80f)
+            lineTo(447f, 80f)
+            quadTo(463f, 80f, 478f, 86.5f)
+            quadTo(493f, 93f, 504f, 104f)
+            lineTo(856f, 457f)
+            quadTo(868f, 469f, 873.5f, 484f)
+            quadTo(879f, 499f, 879f, 514f)
+            quadTo(879f, 529f, 873.5f, 543.5f)
+            quadTo(868f, 558f, 856f, 570f)
+            close()
+            moveTo(513f, 800f)
+            lineTo(799f, 514f)
+            lineTo(446f, 160f)
+            lineTo(160f, 160f)
+            lineTo(160f, 446f)
+            lineTo(513f, 800f)
+            close()
+            moveTo(260f, 320f)
+            quadTo(285f, 320f, 302.5f, 302.5f)
+            quadTo(320f, 285f, 320f, 260f)
+            quadTo(320f, 235f, 302.5f, 217.5f)
+            quadTo(285f, 200f, 260f, 200f)
+            quadTo(235f, 200f, 217.5f, 217.5f)
+            quadTo(200f, 235f, 200f, 260f)
+            quadTo(200f, 285f, 217.5f, 302.5f)
+            quadTo(235f, 320f, 260f, 320f)
             close()
         }
     }.build()

@@ -26,6 +26,11 @@
     <string name="add_tag">+ Add tag</string>
     <string name="add_tag_title">Add tag</string>
     <string name="tag">Tag</string>
+    <string name="filter_by_tags">Filter by tags</string>
+    <string name="tag_filter_clear">Clear</string>
+    <string name="tag_filter_done">Done</string>
+    <string name="tag_filter_active">%1$d tags</string>
+    <string name="tag_filter_empty">No tags yet</string>
     <string name="add">Add</string>
     <string name="save_to_file">Save to file</string>
     <string name="load_replace">Load from file (Replace)</string>
