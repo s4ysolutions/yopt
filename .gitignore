@@ -47,3 +47,9 @@ gradle.properties
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Zed editor
+.zed/
+
+# Superpowers brainstorm
+.superpowers/
