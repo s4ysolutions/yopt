@@ -44,7 +44,7 @@ struct ChatSettingsView: View {
 
             VStack(alignment: .leading, spacing: DesignTokens.spacing6) {
                 Text(String(localized: "chatSettings.instructions"))
-                    .font(.caption)
+                    .font(.body)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
                     .foregroundColor(.secondary)
@@ -61,7 +61,7 @@ struct ChatSettingsView: View {
 
             VStack(alignment: .leading, spacing: DesignTokens.spacing6) {
                 Text(String(localized: "chatSettings.tags"))
-                    .font(.caption)
+                    .font(.body)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
                     .foregroundColor(.secondary)

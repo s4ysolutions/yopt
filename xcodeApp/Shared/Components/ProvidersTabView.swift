@@ -63,7 +63,7 @@ struct ProviderCardView: View {
                     Text(provider.name)
                         .font(.headline)
                     Text(hasKey ? String(localized: "providers.apiKeySet") : String(localized: "providers.notConfigured"))
-                        .font(.caption)
+                        .font(.body)
                         .foregroundColor(hasKey ? Color.accentColor : Color.red)
                 }
                 Spacer()
@@ -144,7 +144,7 @@ struct ApiKeyEditView: View {
                     let url = providerUrl(for: provider.id)
                     if let url = url {
                         Link(String(localized: "providers.getApiKey"), destination: url)
-                            .font(.caption)
+                            .font(.body)
                     }
                 }
 
@@ -322,27 +322,31 @@ struct ModelListView: View {
                 Button(String(localized: "button.allOff")) {
                     filtered.filter { $0.enabled }.forEach { onToggle($0.id) }
                 }
-                .font(.caption2)
+                .font(.body)
 
                 Button(String(localized: "button.allOn")) {
                     filtered.filter { !$0.enabled }.forEach { onToggle($0.id) }
                 }
-                .font(.caption2)
+                .font(.body)
             }
 
-            Text(String(localized: "models.label")).font(.caption).padding(.top, 4)
+            Text(String(localized: "models.label")).font(.body).padding(.top, 4)
 
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(filtered) { model in
-                        Toggle(isOn: Binding(
-                            get: { model.enabled },
-                            set: { _ in onToggle(model.id) }
-                        )) {
+                        HStack(spacing: 8) {
+                            Toggle("", isOn: Binding(
+                                get: { model.enabled },
+                                set: { _ in onToggle(model.id) }
+                            ))
+                            .toggleStyle(.switch)
+                            .labelsHidden()
+                            .scaleEffect(0.7, anchor: .leading)
                             Text(model.officialName)
-                                .font(.callout)
+                                .font(.body)
+                            Spacer()
                         }
-                        .toggleStyle(.switch)
                         .padding(.vertical, 6)
                         Divider()
                     }

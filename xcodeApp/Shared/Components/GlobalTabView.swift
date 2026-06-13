@@ -6,7 +6,7 @@ struct GlobalTabView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.spacing8) {
             Text(String(localized: "global.instructions"))
-                .font(.caption)
+                .font(.body)
                 .fontWeight(.semibold)
                 .textCase(.uppercase)
                 .foregroundColor(.secondary)

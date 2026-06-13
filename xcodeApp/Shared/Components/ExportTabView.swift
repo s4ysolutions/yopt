@@ -10,21 +10,21 @@ struct ExportTabView: View {
                 settingsVM.export()
             }
             if let err = settingsVM.exportError {
-                Text(err).foregroundColor(.red).font(.caption)
+                Text(err).foregroundColor(.red).font(.body)
             }
 
             OpenFileButton(label: String(localized: "import.replaceLabel")) { content in
                 settingsVM.importReplace(json: content)
             }
             if let err = settingsVM.importReplaceError {
-                Text(err).foregroundColor(.red).font(.caption)
+                Text(err).foregroundColor(.red).font(.body)
             }
 
             OpenFileButton(label: String(localized: "import.appendLabel")) { content in
                 settingsVM.importAppend(json: content)
             }
             if let err = settingsVM.importAppendError {
-                Text(err).foregroundColor(.red).font(.caption)
+                Text(err).foregroundColor(.red).font(.body)
             }
         }
         .padding(.top, DesignTokens.sectionPadding)

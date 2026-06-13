@@ -92,12 +92,12 @@
 "tooltip.expand" = "Expand";
 
 /* Export/Import */
-"export.label" = "Export Settings";
+"export.label" = "Export settings and chats";
 "export.title" = "Export";
 "export.message" = "Data exported (%@ chars). Use Save panel to write.";
-"import.replaceLabel" = "Load & Replace";
+"import.replaceLabel" = "Import settings and chats";
 "import.title" = "Import";
 "import.replaceMessage" = "Settings replaced successfully.";
-"import.appendLabel" = "Load & Append";
+"import.appendLabel" = "Append settings and chats";
 "import.appendTitle" = "Import Append";
 "import.appendMessage" = "Settings appended successfully.";

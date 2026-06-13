@@ -47,7 +47,7 @@ struct ChatsTabView: View {
                         else { checkedLabels.insert(label) }
                     }) {
                         Text(label)
-                            .font(.caption2)
+                            .font(.body)
                             .padding(.horizontal, DesignTokens.padding8)
                             .padding(.vertical, DesignTokens.padding4)
                     }
@@ -78,7 +78,7 @@ struct ChatEditRowView: View {
                 TextField(String(localized: "chat.titlePlaceholder"), text: $title)
                     .textFieldStyle(.roundedBorder)
                 TextEditor(text: $instructions)
-                    .font(.caption)
+                    .font(.body)
                     .frame(height: DesignTokens.textEditorMinHeight)
                     .overlay(RoundedRectangle(cornerRadius: DesignTokens.cornerRadius4).stroke(Color.secondary.opacity(DesignTokens.opacity30)))
                 TagChipsView(tags: $labels, onAddTag: { showAddTag = true })
@@ -99,14 +99,14 @@ struct ChatEditRowView: View {
                     HStack(spacing: DesignTokens.spacing4) {
                         ForEach(chat.labels, id: \.self) { label in
                             Text(label)
-                                .font(.caption2)
+                                .font(.body)
                                 .foregroundColor(.accentColor)
                         }
                     }
                 }
                 if !chat.instructions.isEmpty {
                     Text(chat.instructions.prefix(100))
-                        .font(.caption)
+                        .font(.body)
                         .foregroundColor(.secondary)
                 }
                 HStack {
