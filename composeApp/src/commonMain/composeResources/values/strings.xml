@@ -6,7 +6,7 @@
     <string name="tab_providers">Providers</string>
     <string name="tab_chats">Chats</string>
     <string name="tab_global">Global</string>
-    <string name="tab_export">Export</string>
+    <string name="tab_export">Synchronization</string>
     <string name="api_key_set">API key set</string>
     <string name="not_configured">Not configured</string>
     <string name="refresh_models">Refresh models</string>

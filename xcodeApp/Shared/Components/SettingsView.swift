@@ -30,7 +30,7 @@ struct SettingsView: View {
                 Text("Providers").tag(0)
                 Text("Chats").tag(1)
                 Text("Global").tag(2)
-                Text("Export").tag(3)
+                Text("Synchronization").tag(3)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 12)
