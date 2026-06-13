@@ -1432,8 +1432,15 @@ private fun ChatSearchField(
                 InputChip(
                     selected = true,
                     onClick = onClearTags,
-                    label = { Text(stringResource(Res.string.tag_filter_active, selectedTagCount)) },
-                    trailingIcon = { Text("×") },
+                    label = {
+                        Text(
+                            if (selectedTagCount == 1)
+                                stringResource(Res.string.tag_filter_active_one)
+                            else
+                                stringResource(Res.string.tag_filter_active, selectedTagCount)
+                        )
+                    },
+                    trailingIcon = { Icon(AppIcons.Close, contentDescription = null) },
                 )
             }
         } else null,

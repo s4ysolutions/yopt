@@ -3,6 +3,7 @@ package s4y.yopt.ui
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
@@ -41,6 +42,9 @@ object AppIcons {
 
     // Provider actions
     val RefreshModels: ImageVector = Icons.Rounded.Refresh
+
+    // Close / clear
+    val Close: ImageVector = Icons.Rounded.Close
 
     // Tag filter
     val FilterByTags: ImageVector = sell
