@@ -27,15 +27,32 @@ final class ChatViewModel: ObservableObject {
     @Published var globalInstructions: String = ""
     @Published var defaultShowMarkdown: Bool = false
     @Published var lastPrompt: String = ""
+    @Published var selectedTags: Set<String> = []
 
     // Computed
     var currentChat: ChatModel? {
         allChats.first { $0.id == currentChatId }
     }
 
+    var tagCounts: [String: Int] {
+        var counts: [String: Int] = [:]
+        for chat in allChats {
+            for label in chat.labels { counts[label, default: 0] += 1 }
+        }
+        return counts
+    }
+
+    var allTags: [String] { tagCounts.keys.sorted() }
+
+    var effectiveTags: Set<String> { selectedTags.intersection(Set(allTags)) }
+
     var filteredChats: [ChatModel] {
         let query = chatSearchQuery.lowercased()
+        let tags = effectiveTags
         return allChats
+            .filter { chat in
+                tags.isEmpty || tags.allSatisfy { chat.labels.contains($0) }
+            }
             .filter { query.isEmpty || $0.title.lowercased().contains(query) || $0.labels.contains { $0.lowercased().contains(query) } }
             .sorted(by: { a, b in
                 let aTime = a.history.last?.timestamp ?? Int64(a.id.dropFirst(5)) ?? 0
