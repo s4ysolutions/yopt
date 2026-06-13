@@ -26,6 +26,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -80,6 +82,7 @@ import yopt.composeapp.generated.resources.Res
 import yopt.composeapp.generated.resources.*
 
 import s4y.yopt.domain.services.AppPreferencesService
+import s4y.yopt.domain.services.ChatTagFilter
 import s4y.yopt.usecases.ExportImportUseCase
 import s4y.yopt.usecases.ManageAuthUseCase
 import s4y.yopt.usecases.ManageChatsUseCase
@@ -133,6 +136,8 @@ fun MainScreen(
     var showChatSettings by remember { mutableStateOf(false) }
     var chatSearchQuery by remember { mutableStateOf("") }
     var chatDropdownExpanded by remember { mutableStateOf(false) }
+    var selectedTags by remember { mutableStateOf(emptySet<String>()) }
+    var showTagSheet by remember { mutableStateOf(false) }
     val selectedModel by modelSelectionUseCase.observe().collectAsState(null)
     val models by modelsUseCase.observeEnabledModels().collectAsState(emptyList())
     val providers by manageProvidersUseCase.observeProviders().collectAsState(emptyList())
@@ -166,12 +171,12 @@ fun MainScreen(
         }
     }
 
-    val filteredChats = allChats
-        .filter {
-            chatSearchQuery.isBlank() ||
-                    it.title.contains(chatSearchQuery, ignoreCase = true) ||
-                    it.labels.any { label -> label.contains(chatSearchQuery, ignoreCase = true) }
-        }
+    val tagCounts = allChats.flatMap { it.labels }.groupingBy { it }.eachCount()
+    val allTags = tagCounts.keys.sorted()
+    val effectiveTags = selectedTags.intersect(allTags.toSet())
+
+    val filteredChats = ChatTagFilter
+        .filter(allChats, chatSearchQuery, effectiveTags)
         .sortedByDescending { c ->
             c.history.lastOrNull()?.timestamp ?: c.id.removePrefix("chat_").toLongOrNull() ?: 0L
         }
@@ -286,6 +291,19 @@ fun MainScreen(
             }
         }
 
+        if (showTagSheet) {
+            TagFilterSheet(
+                allTags = allTags,
+                tagCounts = tagCounts,
+                selectedTags = effectiveTags,
+                onToggle = { tag ->
+                    selectedTags = if (tag in selectedTags) selectedTags - tag else selectedTags + tag
+                },
+                onClear = { selectedTags = emptySet(); showTagSheet = false },
+                onDismiss = { showTagSheet = false },
+            )
+        }
+
         Column(
             Modifier
                 .fillMaxSize()
@@ -314,33 +332,17 @@ fun MainScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Box(Modifier.weight(1f)) {
-                                    OutlinedTextField(
-                                        value = chatSearchQuery,
-                                        onValueChange = {
+                                    ChatSearchField(
+                                        query = chatSearchQuery,
+                                        onQueryChange = {
                                             chatSearchQuery = it
                                             chatDropdownExpanded = true
                                         },
-                                        singleLine = true,
-                                        placeholder = { Text(stringResource(Res.string.search)) },
-                                        trailingIcon = {
-                                            TooltipBox(
-                                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                                    TooltipAnchorPosition.Above
-                                                ),
-                                                tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
-                                                state = rememberTooltipState()
-                                            ) {
-                                                TextButton(onClick = {
-                                                    chatDropdownExpanded = !chatDropdownExpanded
-                                                }) {
-                                                    Icon(
-                                                        AppIcons.ChatListToggle,
-                                                        contentDescription = stringResource(Res.string.chat_list_tooltip),
-                                                        modifier = Modifier.size(18.dp)
-                                                    )
-                                                }
-                                            }
-                                        }
+                                        onOpenTagSheet = { showTagSheet = true },
+                                        selectedTagCount = effectiveTags.size,
+                                        onClearTags = { selectedTags = emptySet() },
+                                        onToggleDropdown = { chatDropdownExpanded = !chatDropdownExpanded },
+                                        modifier = Modifier.fillMaxWidth(),
                                     )
                                     DropdownMenu(
                                         expanded = chatDropdownExpanded,
@@ -468,33 +470,17 @@ fun MainScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(Modifier.width(headerWidth * 0.3f)) {
-                                OutlinedTextField(
-                                    value = chatSearchQuery,
-                                    onValueChange = {
+                                ChatSearchField(
+                                    query = chatSearchQuery,
+                                    onQueryChange = {
                                         chatSearchQuery = it
                                         chatDropdownExpanded = true
                                     },
-                                    singleLine = true,
-                                    placeholder = { Text(stringResource(Res.string.search)) },
-                                    trailingIcon = {
-                                        TooltipBox(
-                                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                                TooltipAnchorPosition.Above
-                                            ),
-                                            tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
-                                            state = rememberTooltipState()
-                                        ) {
-                                            TextButton(onClick = {
-                                                chatDropdownExpanded = !chatDropdownExpanded
-                                            }) {
-                                                Icon(
-                                                    AppIcons.ChatListToggle,
-                                                    contentDescription = stringResource(Res.string.chat_list_tooltip),
-                                                    modifier = Modifier.size(18.dp)
-                                                )
-                                            }
-                                        }
-                                    }
+                                    onOpenTagSheet = { showTagSheet = true },
+                                    selectedTagCount = effectiveTags.size,
+                                    onClearTags = { selectedTags = emptySet() },
+                                    onToggleDropdown = { chatDropdownExpanded = !chatDropdownExpanded },
+                                    modifier = Modifier.fillMaxWidth(),
                                 )
                                 DropdownMenu(
                                     expanded = chatDropdownExpanded,
@@ -1420,6 +1406,75 @@ fun MainScreen(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ChatSearchField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onOpenTagSheet: () -> Unit,
+    selectedTagCount: Int,
+    onClearTags: () -> Unit,
+    onToggleDropdown: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = { new ->
+            if (new.startsWith("#")) onOpenTagSheet() else onQueryChange(new)
+        },
+        singleLine = true,
+        modifier = modifier,
+        placeholder = { Text(stringResource(Res.string.search)) },
+        leadingIcon = if (selectedTagCount > 0) {
+            {
+                InputChip(
+                    selected = true,
+                    onClick = onClearTags,
+                    label = { Text(stringResource(Res.string.tag_filter_active, selectedTagCount)) },
+                    trailingIcon = { Text("×") },
+                )
+            }
+        } else null,
+        trailingIcon = {
+            Row {
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                        TooltipAnchorPosition.Above
+                    ),
+                    tooltip = { PlainTooltip { Text(stringResource(Res.string.filter_by_tags)) } },
+                    state = rememberTooltipState()
+                ) {
+                    TextButton(onClick = onOpenTagSheet) {
+                        Icon(
+                            AppIcons.FilterByTags,
+                            contentDescription = stringResource(Res.string.filter_by_tags),
+                            modifier = Modifier.size(18.dp),
+                            tint = if (selectedTagCount > 0)
+                                MaterialTheme.colorScheme.primary
+                            else LocalContentColor.current,
+                        )
+                    }
+                }
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                        TooltipAnchorPosition.Above
+                    ),
+                    tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
+                    state = rememberTooltipState()
+                ) {
+                    TextButton(onClick = onToggleDropdown) {
+                        Icon(
+                            AppIcons.ChatListToggle,
+                            contentDescription = stringResource(Res.string.chat_list_tooltip),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+            }
+        }
+    )
 }
 
 private fun formatTimestamp(epochMs: Long): String {
