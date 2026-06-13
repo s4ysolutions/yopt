@@ -1,6 +1,12 @@
 import Foundation
 import ComposeApp
 
+/// Lightweight tagged logger so the send/observe flow is traceable even when the
+/// UI shows nothing. Prints to stdout (visible when the binary runs in a terminal).
+func dbg(_ tag: String, _ msg: @autoclosure () -> String) {
+    print("[\(tag)] \(msg())")
+}
+
 @MainActor
 final class ChatViewModel: ObservableObject {
     private let bridge = KotlinBridge.shared
@@ -39,6 +45,11 @@ final class ChatViewModel: ObservableObject {
     }
 
     private var observationTasks: [Task<Void, Never>] = []
+    /// The in-flight send, so `cancelSend()` can actually cancel it (fix #2).
+    private var sendTask: Task<Void, Never>? = nil
+    /// Seed `prompt` from persisted `lastPrompt` only once at startup, never on the
+    /// emission caused by our own `set` after a send (fix #1 — prompt-refill race).
+    private var didSeedPrompt = false
 
     init() {
         observeFlows()
@@ -54,6 +65,8 @@ final class ChatViewModel: ObservableObject {
             for await chats in bridge.chatsUseCase.observeAll() {
                 let chatList = chats.map(ChatModel.fromKotlin)
                 self.allChats = chatList
+                let curHist = chatList.first { $0.id == self.currentChatId }?.history.count ?? -1
+                dbg("observe.chats", "emission count=\(chatList.count) currentHistory=\(curHist)")
                 if chatList.isEmpty {
                     _ = try? await bridge.chatsUseCase.create(title: "New Chat", instructions: "", labels: [])
                 } else if self.currentChatId == nil {
@@ -95,6 +108,7 @@ final class ChatViewModel: ObservableObject {
         // Observe selected model
         observationTasks.append(Task {
             for await modelId in bridge.modelSelectionUseCase.observe() {
+                dbg("observe.selectedModel", "emission=\(modelId ?? "nil")")
                 self.selectedModel = modelId
                 if modelId == nil && !self.models.isEmpty {
                     try? await bridge.modelSelectionUseCase.set(modelId: self.models.first!.id)
@@ -120,7 +134,20 @@ final class ChatViewModel: ObservableObject {
         observationTasks.append(Task {
             for await p in bridge.lastPromptUseCase.observe() {
                 self.lastPrompt = p
-                if self.prompt.isEmpty { self.prompt = p }
+                // Fix #1: only seed the input box from persisted lastPrompt ONCE, at
+                // startup. After a send we call set(trimmed) ourselves, which makes this
+                // flow re-emit; without this guard it would refill the box we just cleared.
+                if !self.didSeedPrompt {
+                    self.didSeedPrompt = true
+                    if self.prompt.isEmpty && !p.isEmpty {
+                        self.prompt = p
+                        dbg("observe.lastPrompt", "seeded prompt from persisted value len=\(p.count)")
+                    } else {
+                        dbg("observe.lastPrompt", "seed skipped (prompt empty=\(self.prompt.isEmpty), persisted empty=\(p.isEmpty))")
+                    }
+                } else {
+                    dbg("observe.lastPrompt", "emission len=\(p.count) (no refill — already seeded)")
+                }
             }
         })
     }
@@ -154,27 +181,50 @@ final class ChatViewModel: ObservableObject {
     }
 
     func send() {
-        guard !loading else { return }
-        guard let chat = currentChat else { self.error = "No chat available"; return }
+        dbg("send", "called. loading=\(loading) promptLen=\(prompt.count) model=\(selectedModel ?? "nil") chat=\(currentChatId ?? "nil")")
+        guard !loading else { dbg("send", "BLOCKED: already loading"); return }
+        guard let chat = currentChat else { dbg("send", "ABORT: no current chat"); self.error = "No chat available"; return }
         let trimmed = prompt.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty else { return }
-        guard let modelId = selectedModel else { self.error = "No model selected — add an API key in Settings"; return }
+        guard !trimmed.isEmpty else { dbg("send", "ABORT: empty prompt"); return }
+        guard let modelId = selectedModel else { dbg("send", "ABORT: no model selected"); self.error = "No model selected — add an API key in Settings"; return }
         loading = true
         error = nil
-        Task {
-            defer { self.loading = false }
+        dbg("send", "state → loading=true error=nil; starting task")
+        sendTask = Task {
+            defer {
+                self.loading = false
+                self.sendTask = nil
+                dbg("send", "task end → loading=false sendTask=nil")
+            }
             do {
                 let chatToUse = chat.toKotlinChat()
-                _ = try await bridge.sendUseCase.invoke(chat: chatToUse, prompt: trimmed, modelId: modelId)
+                dbg("send", "invoke start model=\(modelId) historyCount=\(chat.history.count)")
+                let raw = try await bridge.sendUseCase.invoke(chat: chatToUse, prompt: trimmed, modelId: modelId)
+                dbg("send", "invoke returned raw type=\(type(of: raw)) value=\(String(describing: raw).prefix(160))")
+                if Task.isCancelled { dbg("send", "cancelled after invoke — discarding result"); return }
+                _ = try resultOrThrow(result: raw)
+                // Keep the prompt in the box on purpose: this app retains the sent text so
+                // the newest history entry hides its prompt header (entry.prompt == prompt)
+                // and the user can tweak + resend. Do NOT clear it — clearing makes the next
+                // send abort on the empty-prompt guard.
+                dbg("send", "SUCCESS — persisting lastPrompt, prompt retained (len=\(self.prompt.count))")
                 try? await bridge.lastPromptUseCase.set(value: trimmed)
-                self.prompt = ""
             } catch {
-                self.error = error.localizedDescription
+                if Task.isCancelled {
+                    dbg("send", "CANCELLED (caught) — not surfacing as error")
+                } else {
+                    dbg("send", "FAILURE caught: \(error.localizedDescription)")
+                    self.error = error.localizedDescription
+                    dbg("send", "state → error set, prompt retained (len=\(self.prompt.count))")
+                }
             }
         }
     }
 
     func cancelSend() {
+        dbg("cancelSend", "cancelling sendTask=\(sendTask != nil)")
+        sendTask?.cancel()   // fix #2: actually cancel the in-flight coroutine, not just the flag
+        sendTask = nil
         loading = false
     }
 

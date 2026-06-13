@@ -37,17 +37,15 @@ struct SplitView<Top: View, Bottom: View>: View {
             .coordinateSpace(name: "split")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onPreferenceChange(ChatTopPanelMinHeight.self) { newMin in
-                let minGrew = newMin > minTopHeight
+                // Fix #3: only track the required min height. The layout above already
+                // clamps topHeight up to minTopHeight when needed, WITHOUT mutating the
+                // persisted `fraction`. The old code permanently bumped `fraction` on
+                // growth and never restored it, so the pane stayed enlarged after the
+                // error cleared. Tracking min alone lets topHeight return to `desired`
+                // (the user's fraction) once the min shrinks again.
+                let desired = available * CGFloat(fraction) - DesignTokens.dividerHeight
+                print("[SplitView] minHeight \(minTopHeight) → \(newMin) | available=\(available) fraction=\(fraction) desiredTop=\(desired) effectiveTop=\(max(desired, newMin))")
                 minTopHeight = newMin
-
-                if minGrew {
-                    let newMinFraction = (newMin + DesignTokens.dividerHeight) / available
-                    let currentTopHeight = available * CGFloat(fraction) - DesignTokens.dividerHeight
-
-                    if currentTopHeight < newMin {
-                        fraction = Double(newMinFraction)
-                    }
-                }
             }
         }
     }
