@@ -16,6 +16,13 @@
 "chatSettings.instructions" = "Instructions";
 "chatSettings.tags" = "Tags";
 "chatSettings.addTag" = "Add Tag";
+"tagFilter.title" = "Filter by tags";
+"tagFilter.clear" = "Clear";
+"tagFilter.done" = "Done";
+"tagFilter.active" = "%lld tags";
+"tagFilter.activeSingular" = "1 tag";
+"tagFilter.empty" = "No tags yet";
+"help.filterByTags" = "Filter by tags";
 
 /* Prompt Area */
 "prompt.placeholder" = "Enter prompt...";
