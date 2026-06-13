@@ -11,10 +11,14 @@ struct HeaderView: View {
     let onChatSettings: () -> Void
     let onSettings: () -> Void
     let onSelectChat: (String) -> Void
+    @Binding var selectedTags: Set<String>
+    let allTags: [String]
+    let tagCounts: [String: Int]
 
     @State private var columnWidth: CGFloat = 0
     @State private var searchFieldHeight: CGFloat = 44
     @FocusState private var searchFocused: Bool
+    @State private var showTagSheet = false
 
     var body: some View {
         VStack(spacing: 8) {
@@ -71,14 +75,46 @@ struct HeaderView: View {
 
     private var chatSearchField: some View {
         HStack(spacing: DesignTokens.spacing4) {
+            if !selectedTags.isEmpty {
+                Button(action: { selectedTags.removeAll() }) {
+                    HStack(spacing: DesignTokens.spacing2) {
+                        Text(selectedTags.count == 1
+                            ? String(localized: "tagFilter.activeSingular")
+                            : String(format: String(localized: "tagFilter.active"), selectedTags.count))
+                            .font(.caption2)
+                        Text("\u{00D7}").font(.caption2)
+                    }
+                    .padding(.horizontal, DesignTokens.padding8)
+                    .padding(.vertical, DesignTokens.padding4)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
             TextField(String(localized: "search.placeholder"), text: $chatSearchQuery)
                 .textFieldStyle(.plain)
                 .focused($searchFocused)
 #if os(macOS)
-                .onChange(of: chatSearchQuery) { chatDropdownExpanded = true }
+                .onChange(of: chatSearchQuery) {
+                    if chatSearchQuery.hasPrefix("#") { chatSearchQuery = ""; showTagSheet = true }
+                    else { chatDropdownExpanded = true }
+                }
 #else
-                .onChange(of: chatSearchQuery) { _ in chatDropdownExpanded = true }
+                .onChange(of: chatSearchQuery) { newValue in
+                    if newValue.hasPrefix("#") { chatSearchQuery = ""; showTagSheet = true }
+                    else { chatDropdownExpanded = true }
+                }
 #endif
+            Button {
+                showTagSheet = true
+            } label: {
+                Image(systemName: "tag")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
+                    .foregroundColor(selectedTags.isEmpty ? .secondary : .accentColor)
+            }
+            .buttonStyle(.plain)
+            .help(String(localized: "help.filterByTags"))
             Button {
                 chatDropdownExpanded.toggle()
             } label: {
@@ -110,8 +146,6 @@ struct HeaderView: View {
 #if os(iOS)
         .background(Color(uiColor: .systemBackground))
 #endif
-        // Overlay (not popover): macOS popover steals key focus on open,
-        // breaking incremental typing in the search field.
         .overlay(alignment: .topLeading) {
             if chatDropdownExpanded {
                 chatListView
@@ -119,6 +153,15 @@ struct HeaderView: View {
                     .offset(y: searchFieldHeight + 4)
                     .zIndex(10)
             }
+        }
+        .sheet(isPresented: $showTagSheet) {
+            TagFilterSheet(
+                allTags: allTags,
+                tagCounts: tagCounts,
+                selectedTags: $selectedTags,
+                onClear: { selectedTags.removeAll(); showTagSheet = false },
+                onDone: { showTagSheet = false }
+            )
         }
     }
 

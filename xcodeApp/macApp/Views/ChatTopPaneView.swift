@@ -27,7 +27,10 @@ struct ChatTopPaneView: View {
                 onDelete: viewModel.deleteCurrentChat,
                 onChatSettings: { viewModel.showChatSettings = true },
                 onSettings: { viewModel.showSettings = true },
-                onSelectChat: viewModel.selectChat
+                onSelectChat: viewModel.selectChat,
+                selectedTags: $viewModel.selectedTags,
+                allTags: viewModel.allTags,
+                tagCounts: viewModel.tagCounts
             )
             .padding(.horizontal, DesignTokens.sectionPadding)
             .padding(.top, DesignTokens.sectionPadding)
