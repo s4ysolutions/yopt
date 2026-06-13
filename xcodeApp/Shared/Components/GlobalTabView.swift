@@ -4,12 +4,19 @@ struct GlobalTabView: View {
     @ObservedObject var settingsVM: SettingsViewModel
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Global Instructions")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .textCase(.uppercase)
+                .foregroundColor(.secondary)
+
             TextEditor(text: Binding(
                 get: { settingsVM.globalInstructions },
                 set: { settingsVM.globalInstructions = $0; settingsVM.setGlobalInstructions($0) }
             ))
             .font(.body)
+            .scrollContentBackground(.hidden)
             .frame(maxHeight: .infinity)
             .overlay(
                 Group {
@@ -24,11 +31,11 @@ struct GlobalTabView: View {
                 alignment: .topLeading
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: 6)
                     .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
             )
         }
-        .padding(.vertical, 8)
+        .padding(12)
         .frame(maxHeight: .infinity)
     }
 }
