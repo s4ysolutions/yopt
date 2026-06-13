@@ -30,14 +30,14 @@ struct ResponseActionsBar: View {
             }
 
             Button(action: onUseAsPrompt) {
-                Image(systemName: "square.and.pencil")
+                Image(systemName: "checkmark.rectangle")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help(String(localized: "help.useAsPrompt"))
 
             Button(action: onAppendToPrompt) {
-                Image(systemName: "text.badge.plus")
+                Image(systemName: "plus.rectangle")
                     .actionIcon()
             }
             .buttonStyle(.plain)
@@ -75,13 +75,13 @@ struct PromptActionsBar: View {
             }
             Spacer()
             Button(action: onUseAsPrompt) {
-                Image(systemName: "square.and.pencil")
+                Image(systemName: "checkmark.rectangle")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help(String(localized: "help.useAsPrompt"))
             Button(action: onAppendToPrompt) {
-                Image(systemName: "text.badge.plus")
+                Image(systemName: "plus.rectangle")
                     .actionIcon()
             }
             .buttonStyle(.plain)
