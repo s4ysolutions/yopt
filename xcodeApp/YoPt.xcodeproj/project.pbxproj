@@ -51,8 +51,6 @@
 		AA00000000000000000127 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
 		AA0000000000000000012c /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012d /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
-		AA000000000000000001B3 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
-		AA000000000000000001B4 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
 		AA0000000000000000012f /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
 		AA00000000000000000130 /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
 		AA00000000000000000135 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000134 /* SettingsView.swift */; };
@@ -72,8 +70,10 @@
 		AA00000000000000000155 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA00000000000000000156 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000154 /* SplitView.swift */; };
 		AA00000000000000000157 /* ChatTopPaneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000158 /* ChatTopPaneView.swift */; };
-		AA0000000000000000015a /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Localizable.strings */; };
-		AA0000000000000000015b /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Localizable.strings */; };
+		AA0000000000000000015a /* Resources/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Resources/Localizable.strings */; };
+		AA0000000000000000015b /* Resources/Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000159 /* Resources/Localizable.strings */; };
+		AA000000000000000001B3 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
+		AA000000000000000001B4 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,7 +116,6 @@
 		AA00000000000000000122 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		AA00000000000000000125 /* PromptAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAreaView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012b /* TagChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChipsView.swift; sourceTree = "<group>"; };
-		AA000000000000000001B2 /* TagFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterSheet.swift; sourceTree = "<group>"; };
 		AA0000000000000000012e /* ChatSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000134 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000137 /* ProvidersTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersTabView.swift; sourceTree = "<group>"; };
@@ -128,7 +127,8 @@
 		AA00000000000000000151 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		AA00000000000000000154 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		AA00000000000000000158 /* ChatTopPaneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTopPaneView.swift; sourceTree = "<group>"; };
-		AA00000000000000000159 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Resources/Localizable.strings; sourceTree = "<group>"; };
+		AA00000000000000000159 /* Resources/Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Resources/Localizable.strings; sourceTree = "<group>"; };
+		AA000000000000000001B2 /* TagFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -213,8 +213,8 @@
 				AA00000000000000000103 /* ViewModels */,
 				AA00000000000000000104 /* Components */,
 				AA00000000000000000107 /* KotlinBridge.swift */,
-AA00000000000000000159 /* Localizable.strings */,
-								AA00000000000000000151 /* DesignTokens.swift */,
+				AA00000000000000000159 /* Resources/Localizable.strings */,
+				AA00000000000000000151 /* DesignTokens.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@ AA00000000000000000159 /* Localizable.strings */,
 			buildActionMask = 2147483647;
 			files = (
 				AA0000000000000000000020 /* Assets.xcassets in Resources */,
-				AA0000000000000000015a /* Localizable.strings in Resources */,
+				AA0000000000000000015a /* Resources/Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +379,7 @@ AA00000000000000000159 /* Localizable.strings */,
 			buildActionMask = 2147483647;
 			files = (
 				AA000000000000000000003E /* Assets.xcassets in Resources */,
-				AA0000000000000000015b /* Localizable.strings in Resources */,
+				AA0000000000000000015b /* Resources/Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +575,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = macApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YoPt;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -582,7 +583,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = s4y.yopt.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = YoPt;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -603,6 +604,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				EXCLUDED_ARCHS = x86_64;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = macApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YoPt;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -610,7 +612,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = s4y.yopt.mac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = YoPt;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
