@@ -83,7 +83,10 @@ struct HeaderView: View {
                 chatDropdownExpanded.toggle()
             } label: {
                 Image(systemName: "chevron.down")
-                    .actionIcon()
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
+                    .foregroundColor(.secondary)
             }
             .buttonStyle(.plain)
             .help(String(localized: "help.chatList"))
