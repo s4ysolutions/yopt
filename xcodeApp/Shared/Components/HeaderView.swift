@@ -194,14 +194,14 @@ struct HeaderView: View {
             }
 
             Button(action: onChatSettings) {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: "note.text")
                     .actionIcon()
             }
             .buttonStyle(.plain)
             .help(String(localized: "help.chatSettings"))
 
             Button(action: onSettings) {
-                Image(systemName: "gear")
+                Image(systemName: "gearshape.2")
                     .actionIcon()
             }
             .buttonStyle(.plain)
