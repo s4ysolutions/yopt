@@ -31,6 +31,7 @@ struct ChatSettingsView: View {
                 Text("Tags")
                     .font(.caption)
                 TagChipsView(tags: $labels, onAddTag: { showAddTag = true })
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             HStack {

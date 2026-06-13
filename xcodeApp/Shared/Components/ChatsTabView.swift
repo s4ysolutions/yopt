@@ -79,6 +79,7 @@ struct ChatEditRowView: View {
                     .frame(height: 60)
                     .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary.opacity(0.3)))
                 TagChipsView(tags: $labels, onAddTag: { showAddTag = true })
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
                     Button("Save") {
                         onUpdate(chat, title, instructions, labels)
