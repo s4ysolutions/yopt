@@ -51,6 +51,8 @@
 		AA00000000000000000127 /* PromptAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000125 /* PromptAreaView.swift */; };
 		AA0000000000000000012c /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
 		AA0000000000000000012d /* TagChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012b /* TagChipsView.swift */; };
+		AA000000000000000001B3 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
+		AA000000000000000001B4 /* TagFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000001B2 /* TagFilterSheet.swift */; };
 		AA0000000000000000012f /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
 		AA00000000000000000130 /* ChatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000012e /* ChatSettingsView.swift */; };
 		AA00000000000000000135 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000134 /* SettingsView.swift */; };
@@ -114,6 +116,7 @@
 		AA00000000000000000122 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		AA00000000000000000125 /* PromptAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAreaView.swift; sourceTree = "<group>"; };
 		AA0000000000000000012b /* TagChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChipsView.swift; sourceTree = "<group>"; };
+		AA000000000000000001B2 /* TagFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterSheet.swift; sourceTree = "<group>"; };
 		AA0000000000000000012e /* ChatSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000134 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA00000000000000000137 /* ProvidersTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersTabView.swift; sourceTree = "<group>"; };
@@ -246,6 +249,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				AA00000000000000000125 /* PromptAreaView.swift */,
 				AA00000000000000000154 /* SplitView.swift */,
 				AA0000000000000000012b /* TagChipsView.swift */,
+				AA000000000000000001B2 /* TagFilterSheet.swift */,
 				AA0000000000000000012e /* ChatSettingsView.swift */,
 				AA00000000000000000134 /* SettingsView.swift */,
 				AA00000000000000000137 /* ProvidersTabView.swift */,
@@ -442,6 +446,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				AA00000000000000000126 /* PromptAreaView.swift in Sources */,
 				AA00000000000000000155 /* SplitView.swift in Sources */,
 				AA0000000000000000012c /* TagChipsView.swift in Sources */,
+				AA000000000000000001B3 /* TagFilterSheet.swift in Sources */,
 				AA0000000000000000012f /* ChatSettingsView.swift in Sources */,
 				AA00000000000000000135 /* SettingsView.swift in Sources */,
 				AA00000000000000000138 /* ProvidersTabView.swift in Sources */,
@@ -471,6 +476,7 @@ AA00000000000000000159 /* Localizable.strings */,
 				AA00000000000000000127 /* PromptAreaView.swift in Sources */,
 				AA00000000000000000156 /* SplitView.swift in Sources */,
 				AA0000000000000000012d /* TagChipsView.swift in Sources */,
+				AA000000000000000001B4 /* TagFilterSheet.swift in Sources */,
 				AA00000000000000000130 /* ChatSettingsView.swift in Sources */,
 				AA00000000000000000136 /* SettingsView.swift in Sources */,
 				AA00000000000000000139 /* ProvidersTabView.swift in Sources */,
