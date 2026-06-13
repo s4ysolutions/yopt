@@ -3,10 +3,10 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var viewModel: ChatViewModel
     @StateObject private var settingsVM = SettingsViewModel()
-    @State private var selectedTab = 0
 
     var body: some View {
         VStack(spacing: 0) {
+#if os(iOS)
             HStack {
                 Button(action: { viewModel.showSettings = false }) {
                     Image(systemName: "chevron.left")
@@ -26,7 +26,7 @@ struct SettingsView: View {
             Divider()
                 .padding(.vertical, 8)
 
-            Picker("", selection: $selectedTab) {
+            Picker("", selection: $settingsVM.selectedTab) {
                 Text("Providers").tag(0)
                 Text("Chats").tag(1)
                 Text("Global").tag(2)
@@ -34,9 +34,36 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 12)
+#else
+            HStack {
+                Text("Settings")
+                    .font(.title2)
+                Spacer()
+                Button(action: { viewModel.showSettings = false }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Close (Esc)")
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 8)
+
+            Divider()
+                .padding(.vertical, 8)
+
+            Picker("", selection: $settingsVM.selectedTab) {
+                Text("Providers").tag(0)
+                Text("Chats").tag(1)
+                Text("Global").tag(2)
+                Text("Synchronization").tag(3)
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 12)
+#endif
 
             Group {
-                switch selectedTab {
+                switch settingsVM.selectedTab {
                 case 0:
                     ProvidersTabView(settingsVM: settingsVM)
                 case 1:

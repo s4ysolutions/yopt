@@ -38,7 +38,7 @@ struct ChatsTabView: View {
 
     private var labelFilterView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 4) {
+            HStack(spacing: 6) {
                 ForEach(0..<allLabels.count, id: \.self) { i in
                     let label = allLabels[i]
                     let checked = checkedLabels.contains(label)
@@ -48,12 +48,15 @@ struct ChatsTabView: View {
                     }) {
                         Text(label)
                             .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(checked ? .accentColor : nil)
-                    .controlSize(.small)
+                    .background(checked ? Color.accentColor.opacity(0.15) : Color.secondary.opacity(0.1))
+                    .foregroundColor(checked ? .accentColor : .primary)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
                 }
             }
+            .padding(.horizontal, 4)
         }
     }
 }

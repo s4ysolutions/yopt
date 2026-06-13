@@ -17,6 +17,8 @@ final class SettingsViewModel: ObservableObject {
     @Published var dialogTitle: String? = nil
     @Published var dialogText: String? = nil
 
+    @Published var selectedTab: Int = 0
+
     private var observationTasks: [Task<Void, Never>] = []
 
     init() {

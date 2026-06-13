@@ -27,7 +27,7 @@ struct ExportTabView: View {
                 Text(err).foregroundColor(.red).font(.caption)
             }
         }
-        .padding(.top, 8)
+        .padding(.top, DesignTokens.sectionPadding)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .alert(settingsVM.dialogTitle ?? "", isPresented: Binding(
             get: { settingsVM.dialogText != nil },

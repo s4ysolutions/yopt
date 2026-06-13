@@ -35,7 +35,7 @@ struct GlobalTabView: View {
                     .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
             )
         }
-        .padding(12)
+        .padding(DesignTokens.sectionPadding)
         .frame(maxHeight: .infinity)
     }
 }

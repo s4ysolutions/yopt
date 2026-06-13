@@ -39,7 +39,7 @@ struct ChatSettingsView: View {
             Divider()
 #else
             Text("Chat Settings")
-                .font(.headline)
+                .font(.title3.weight(.semibold))
 #endif
 
             VStack(alignment: .leading, spacing: 6) {
