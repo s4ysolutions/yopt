@@ -11,6 +11,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var providers: [ProviderModel] = []
     @Published var globalInstructions: String = ""
 
+    @Published var exportContent: String? = nil
     @Published var exportError: String? = nil
     @Published var importReplaceError: String? = nil
     @Published var importAppendError: String? = nil
@@ -67,9 +68,12 @@ final class SettingsViewModel: ObservableObject {
 
     func refreshModels(provider: ProviderModel, apiKey: String?) {
         Task {
-            let kotlinProvider = provider.toKotlinProvider()
-            if let error = try? await bridge.refreshModelsUseCase.refreshOrError(provider: kotlinProvider, apiKey: apiKey) {
-                self.refreshError = error
+            let kp = provider.toKotlinProvider()
+            do {
+                let raw = try await bridge.refreshModelsUseCase.refresh(provider: kp, apiKey: apiKey)
+                _ = try resultOrThrow(result: raw)
+            } catch {
+                self.refreshError = error.localizedDescription
             }
         }
     }
@@ -115,8 +119,7 @@ final class SettingsViewModel: ObservableObject {
         Task {
             do {
                 let json = try await bridge.exportUseCase.export()
-                self.dialogTitle = String(localized: "export.title")
-                self.dialogText = String(localized: "export.message").replacingOccurrences(of: "%@", with: String(json.count))
+                self.exportContent = json
             } catch {
                 self.exportError = error.localizedDescription
             }
@@ -126,9 +129,9 @@ final class SettingsViewModel: ObservableObject {
     func importReplace(json: String) {
         Task {
             do {
-                try await bridge.exportUseCase.import(json: json)
+                let result = try await bridge.exportUseCase.import(json: json)
                 self.dialogTitle = String(localized: "import.title")
-                self.dialogText = String(localized: "import.replaceMessage")
+                self.dialogText = String(format: String(localized: "import.replaceMessage"), Int(result.chats), Int(result.providers))
             } catch {
                 self.importReplaceError = error.localizedDescription
             }
@@ -138,9 +141,9 @@ final class SettingsViewModel: ObservableObject {
     func importAppend(json: String) {
         Task {
             do {
-                try await bridge.exportUseCase.importAppend(json: json)
+                let result = try await bridge.exportUseCase.importAppend(json: json)
                 self.dialogTitle = String(localized: "import.appendTitle")
-                self.dialogText = String(localized: "import.appendMessage")
+                self.dialogText = String(format: String(localized: "import.appendMessage"), Int(result.chats), Int(result.providers))
             } catch {
                 self.importAppendError = error.localizedDescription
             }
