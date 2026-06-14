@@ -187,9 +187,10 @@ fun SettingsScreen(
                                                 refreshing = true
                                                 refreshError = null
                                                 scope.launch {
-                                                    try { refreshModelsUseCase.refresh(provider, cred?.apiKey) }
-                                                    catch (e: Exception) { refreshError = e.message }
-                                                    finally { refreshing = false }
+                                                    try {
+                                                        refreshModelsUseCase.refresh(provider, cred?.apiKey)
+                                                            .onFailure { if (it !is kotlinx.coroutines.CancellationException) refreshError = it.message }
+                                                    } finally { refreshing = false }
                                                 }
                                             },
                                             enabled = !refreshing && hasKey
@@ -296,9 +297,10 @@ fun SettingsScreen(
                                                 if (providerModels.isEmpty()) {
                                                     refreshing = true
                                                     refreshError = null
-                                                    try { refreshModelsUseCase.refresh(provider, editApiKey) }
-                                                    catch (e: Exception) { refreshError = e.message }
-                                                    finally { refreshing = false }
+                                                    try {
+                                                        refreshModelsUseCase.refresh(provider, editApiKey)
+                                                            .onFailure { if (it !is kotlinx.coroutines.CancellationException) refreshError = it.message }
+                                                    } finally { refreshing = false }
                                                 }
                                             } else {
                                                 manageAuthUseCase.deleteCredentials(provider.id)
@@ -319,9 +321,10 @@ fun SettingsScreen(
                                                     if (providerModels.isEmpty()) {
                                                         refreshing = true
                                                         refreshError = null
-                                                        try { refreshModelsUseCase.refresh(provider, key) }
-                                                        catch (e: Exception) { refreshError = e.message }
-                                                        finally { refreshing = false }
+                                                        try {
+                                                            refreshModelsUseCase.refresh(provider, key)
+                                                                .onFailure { if (it !is kotlinx.coroutines.CancellationException) refreshError = it.message }
+                                                        } finally { refreshing = false }
                                                     }
                                                 }
                                             },
@@ -516,9 +519,10 @@ fun SettingsScreen(
                                                 manageAuthUseCase.saveApiKey(def.id, newApiKey)
                                                 refreshing = true
                                                 refreshError = null
-                                                try { refreshModelsUseCase.refresh(def, newApiKey) }
-                                                catch (e: Exception) { refreshError = e.message }
-                                                finally { refreshing = false }
+                                                try {
+                                                    refreshModelsUseCase.refresh(def, newApiKey)
+                                                        .onFailure { if (it !is kotlinx.coroutines.CancellationException) refreshError = it.message }
+                                                } finally { refreshing = false }
                                             }
                                         }
                                         newName = ""

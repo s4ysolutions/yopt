@@ -1,5 +1,6 @@
 package s4y.yopt.usecases
 
+import kotlinx.coroutines.CancellationException
 import s4y.yopt.domain.models.ModelDef
 import s4y.yopt.domain.models.ProviderDef
 import s4y.yopt.domain.services.LLMService
@@ -9,20 +10,14 @@ class RefreshModelsUseCase(
     private val models: ModelService,
     private val llm: LLMService
 ) {
-    suspend fun refresh(provider: ProviderDef, apiKey: String?): List<ModelDef> {
-        val fetched = llm.fetchModels(provider, apiKey)
-        models.upsertModels(provider.id, fetched)
-        return fetched
-    }
-
-    /** Never throws. Returns null on success, error message on failure. */
-    suspend fun refreshOrError(provider: ProviderDef, apiKey: String?): String? {
-        return try {
+    suspend fun refresh(provider: ProviderDef, apiKey: String?): Result<List<ModelDef>> =
+        try {
             val fetched = llm.fetchModels(provider, apiKey)
             models.upsertModels(provider.id, fetched)
-            null
+            Result.success(fetched)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            e.message ?: "Failed to refresh models for ${provider.name}"
+            Result.failure(e)
         }
-    }
 }

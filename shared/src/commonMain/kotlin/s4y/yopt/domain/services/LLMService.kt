@@ -1,5 +1,6 @@
 package s4y.yopt.domain.services
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
@@ -40,6 +41,8 @@ class LLMService(
                 ApiStyle.ANTHROPIC -> anthropic(prompt, systemInstructions, apiModelId(model.id), prov, apiKey)
                 ApiStyle.GEMINI -> gemini(prompt, systemInstructions, apiModelId(model.id), prov, apiKey)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("${prov.name}: ${e.message ?: "unknown"}", e)
         }
@@ -53,6 +56,8 @@ class LLMService(
                 ApiStyle.GEMINI -> fetchGeminiModels(prov, apiKey)
                 ApiStyle.ANTHROPIC -> anthropicModels(prov)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("${prov.name}: ${e.message ?: "unknown"}", e)
         }
@@ -85,6 +90,8 @@ class LLMService(
         if (!apiKey.isNullOrBlank()) headers["Authorization"] = "Bearer $apiKey"
         val raw = try {
             http.get(url, headers)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("GET $url failed: ${e.message ?: "unknown"}", e)
         }
@@ -113,6 +120,8 @@ class LLMService(
         val url = "${base(prov)}/models?key=$key"
         val raw = try {
             http.get(url, emptyMap())
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             throw Exception("GET $url failed: ${e.message ?: "unknown"}", e)
         }
