@@ -29,9 +29,9 @@ jobs:
       - name: Build KMP framework
         run: |
           ./gradlew \
-            :shared:linkDebugFrameworkIosArm64 \
-            :shared:linkDebugFrameworkIosSimulatorArm64 \
-            :composeApp:assembleComposeAppDebugXCFramework
+            :shared:linkReleaseFrameworkIosArm64 \
+            :shared:linkReleaseFrameworkIosSimulatorArm64 \
+            :composeApp:assembleComposeAppReleaseXCFramework
 
       - name: Build macOS app
         run: |
