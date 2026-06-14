@@ -23,15 +23,12 @@ jobs:
       - name: Install rsvg-convert
         run: brew install librsvg
 
-      # Mirror exactly what the Xcode KMP Build phase runs so the
-      # up-to-date check skips it when xcodebuild triggers KMP Build.
-      # The pbxproj references the debug/ XCFramework path, so build debug.
       - name: Build KMP framework
         run: |
-          ./gradlew \
-            :shared:linkReleaseFrameworkIosArm64 \
-            :shared:linkReleaseFrameworkIosSimulatorArm64 \
-            :composeApp:assembleComposeAppReleaseXCFramework
+          ./gradlew :composeApp:assembleComposeAppReleaseXCFramework
+          mkdir -p composeApp/build/XCFrameworks
+          rm -rf composeApp/build/XCFrameworks/current
+          ln -sfn release composeApp/build/XCFrameworks/current
 
       - name: Build macOS app
         run: |
