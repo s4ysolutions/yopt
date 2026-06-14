@@ -84,7 +84,8 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func updateCustomProvider(_ provider: ProviderModel, name: String, baseUrl: String, apiStyle: ApiStyleModel) {
-        Task { _ = try? await bridge.manageProvidersUseCase.updateCustomProvider(def: provider.toKotlinProvider()) }
+        let updated = ProviderModel(id: provider.id, name: name, apiStyle: apiStyle, baseUrl: baseUrl, predefined: provider.predefined)
+        Task { _ = try? await bridge.manageProvidersUseCase.updateCustomProvider(def: updated.toKotlinProvider()) }
     }
 
     func deleteCustomProvider(_ id: String) {
