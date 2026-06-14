@@ -102,5 +102,6 @@
 "import.appendTitle" = "Import Append";
 "import.appendMessage" = "Settings appended successfully.";
 "providers.refreshError.title" = "Failed to load models";
+"providers.apiStyleLabel" = "API Style";
 "providers.manualModelPlaceholder" = "Model name (optional, if provider has no model list)";
 "button.ok" = "OK";

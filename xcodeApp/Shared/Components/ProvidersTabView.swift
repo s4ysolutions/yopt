@@ -208,54 +208,37 @@ struct CustomProviderEditView: View {
     @State private var editApiStyle: ApiStyleModel = .openai
     @State private var editApiKey: String = ""
     @State private var editModelName: String = ""
-    @State private var styleExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             TextField(String(localized: "providers.providerNamePlaceholder"), text: $editName)
                 .textFieldStyle(.roundedBorder)
+                .onChange(of: editName) { onUpdate(editName, editBaseUrl, editApiStyle) }
+
             TextField(String(localized: "providers.baseUrlPlaceholder"), text: $editBaseUrl)
                 .textFieldStyle(.roundedBorder)
+                .onChange(of: editBaseUrl) { onUpdate(editName, editBaseUrl, editApiStyle) }
 
-            HStack {
-                Text("API Style: \(editApiStyle.rawValue)")
-                Spacer()
-                Button(String(localized: "button.change")) { styleExpanded.toggle() }
-                    .popover(isPresented: $styleExpanded) {
-                        Picker("API Style", selection: $editApiStyle) {
-                            ForEach(ApiStyleModel.allCases, id: \.self) { style in
-                                Text(style.rawValue).tag(style)
-                            }
-                        }
-                        #if os(macOS)
-                        .pickerStyle(.radioGroup)
-                        #else
-                        .pickerStyle(.wheel)
-                        #endif
-                        .padding()
+            HStack(spacing: DesignTokens.spacing8) {
+                ForEach(ApiStyleModel.allCases, id: \.self) { style in
+                    Button(style.rawValue) {
+                        editApiStyle = style
+                        onUpdate(editName, editBaseUrl, style)
                     }
+                    .buttonStyle(.bordered)
+                    .tint(editApiStyle == style ? .accentColor : .secondary)
+                }
             }
 
             TextField(String(localized: "providers.apiKeyPlaceholder"), text: $editApiKey)
                 .textFieldStyle(.roundedBorder)
+                .onSubmit { if !editApiKey.isEmpty { onSave(editApiKey) } }
 
             TextField(String(localized: "providers.manualModelPlaceholder"), text: $editModelName)
                 .textFieldStyle(.roundedBorder)
+                .onChange(of: editModelName) { if !editModelName.isEmpty { onSaveManualModel(editModelName) } }
 
-            HStack {
-                Button(String(localized: "button.save")) {
-                    onUpdate(editName, editBaseUrl, editApiStyle)
-                    if !editApiKey.isEmpty {
-                        onSave(editApiKey)
-                    }
-                    if !editModelName.isEmpty {
-                        onSaveManualModel(editModelName)
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-
-                Button(String(localized: "button.delete"), role: .destructive, action: onDelete)
-            }
+            Button(String(localized: "button.delete"), role: .destructive, action: onDelete)
         }
         .onAppear {
             editName = provider.name
