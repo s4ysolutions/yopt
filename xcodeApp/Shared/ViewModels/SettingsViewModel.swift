@@ -74,6 +74,10 @@ final class SettingsViewModel: ObservableObject {
         }
     }
 
+    func setManualModel(providerId: String, modelName: String) {
+        Task { try? await bridge.modelsUseCase.setManualModel(providerId: providerId, modelName: modelName) }
+    }
+
     func toggleModelEnabled(_ modelId: String) {
         let model = models.first { $0.id == modelId }
         Task { try? await bridge.modelsUseCase.setModelEnabled(modelId: modelId, enabled: !(model?.enabled ?? false)) }

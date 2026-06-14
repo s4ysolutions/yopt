@@ -18,4 +18,9 @@ class ManageModelsUseCase(
     suspend fun clearModels(providerId: String) {
         models.upsertModels(providerId, emptyList())
     }
+
+    suspend fun setManualModel(providerId: String, modelName: String) {
+        val id = "$providerId:$modelName"
+        models.upsertModels(providerId, listOf(ModelDef(id, providerId, modelName)))
+    }
 }

@@ -23,7 +23,8 @@ struct ProvidersTabView: View {
                     onUpdateCustom: { name, url, style in
                         settingsVM.updateCustomProvider(provider, name: name, baseUrl: url, apiStyle: style)
                     },
-                    onDeleteCustom: { settingsVM.deleteCustomProvider(provider.id) }
+                    onDeleteCustom: { settingsVM.deleteCustomProvider(provider.id) },
+                    onSaveManualModel: { settingsVM.setManualModel(providerId: provider.id, modelName: $0) }
                 )
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: DesignTokens.padding4, leading: 0, bottom: DesignTokens.padding4, trailing: 0))
@@ -61,6 +62,7 @@ struct ProviderCardView: View {
     let onToggleModel: (String) -> Void
     let onUpdateCustom: (String, String, ApiStyleModel) -> Void
     let onDeleteCustom: () -> Void
+    let onSaveManualModel: (String) -> Void
 
     var hasKey: Bool { !(credential?.apiKey ?? "").isEmpty }
 
@@ -99,9 +101,11 @@ struct ProviderCardView: View {
                     CustomProviderEditView(
                         provider: provider,
                         credential: credential,
+                        initialModelName: models.first?.officialName ?? "",
                         onSave: onSaveApiKey,
                         onUpdate: onUpdateCustom,
-                        onDelete: onDeleteCustom
+                        onDelete: onDeleteCustom,
+                        onSaveManualModel: onSaveManualModel
                     )
                 } else {
                     ApiKeyEditView(
@@ -193,14 +197,17 @@ struct ApiKeyEditView: View {
 struct CustomProviderEditView: View {
     let provider: ProviderModel
     let credential: AuthCredentialsModel?
+    let initialModelName: String
     let onSave: (String) -> Void
     let onUpdate: (String, String, ApiStyleModel) -> Void
     let onDelete: () -> Void
+    let onSaveManualModel: (String) -> Void
 
     @State private var editName: String = ""
     @State private var editBaseUrl: String = ""
     @State private var editApiStyle: ApiStyleModel = .openai
     @State private var editApiKey: String = ""
+    @State private var editModelName: String = ""
     @State private var styleExpanded = false
 
     var body: some View {
@@ -232,11 +239,17 @@ struct CustomProviderEditView: View {
             TextField(String(localized: "providers.apiKeyPlaceholder"), text: $editApiKey)
                 .textFieldStyle(.roundedBorder)
 
+            TextField(String(localized: "providers.manualModelPlaceholder"), text: $editModelName)
+                .textFieldStyle(.roundedBorder)
+
             HStack {
                 Button(String(localized: "button.save")) {
                     onUpdate(editName, editBaseUrl, editApiStyle)
                     if !editApiKey.isEmpty {
                         onSave(editApiKey)
+                    }
+                    if !editModelName.isEmpty {
+                        onSaveManualModel(editModelName)
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -249,6 +262,7 @@ struct CustomProviderEditView: View {
             editBaseUrl = provider.baseUrl
             editApiStyle = provider.apiStyle
             editApiKey = credential?.apiKey ?? ""
+            editModelName = initialModelName
         }
     }
 }
