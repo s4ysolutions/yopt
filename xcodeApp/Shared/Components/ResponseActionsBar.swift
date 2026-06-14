@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ResponseActionsBar: View {
     let isExpanded: Bool
+    let showExpand: Bool
     let showMarkdown: Bool
     let onToggleExpand: () -> Void
     let onToggleMarkdown: () -> Void
@@ -11,12 +12,18 @@ struct ResponseActionsBar: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            Button(action: onToggleExpand) {
-                Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                    .actionIcon()
+            if showExpand {
+                Button(action: onToggleExpand) {
+                    Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                        .actionIcon()
+                }
+                .buttonStyle(.plain)
+                .help(isExpanded ? "Collapse" : "Expand")
+            } else {
+                // Placeholder to keep actions right-aligned
+                Color.clear
+                    .frame(width: DesignTokens.actionBarHeight, height: DesignTokens.actionBarHeight)
             }
-            .buttonStyle(.plain)
-            .help(isExpanded ? "Collapse" : "Expand")
 
             Spacer()
 

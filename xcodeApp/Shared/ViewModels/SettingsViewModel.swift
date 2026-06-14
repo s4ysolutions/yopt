@@ -16,6 +16,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var importAppendError: String? = nil
     @Published var dialogTitle: String? = nil
     @Published var dialogText: String? = nil
+    @Published var refreshError: String? = nil
 
     @Published var selectedTab: Int = 0
 
@@ -67,7 +68,9 @@ final class SettingsViewModel: ObservableObject {
     func refreshModels(provider: ProviderModel, apiKey: String?) {
         Task {
             let kotlinProvider = provider.toKotlinProvider()
-            _ = try? await bridge.refreshModelsUseCase.refresh(provider: kotlinProvider, apiKey: apiKey)
+            if let error = try? await bridge.refreshModelsUseCase.refreshOrError(provider: kotlinProvider, apiKey: apiKey) {
+                self.refreshError = error
+            }
         }
     }
 

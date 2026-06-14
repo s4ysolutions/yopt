@@ -38,6 +38,14 @@ struct ProvidersTabView: View {
             }
         }
         .listStyle(.plain)
+        .alert(String(localized: "providers.refreshError.title"), isPresented: Binding(
+            get: { settingsVM.refreshError != nil },
+            set: { if !$0 { settingsVM.refreshError = nil } }
+        )) {
+            Button(String(localized: "button.ok"), role: .cancel) { settingsVM.refreshError = nil }
+        } message: {
+            Text(settingsVM.refreshError ?? "")
+        }
     }
 }
 

@@ -101,3 +101,5 @@
 "import.appendLabel" = "Append settings and chats";
 "import.appendTitle" = "Import Append";
 "import.appendMessage" = "Settings appended successfully.";
+"providers.refreshError.title" = "Failed to load models";
+"button.ok" = "OK";

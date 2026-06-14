@@ -32,6 +32,7 @@ struct ResponseCardView: View {
             // Response action buttons
             ResponseActionsBar(
                 isExpanded: isExpanded,
+                showExpand: !isFirst,
                 showMarkdown: entry.showMarkdown,
                 onToggleExpand: onToggleExpand,
                 onToggleMarkdown: onToggleMarkdown,

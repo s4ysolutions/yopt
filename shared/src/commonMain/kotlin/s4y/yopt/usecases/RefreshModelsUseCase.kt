@@ -14,4 +14,15 @@ class RefreshModelsUseCase(
         models.upsertModels(provider.id, fetched)
         return fetched
     }
+
+    /** Never throws. Returns null on success, error message on failure. */
+    suspend fun refreshOrError(provider: ProviderDef, apiKey: String?): String? {
+        return try {
+            val fetched = llm.fetchModels(provider, apiKey)
+            models.upsertModels(provider.id, fetched)
+            null
+        } catch (e: Exception) {
+            e.message ?: "Failed to refresh models for ${provider.name}"
+        }
+    }
 }
