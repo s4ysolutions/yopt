@@ -77,11 +77,11 @@
 "providers.newApiKeyPlaceholder" = "New API Key";
 "providers.getApiKey" = "Get API Key ↗";
 "providers.providerNamePlaceholder" = "Provider Name";
-"providers.baseUrlPlaceholder" = "Base URL";
+"providers.baseUrlPlaceholder" = "Base URL (include version, e.g. https://api.example.com/v1)";
 "providers.apiKeyPlaceholder" = "API Key";
 "providers.apiKeyOptionalPlaceholder" = "API Key (optional)";
 "providers.customProviderDefault" = "Custom Provider";
-"providers.exampleUrl" = "https://api.example.com";
+"providers.exampleUrl" = "https://api.example.com/v1";
 "providers.filterModelsPlaceholder" = "Filter models...";
 
 /* Tags */

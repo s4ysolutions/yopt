@@ -80,7 +80,7 @@ class LLMService(
     ).map { ModelDef(modelId(prov.id, it), prov.id, it) }
 
     private suspend fun fetchOpenAIModels(prov: ProviderDef, apiKey: String?): List<ModelDef> {
-        val url = "${base(prov)}/v1/models"
+        val url = "${base(prov)}/models"
         val headers = mutableMapOf<String, String>()
         if (!apiKey.isNullOrBlank()) headers["Authorization"] = "Bearer $apiKey"
         val raw = try {
@@ -110,7 +110,7 @@ class LLMService(
 
     private suspend fun fetchGeminiModels(prov: ProviderDef, apiKey: String?): List<ModelDef> {
         val key = apiKey?.trim()?.ifBlank { null } ?: throw Exception("API key required to fetch Gemini models")
-        val url = "${base(prov)}/v1beta/models?key=$key"
+        val url = "${base(prov)}/models?key=$key"
         val raw = try {
             http.get(url, emptyMap())
         } catch (e: Exception) {
@@ -150,7 +150,7 @@ class LLMService(
         }
         val body = buildJsonObject { put("model", m); put("messages", msgs) }
         val r = json.parseToJsonElement(
-            http.post("${base(prov)}/v1/chat/completions", mapOf("Authorization" to "Bearer $key"), body.toString())
+            http.post("${base(prov)}/chat/completions", mapOf("Authorization" to "Bearer $key"), body.toString())
         ).jsonObject
         r["error"]?.jsonObject?.let {
             val msg = it["message"]?.jsonPrimitive?.content ?: "OpenAI API error"
@@ -187,7 +187,7 @@ class LLMService(
             "anthropic-version" to "2023-06-01",
         )
         val r = json.parseToJsonElement(
-            http.post("${base(prov)}/v1/messages", headers, body.toString())
+            http.post("${base(prov)}/messages", headers, body.toString())
         ).jsonObject
         r["error"]?.jsonObject?.let { err ->
             val msg = err["message"]?.jsonPrimitive?.content ?: "Anthropic API error"
@@ -217,7 +217,7 @@ class LLMService(
             }
         }
         val r = json.parseToJsonElement(
-            http.post("${base(prov)}/v1beta/models/${m}:generateContent?key=${key}", emptyMap(), body.toString())
+            http.post("${base(prov)}/models/${m}:generateContent?key=${key}", emptyMap(), body.toString())
         ).jsonObject
         r["error"]?.jsonObject?.let { err ->
             val msg = err["message"]?.jsonPrimitive?.content ?: "Gemini API error"
