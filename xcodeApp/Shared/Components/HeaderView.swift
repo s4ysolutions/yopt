@@ -105,28 +105,40 @@ struct HeaderView: View {
                     else { chatDropdownExpanded = true }
                 }
 #endif
-            Button {
-                showTagSheet = true
-            } label: {
-                Image(systemName: "tag")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
-                    .foregroundColor(selectedTags.isEmpty ? .secondary : .accentColor)
+            HStack(spacing: 0) {
+                Button {
+                    showTagSheet = true
+                } label: {
+                    Image(systemName: "tag")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
+                        .foregroundColor(selectedTags.isEmpty ? .secondary : .accentColor)
+                        .padding(DesignTokens.padding8)
+                }
+                .buttonStyle(.plain)
+                .help(String(localized: "help.filterByTags"))
+                Divider()
+                    .frame(height: DesignTokens.iconSize + DesignTokens.padding8)
+                Button {
+                    chatDropdownExpanded.toggle()
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
+                        .rotationEffect(.degrees(chatDropdownExpanded ? 180 : 0))
+                        .animation(.easeInOut(duration: 0.2), value: chatDropdownExpanded)
+                        .foregroundColor(.secondary)
+                        .padding(DesignTokens.padding8)
+                }
+                .buttonStyle(.plain)
+                .help(String(localized: "help.chatList"))
             }
-            .buttonStyle(.plain)
-            .help(String(localized: "help.filterByTags"))
-            Button {
-                chatDropdownExpanded.toggle()
-            } label: {
-                Image(systemName: "chevron.down")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
-                    .foregroundColor(.secondary)
-            }
-            .buttonStyle(.plain)
-            .help(String(localized: "help.chatList"))
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
+                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
+            )
         }
         .padding(DesignTokens.padding8)
         .overlay(

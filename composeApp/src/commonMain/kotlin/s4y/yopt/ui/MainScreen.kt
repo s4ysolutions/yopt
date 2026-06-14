@@ -25,6 +25,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.IconButton
+import androidx.compose.foundation.border
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.LocalContentColor
@@ -73,6 +75,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
@@ -342,6 +345,7 @@ fun MainScreen(
                                         selectedTagCount = effectiveTags.size,
                                         onClearTags = { selectedTags = emptySet() },
                                         onToggleDropdown = { chatDropdownExpanded = !chatDropdownExpanded },
+                                        isDropdownExpanded = chatDropdownExpanded,
                                         modifier = Modifier.fillMaxWidth(),
                                     )
                                     DropdownMenu(
@@ -480,6 +484,7 @@ fun MainScreen(
                                     selectedTagCount = effectiveTags.size,
                                     onClearTags = { selectedTags = emptySet() },
                                     onToggleDropdown = { chatDropdownExpanded = !chatDropdownExpanded },
+                                    isDropdownExpanded = chatDropdownExpanded,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
                                 DropdownMenu(
@@ -1417,6 +1422,7 @@ private fun ChatSearchField(
     selectedTagCount: Int,
     onClearTags: () -> Unit,
     onToggleDropdown: () -> Unit,
+    isDropdownExpanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
@@ -1445,38 +1451,57 @@ private fun ChatSearchField(
             }
         } else null,
         trailingIcon = {
-            Row {
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                        TooltipAnchorPosition.Above
-                    ),
-                    tooltip = { PlainTooltip { Text(stringResource(Res.string.filter_by_tags)) } },
-                    state = rememberTooltipState()
-                ) {
-                    TextButton(onClick = onOpenTagSheet) {
-                        Icon(
-                            AppIcons.FilterByTags,
-                            contentDescription = stringResource(Res.string.filter_by_tags),
-                            modifier = Modifier.size(18.dp),
-                            tint = if (selectedTagCount > 0)
-                                MaterialTheme.colorScheme.primary
-                            else LocalContentColor.current,
-                        )
+            val groupBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            Box(
+                modifier = Modifier.border(1.dp, groupBorderColor, RoundedCornerShape(8.dp))
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                            TooltipAnchorPosition.Above
+                        ),
+                        tooltip = { PlainTooltip { Text(stringResource(Res.string.filter_by_tags)) } },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(
+                            onClick = onOpenTagSheet,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                AppIcons.FilterByTags,
+                                contentDescription = stringResource(Res.string.filter_by_tags),
+                                modifier = Modifier.size(18.dp),
+                                tint = if (selectedTagCount > 0)
+                                    MaterialTheme.colorScheme.primary
+                                else LocalContentColor.current,
+                            )
+                        }
                     }
-                }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                        TooltipAnchorPosition.Above
-                    ),
-                    tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
-                    state = rememberTooltipState()
-                ) {
-                    TextButton(onClick = onToggleDropdown) {
-                        Icon(
-                            AppIcons.ChatListToggle,
-                            contentDescription = stringResource(Res.string.chat_list_tooltip),
-                            modifier = Modifier.size(18.dp)
-                        )
+                    Box(
+                        Modifier
+                            .width(1.dp)
+                            .height(24.dp)
+                            .background(groupBorderColor)
+                    )
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                            TooltipAnchorPosition.Above
+                        ),
+                        tooltip = { PlainTooltip { Text(stringResource(Res.string.chat_list_tooltip)) } },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(
+                            onClick = onToggleDropdown,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                AppIcons.ChatListToggle,
+                                contentDescription = stringResource(Res.string.chat_list_tooltip),
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .rotate(if (isDropdownExpanded) 180f else 0f)
+                            )
+                        }
                     }
                 }
             }
