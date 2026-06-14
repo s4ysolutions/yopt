@@ -173,6 +173,9 @@ final class ChatViewModel: ObservableObject {
 
     func selectChat(_ chatId: String) {
         currentChatId = chatId
+        if let chat = allChats.first(where: { $0.id == chatId }) {
+            chatName = chat.title
+        }
         Task { try? await bridge.lastChatIdUseCase.set(id: chatId) }
     }
 
