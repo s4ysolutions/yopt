@@ -213,11 +213,11 @@ struct CustomProviderEditView: View {
         VStack(alignment: .leading, spacing: 8) {
             TextField(String(localized: "providers.providerNamePlaceholder"), text: $editName)
                 .textFieldStyle(.roundedBorder)
-                .onChange(of: editName) { onUpdate(editName, editBaseUrl, editApiStyle) }
+                .onChange(of: editName, perform: { _ in onUpdate(editName, editBaseUrl, editApiStyle) })
 
             TextField(String(localized: "providers.baseUrlPlaceholder"), text: $editBaseUrl)
                 .textFieldStyle(.roundedBorder)
-                .onChange(of: editBaseUrl) { onUpdate(editName, editBaseUrl, editApiStyle) }
+                .onChange(of: editBaseUrl, perform: { _ in onUpdate(editName, editBaseUrl, editApiStyle) })
 
             HStack(spacing: DesignTokens.spacing8) {
                 ForEach(ApiStyleModel.allCases, id: \.self) { style in
@@ -236,7 +236,7 @@ struct CustomProviderEditView: View {
 
             TextField(String(localized: "providers.manualModelPlaceholder"), text: $editModelName)
                 .textFieldStyle(.roundedBorder)
-                .onChange(of: editModelName) { if !editModelName.isEmpty { onSaveManualModel(editModelName) } }
+                .onChange(of: editModelName, perform: { _ in if !editModelName.isEmpty { onSaveManualModel(editModelName) } })
 
             Button(String(localized: "button.delete"), role: .destructive, action: onDelete)
         }

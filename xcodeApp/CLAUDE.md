@@ -71,11 +71,11 @@ DesignTokens.actionBarHeight         // 28
 
 ## SwiftUI API versions
 
-- **`onChange`**: `onChange(of:perform:)` is deprecated on macOS 14+. Use:
+- **`onChange`**: iOS deployment target is 16. The zero-param / single-param closure form (`onChange(of:initial:_:)`) requires iOS 17+. Use the `perform:` form for `Shared/` files:
   ```swift
-  .onChange(of: value) { newValue in ... }   // ✓
-  .onChange(of: value) { ... }               // ✓ (zero-param, when old value not needed)
-  .onChange(of: value, perform: { _ in })    // ✗ deprecated
+  .onChange(of: value, perform: { _ in ... })   // ✓ iOS 14+ (deprecated warning on macOS 14+ is OK)
+  .onChange(of: value) { newValue in ... }      // ✗ iOS 17+ only
+  .onChange(of: value) { ... }                  // ✗ iOS 17+ only
   ```
 
 ## State and actions
