@@ -176,6 +176,7 @@ struct ApiKeyEditView: View {
         case "deepseek": return URL(string: "https://platform.deepseek.com/api_keys")
         case "qwen": return URL(string: "https://bailian.console.aliyun.com/?apiKey=1")
         case "huggingface": return URL(string: "https://huggingface.co/settings/tokens")
+        case "xai": return URL(string: "https://console.x.ai/")
         default: return nil
         }
     }

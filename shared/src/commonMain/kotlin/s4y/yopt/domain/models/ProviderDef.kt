@@ -21,6 +21,7 @@ data class ProviderDef(
             ProviderDef("anthropic", "Anthropic", ApiStyle.ANTHROPIC, AuthType.ApiKey("Anthropic API Key"), "https://api.anthropic.com"),
             ProviderDef("deepseek", "DeepSeek", ApiStyle.OPENAI, AuthType.ApiKey("DeepSeek API Key"), "https://api.deepseek.com"),
             ProviderDef("qwen", "Qwen", ApiStyle.OPENAI, AuthType.ApiKey("Qwen API Key"), "https://dashscope-intl.aliyuncs.com/compatible-mode"),
+            ProviderDef("xai", "xAI Grok", ApiStyle.OPENAI, AuthType.ApiKey("xAI API Key"), "https://api.x.ai"),
         )
     }
 }
