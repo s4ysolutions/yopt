@@ -94,13 +94,12 @@
 /* Export/Import */
 "export.label" = "Export settings and chats";
 "export.title" = "Export";
-"export.message" = "Data exported (%@ chars). Use Save panel to write.";
 "import.replaceLabel" = "Import settings and chats";
 "import.title" = "Import";
-"import.replaceMessage" = "Settings replaced successfully.";
+"import.replaceMessage" = "Imported %d chats and %d providers.";
 "import.appendLabel" = "Append settings and chats";
 "import.appendTitle" = "Import Append";
-"import.appendMessage" = "Settings appended successfully.";
+"import.appendMessage" = "Appended %d chats and %d providers.";
 "providers.refreshError.title" = "Failed to load models";
 "providers.apiStyleLabel" = "API Style";
 "providers.manualModelPlaceholder" = "Model name (optional, if provider has no model list)";

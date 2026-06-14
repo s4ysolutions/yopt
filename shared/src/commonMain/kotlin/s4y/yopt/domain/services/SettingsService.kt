@@ -17,6 +17,8 @@ data class ExportData(
     val globalInstructions: String = ""
 )
 
+data class ImportResult(val chats: Int, val providers: Int)
+
 class SettingsService(
     private val models: ModelService,
     private val chats: ChatService,
@@ -35,7 +37,7 @@ class SettingsService(
         return json.encodeToString(data)
     }
 
-    suspend fun import(jsonString: String) {
+    suspend fun import(jsonString: String): ImportResult {
         val data = Json.decodeFromString<ExportData>(jsonString)
         data.models.groupBy { it.providerId }.forEach { (pid, ms) ->
             models.upsertModels(pid, ms)
@@ -43,9 +45,10 @@ class SettingsService(
         chats.importAll(data.chats)
         authService.importAll(data.auth)
         prefs.setGlobalInstructions(data.globalInstructions)
+        return ImportResult(chats = data.chats.size, providers = data.auth.size)
     }
 
-    suspend fun importAppend(jsonString: String) {
+    suspend fun importAppend(jsonString: String): ImportResult {
         val data = Json.decodeFromString<ExportData>(jsonString)
         data.models.groupBy { it.providerId }.forEach { (pid, ms) ->
             models.mergeModels(pid, ms)
@@ -53,6 +56,7 @@ class SettingsService(
         chats.mergeChats(data.chats)
         authService.mergeCredentials(data.auth)
         mergeGlobalInstructions(data.globalInstructions)
+        return ImportResult(chats = data.chats.size, providers = data.auth.size)
     }
 
     private suspend fun mergeGlobalInstructions(incoming: String) {
