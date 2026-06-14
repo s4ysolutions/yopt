@@ -26,7 +26,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.IconButton
-import androidx.compose.foundation.border
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.LocalContentColor
@@ -76,6 +75,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
@@ -1451,11 +1453,11 @@ private fun ChatSearchField(
             }
         } else null,
         trailingIcon = {
-            val groupBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-            Box(
-                modifier = Modifier.border(1.dp, groupBorderColor, RoundedCornerShape(8.dp))
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     TooltipBox(
                         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                             TooltipAnchorPosition.Above
@@ -1477,12 +1479,6 @@ private fun ChatSearchField(
                             )
                         }
                     }
-                    Box(
-                        Modifier
-                            .width(1.dp)
-                            .height(24.dp)
-                            .background(groupBorderColor)
-                    )
                     TooltipBox(
                         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                             TooltipAnchorPosition.Above

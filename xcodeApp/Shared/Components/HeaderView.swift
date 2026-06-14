@@ -105,7 +105,7 @@ struct HeaderView: View {
                     else { chatDropdownExpanded = true }
                 }
 #endif
-            HStack(spacing: 0) {
+            HStack(spacing: DesignTokens.padding8) {
                 Button {
                     showTagSheet = true
                 } label: {
@@ -114,12 +114,10 @@ struct HeaderView: View {
                         .scaledToFit()
                         .frame(width: DesignTokens.iconSize, height: DesignTokens.iconSize)
                         .foregroundColor(selectedTags.isEmpty ? .secondary : .accentColor)
-                        .padding(DesignTokens.padding8)
+                        .padding(.horizontal, DesignTokens.padding8)
                 }
                 .buttonStyle(.plain)
                 .help(String(localized: "help.filterByTags"))
-                Divider()
-                    .frame(height: DesignTokens.iconSize + DesignTokens.padding8)
                 Button {
                     chatDropdownExpanded.toggle()
                 } label: {
@@ -130,15 +128,11 @@ struct HeaderView: View {
                         .rotationEffect(.degrees(chatDropdownExpanded ? 180 : 0))
                         .animation(.easeInOut(duration: 0.2), value: chatDropdownExpanded)
                         .foregroundColor(.secondary)
-                        .padding(DesignTokens.padding8)
+                        .padding(.horizontal, DesignTokens.padding8)
                 }
                 .buttonStyle(.plain)
                 .help(String(localized: "help.chatList"))
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignTokens.cornerRadius8)
-                    .stroke(Color.secondary.opacity(DesignTokens.opacity30), lineWidth: 1)
-            )
         }
         .padding(DesignTokens.padding8)
         .overlay(
