@@ -7,10 +7,11 @@ on:
 jobs:
   build-macos:
     runs-on: macos-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -22,15 +23,37 @@ jobs:
       - name: Install rsvg-convert
         run: brew install librsvg
 
-      - name: Package macOS App
-        run: ./gradlew :composeApp:packageMacosApp
-
-      - name: Archive .app bundle
+      # Mirror exactly what the Xcode KMP Build phase runs so the
+      # up-to-date check skips it when xcodebuild triggers KMP Build.
+      # The pbxproj references the debug/ XCFramework path, so build debug.
+      - name: Build KMP framework
         run: |
-          cd composeApp/build/macos
-          zip -r ../../../YoPt.app.zip YoPt.app
+          ./gradlew \
+            :shared:linkDebugFrameworkIosArm64 \
+            :shared:linkDebugFrameworkIosSimulatorArm64 \
+            :composeApp:assembleComposeAppDebugXCFramework
+
+      - name: Build macOS app
+        run: |
+          xcodebuild \
+            -project xcodeApp/YoPt.xcodeproj \
+            -target "YoPt macOS" \
+            -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            ONLY_ACTIVE_ARCH=YES \
+            ARCHS=arm64 \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Zip .app bundle
+        run: |
+          APP=$(find "$RUNNER_TEMP/DerivedData" -name "YoPt macOS.app" -maxdepth 10 | head -1)
+          cd "$(dirname "$APP")"
+          zip -r "$RUNNER_TEMP/YoPt-macOS-arm64.zip" "YoPt macOS.app"
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         with:
-          files: composeApp/build/macos/YoPt.app.zip
+          files: ${{ runner.temp }}/YoPt-macOS-arm64.zip
